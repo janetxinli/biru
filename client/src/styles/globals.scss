@@ -1,0 +1,39 @@
+@import "variables";
+@import "utilities";
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap");
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Lora", serif;
+}
+
+body {
+  background-color: $bone;
+  color: $darkumber;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+// Material-UI overrides
+.MuiRating-root {
+  svg {
+    transform: translate(-2px);
+  }
+}
+
+.MuiRating-icon {
+  color: darken($bone, 15%);
+}
+
+.MuiRating-iconFilled {
+  color: #D3A15F;
+}

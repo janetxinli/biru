@@ -1,0 +1,32 @@
+@import "variables";
+
+.container {
+  width: 90%;
+  margin: auto;
+
+  @media (min-width: $mdscreen) {
+    width: 75%;
+    max-width: $lgscreen;
+  }
+}
+
+// flexbox
+.df {
+  display: flex;
+
+  &-fc {
+    flex-direction: column;
+  }
+
+  &-jc-c {
+    justify-content: center;
+  }
+
+  &-jc-sb {
+    justify-content: space-between;
+  }
+
+  &-ai-c {
+    align-items: center;
+  }
+}

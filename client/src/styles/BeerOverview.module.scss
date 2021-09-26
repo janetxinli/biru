@@ -1,0 +1,74 @@
+@import "variables";
+
+.beerOverview {
+  padding: 0.5em;
+  border-radius: 4px;
+  background-color: lighten($bone, 4%);
+
+  @media (min-width: $mdscreen) {
+    padding: 0.5em 1em;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 1em;
+  }
+
+  .beerInfo {
+    @media (min-width: $mdscreen) {
+      flex-grow: 1;
+      display: grid;
+      grid-template-columns: 2fr 2fr 1fr;
+    }
+
+    @media (min-width: $lgscreen) {
+      grid-template-columns: 3fr 3fr 2fr 1fr;
+    }
+
+    h3 {
+      font-size: 1em;
+      margin-top: 0;
+      margin-bottom: 0.25em;
+
+
+      @media (min-width: $mdscreen) {
+        font-size: 1.125em;
+        margin-bottom: 0;
+      }
+    }
+
+    p {
+      font-size: 0.825em;
+      margin-top: 0;
+      margin-bottom: 0.5em;
+      font-weight: 400;
+
+      @media (min-width: $mdscreen) {
+        font-size: 1em;
+        margin-bottom: 0;
+      }
+    }
+
+    .dateAdded {
+      display: none;
+
+      @media (min-width: $lgscreen) {
+        display: block;
+      }
+    }
+  }
+
+  .rating {
+    @media (min-width: $mdscreen) {
+      justify-self: end;
+    }
+  }
+
+  .beerImage {
+    height: 3em;
+    padding-left: 1em;
+
+    @media (min-width: $mdscreen) {
+      padding-left: 2em;
+    }
+  }
+}
