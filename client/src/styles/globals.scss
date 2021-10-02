@@ -10,7 +10,7 @@ body {
 }
 
 body {
-  background-color: $bone;
+  background-color: lighten($bone, 5%);
   color: $darkumber;
 }
 
@@ -25,9 +25,7 @@ a {
 
 // Material-UI overrides
 .MuiRating-root {
-  svg {
-    transform: translate(-2px);
-  }
+  transform: translateX(-3px);
 }
 
 .MuiRating-icon {
