@@ -1,12 +1,8 @@
 import Head from "next/head";
 import BeerOverview from "../components/BeerOverview";
-import data from "../data.json";
 import styles from "../styles/Index.module.scss";
 
-// TODO: create layout component for header
-// TODO: integrate getServerSideProps
-
-export default function Home() {
+export default function Home({ beers }) {
   return (
     <>
       <Head>
@@ -14,10 +10,19 @@ export default function Home() {
       </Head>
       <section>
         <h2 className={styles.title}>My Beer Journal</h2>
-        {data.beers.map((b) => (
+        {beers.map((b) => (
           <BeerOverview key={b.id} beer={b} />
         ))}
       </section>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const res = await fetch("http://localhost:3000/data.json");
+  const data = await res.json();
+
+  return {
+    props: { beers: data.beers },
+  };
 }
