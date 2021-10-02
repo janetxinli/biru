@@ -1,0 +1,72 @@
+@import "variables";
+
+.beerCard {
+  p {
+    margin: 0;
+  }
+
+  .beerImage {
+    width: 100%;
+    max-width: 400px;
+    align-self: flex-end;
+    border-radius: 50pc;
+    object-fit: cover;
+
+    @media (min-width: $mdscreen) {
+      width: 45%;
+      max-width: 520px;
+      align-self: center;
+    }
+  }
+
+  .beerInfo {
+    @media (min-width: $mdscreen) {
+      order: -1;
+      width: 53%;
+      border-radius: 6px;
+    }
+  }
+
+  .dateAdded {
+    margin-bottom: 0.5em;
+  }
+
+  .rating {
+    p {
+      display: inline;
+      padding-left: 0.5em;
+    }
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 0.25em;
+
+    @media (min-width: $mdscreen) {
+      margin-top: 0;
+    }
+  }
+
+  .beerDetails {
+    margin-top: 1em;
+
+    // &>*:not(:last-child) {
+    //   border-bottom: 1px solid darken($bone, 10%);
+    // }
+
+    p {
+      padding: 1em 0;
+    }
+
+    .beerNotesTitle {
+      padding-bottom: 0;
+    }
+  }
+
+  @media (min-width: $mdscreen) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 2em;
+  }
+}
