@@ -1,9 +1,11 @@
+const cors = require("cors");
 const express = require("express");
 const beerRouter = require("./routes/beer");
-const db = require("./db");
+const middleware = require("./utils/middleware");
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -11,5 +13,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/beer", beerRouter);
+
+app.use(middleware.errorHandler);
 
 module.exports = app;
