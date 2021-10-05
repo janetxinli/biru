@@ -1,12 +1,41 @@
 const router = require("express").Router();
+const error = require("../utils/error");
 const pool = require("../db");
 
-router.get("/", async (req, res) => {
+// TODO: use morgan for logging
+
+router.get("/", async (req, res, next) => {
+  const { beer_type, sort, descending } = req.query;
+
+  // filter by beer type
+  let beerTypeString = "";
+  let paramList;
+  if (beer_type) {
+    beerTypeString = "WHERE beer_type = ANY ($1) ";
+    paramList = [beer_type];
+  }
+
+  // sort result
+  // sort by date by default
+  const sortBy = sort || "date_added";
+  const order = descending ? "DESC" : "";
+  let sortString;
+  if (sortBy === "date_added" || sortBy === "name" || sortBy === "rating") {
+    sortString = `${sortBy} ${order}`
+  } else {
+    const err = error(400, "Invalid query parameter for sort");
+    next(err);
+  }
+
   try {
-    const beers = await pool.query("SELECT * FROM beers;");
+    const beers = await pool.query(
+      `SELECT * FROM beers ${beerTypeString} ORDER BY ${sortString}`,
+      paramList
+    );
     return res.json({ payload: beers.rows });
-  } catch (err) {
-    const error = error(500, err.message);
+  } catch (e) {
+    const err = error(500, e.message);
+    next(err);
   }
 });
 
@@ -44,9 +73,9 @@ router.post("/", async (req, res) => {
       ]
     );
     return res.status(201).json({ payload: newBeer.rows[0] });
-  } catch (err) {
-    console.log(err);
-    return res.status(500);
+  } catch (e) {
+    const err = error(500, "Unable to create beer");
+    next(err);
   }
 });
 
@@ -58,9 +87,9 @@ router.get("/:id", async (req, res) => {
       return res.json({ payload: beer.rows[0] });
     }
     return res.status(400).json({ error: true });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ error: true });
+  } catch (e) {
+    const err = error(500, "Server error");
+    next(err);
   }
 });
 
@@ -95,9 +124,9 @@ router.put("/:id", async (req, res, next) => {
       ]
     );
     return res.status(201).json({ payload: updatedBeer.rows[0] });
-  } catch (err) {
-    const error = error(500, err.message);
-    next(error);
+  } catch (e) {
+    const err = error(500, "Unable to update beer");
+    next(err);
   }
 });
 
@@ -107,9 +136,9 @@ router.delete("/:id", async (req, res) => {
   try {
     await pool.query("DELETE FROM beers WHERE ID = $1", [id]);
     return res.status(204).end();
-  } catch (err) {
-    console.log(err);
-    return res.status(500);
+  } catch (e) {
+    const err = error(500, "Server error");
+    next(err);
   }
 });
 
