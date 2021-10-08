@@ -9,19 +9,19 @@ router.get("/", async (req, res, next) => {
 
   // filter by beer type
   let beerTypeString = "";
-  let paramList;
+  let params = null;
   if (beer_type) {
-    beerTypeString = "WHERE beer_type = ANY ($1) ";
-    paramList = [beer_type];
+    beerTypeString = "WHERE beer_type = $1 ";
+    params = [beer_type];
   }
 
   // sort result
   // sort by date by default
-  const sortBy = sort || "date_added";
+  const sortBy = sort || "name";
   const order = descending ? "DESC" : "";
   let sortString;
   if (sortBy === "date_added" || sortBy === "name" || sortBy === "rating") {
-    sortString = `${sortBy} ${order}`
+    sortString = `${sortBy} ${order}`;
   } else {
     const err = error(400, "Invalid query parameter for sort");
     next(err);
@@ -30,7 +30,7 @@ router.get("/", async (req, res, next) => {
   try {
     const beers = await pool.query(
       `SELECT * FROM beers ${beerTypeString} ORDER BY ${sortString}`,
-      paramList
+      params
     );
     return res.json({ payload: beers.rows });
   } catch (e) {
