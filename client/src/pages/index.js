@@ -6,14 +6,31 @@ import FilterDropdown from "../components/FilterDropdown";
 import styles from "../styles/Index.module.scss";
 
 export default function Home({ beers }) {
+  // data state
+  const [beerList, setBeerList] = useState(beers);
   const [filter, setFilter] = useState({
-    sort: "date_added",
+    sort: "date",
     descending: true,
     beer_type: null,
   });
-  const [beerList, setBeerList] = useState(beers);
 
-  const toggleBeerType = (beerType) => {
+  // menu button state
+  const [sortVisible, setSortVisible] = useState(false);
+  const [beerTypeVisible, setBeerTypeVisible] = useState(false);
+
+  const toggleSortVisible = (e) => {
+    e.preventDefault();
+    setBeerTypeVisible(false);
+    setSortVisible(!sortVisible);
+  };
+
+  const toggleBeerTypeVisible = (e) => {
+    e.preventDefault();
+    setSortVisible(false);
+    setBeerTypeVisible(!beerTypeVisible);
+  };
+
+  const toggleSelectedBeerType = (beerType) => {
     if (beerType === filter.beer_type) {
       setFilter({ ...filter, beer_type: null });
     } else {
@@ -22,23 +39,23 @@ export default function Home({ beers }) {
   };
 
   const sortMap = {
-    date: () => setFilter({ ...filter, descending: true, sort: "date_added" }),
+    date: () => setFilter({ ...filter, descending: true, sort: "date" }),
     name: () => setFilter({ ...filter, descending: "", sort: "name" }),
     rating: () => setFilter({ ...filter, descending: true, sort: "rating" }),
   };
 
   const beerTypeMap = {
-    ale: () => toggleBeerType("ale"),
-    lager: () => toggleBeerType("lager"),
-    porter: () => toggleBeerType("porter"),
-    stout: () => toggleBeerType("stout"),
-    pilsner: () => toggleBeerType("pilsner"),
-    "pale ale": () => toggleBeerType("pale ale"),
-    wheat: () => toggleBeerType("wheat"),
-    brown: () => toggleBeerType("brown"),
-    blonde: () => toggleBeerType("blonde"),
-    IPA: () => toggleBeerType("IPA"),
-    sour: () => toggleBeerType("sour"),
+    ale: () => toggleSelectedBeerType("ale"),
+    lager: () => toggleSelectedBeerType("lager"),
+    porter: () => toggleSelectedBeerType("porter"),
+    stout: () => toggleSelectedBeerType("stout"),
+    pilsner: () => toggleSelectedBeerType("pilsner"),
+    "pale ale": () => toggleSelectedBeerType("pale ale"),
+    wheat: () => toggleSelectedBeerType("wheat"),
+    brown: () => toggleSelectedBeerType("brown"),
+    blonde: () => toggleSelectedBeerType("blonde"),
+    IPA: () => toggleSelectedBeerType("IPA"),
+    sour: () => toggleSelectedBeerType("sour"),
   };
 
   useEffect(async () => {
@@ -51,20 +68,30 @@ export default function Home({ beers }) {
       <Head>
         <title>biru</title>
       </Head>
-      <div>
-        <section className="df">
-          <FilterDropdown label="sort" optionMap={sortMap} />
-          <FilterDropdown label="beer type" optionMap={beerTypeMap} />
-        </section>
-      </div>{" "}
-      <section>
+      <section className={`df df-fc ${styles.pageHeader}`}>
         <h2 className={styles.title}>My Beer Journal</h2>
-        {beerList.length ? (
-          beerList.map((b) => <BeerOverview key={b.id} beer={b} />)
-        ) : (
-          <p>No beers...</p> // TODO: make this prettier
-        )}
+        <section className="df">
+          <FilterDropdown
+            label="sort"
+            optionMap={sortMap}
+            visibility={sortVisible}
+            toggleVisibility={toggleSortVisible}
+            selected={filter.sort}
+          />
+          <FilterDropdown
+            label="beer type"
+            optionMap={beerTypeMap}
+            visibility={beerTypeVisible}
+            toggleVisibility={toggleBeerTypeVisible}
+            selected={filter.beer_type}
+          />
+        </section>
       </section>
+      {beerList.length ? (
+        beerList.map((b) => <BeerOverview key={b.id} beer={b} />)
+      ) : (
+        <p className={styles.noMatchingBeers}>No matching beers.</p>
+      )}
     </>
   );
 }
@@ -72,7 +99,7 @@ export default function Home({ beers }) {
 export async function getServerSideProps() {
   // sort beers by descending date by default
   const defaultFilters = {
-    sort: "date_added",
+    sort: "date",
     descending: true,
     beer_type: null,
   };

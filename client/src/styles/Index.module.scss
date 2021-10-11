@@ -1,5 +1,29 @@
 @import "variables";
 
+.pageHeader {
+  margin-bottom: 0.5em;
+
+  @media (min-width: $mdscreen) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  h2 {
+    margin-bottom: 0.5em;
+
+    @media (min-width: $mdscreen) {
+      margin-bottom: 1em;
+    }
+  }
+}
+
 .title {
+  color: $redviolet;
+}
+
+.noMatchingBeers {
+  font-size: 1.125rem;
+  font-weight: 500;
   color: $redviolet;
 }
