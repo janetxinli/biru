@@ -20,7 +20,7 @@ router.get("/", async (req, res, next) => {
   const sortBy = sort || "name";
   const order = descending ? "DESC" : "";
   let sortString;
-  if (sortBy === "date_added" || sortBy === "name" || sortBy === "rating") {
+  if (sortBy === "date" || sortBy === "name" || sortBy === "rating") {
     sortString = `${sortBy} ${order}`;
   } else {
     const err = error(400, "Invalid query parameter for sort");
@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
     beer_type,
     abv,
     ibu,
-    date_added,
+    date,
     notes,
   } = req.body;
   // check that name, brewer and rating exist
@@ -59,7 +59,7 @@ router.post("/", async (req, res) => {
 
   try {
     const newBeer = await pool.query(
-      "INSERT INTO beers (name, brewer, rating, serving_type, beer_type, abv, ibu, date_added, notes) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
+      "INSERT INTO beers (name, brewer, rating, serving_type, beer_type, abv, ibu, date, notes) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
       [
         name,
         brewer,
@@ -68,7 +68,7 @@ router.post("/", async (req, res) => {
         beer_type,
         abv,
         ibu,
-        date_added,
+        date,
         notes,
       ]
     );
@@ -103,13 +103,13 @@ router.put("/:id", async (req, res, next) => {
     beer_type,
     abv,
     ibu,
-    date_added,
+    date,
     notes,
   } = req.body;
 
   try {
     const updatedBeer = await pool.query(
-      "UPDATE beers SET name = $1, brewer = $2, rating = $3, serving_type = $4, beer_type = $5, abv = $6, ibu = $7, date_added = $8, notes = $9 where id = $10 RETURNING *",
+      "UPDATE beers SET name = $1, brewer = $2, rating = $3, serving_type = $4, beer_type = $5, abv = $6, ibu = $7, date = $8, notes = $9 where id = $10 RETURNING *",
       [
         name,
         brewer,
@@ -118,7 +118,7 @@ router.put("/:id", async (req, res, next) => {
         beer_type,
         abv,
         ibu,
-        date_added,
+        date,
         notes,
         id,
       ]
