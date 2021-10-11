@@ -12,18 +12,18 @@ CREATE TABLE beers(
   beer_type beer_type,
   abv FLOAT(2),
   ibu INTEGER,
-  date_added DATE,
+  date DATE,
   notes VARCHAR(255)
 );
 
-INSERT INTO beers (name, brewer, rating, serving_type, beer_type, abv, ibu, date_added, notes)
+INSERT INTO beers (name, brewer, rating, serving_type, beer_type, abv, ibu, date, notes)
   VALUES ('Electric Unicorn', 'Phillips', 3.5, 'can', 'IPA', 6.5, 75, '2021-09-23', 'A light, citrusy and bitter IPA. Great for sipping on the beach or watching a game');
 
-INSERT INTO beers (name, brewer, rating, serving_type, beer_type, abv, date_added)
+INSERT INTO beers (name, brewer, rating, serving_type, beer_type, abv, date)
   VALUES ('Lavender Sour', 'Moody Ales', 4., 'can', 'sour', 4.9, '2021-09-24');
 
-INSERT INTO beers (name, brewer, rating, serving_type, beer_type, abv, date_added, notes)
+INSERT INTO beers (name, brewer, rating, serving_type, beer_type, abv, date, notes)
   VALUES ('33 Acres of Ocean', '33 Acres', 4.5, 'bottle', 'pale ale', 5.3, '2021-09-20', 'This is a classic everyday beer made for glugging. Citrusy, hoppy and piney.');
 
-INSERT INTO beers (name, brewer, rating, serving_type, beer_type, abv, date_added)
+INSERT INTO beers (name, brewer, rating, serving_type, beer_type, abv, date)
   VALUES ('No Brainer', 'Brassneck', 4.5, 'can', 'lager', 4.5, '2021-09-21');
