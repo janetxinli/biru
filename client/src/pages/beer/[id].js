@@ -1,8 +1,9 @@
 import React from "react";
 import { Rating } from "@mui/material";
+import { getBeerById } from "../../services/beer";
 import styles from "../../styles/Beer.module.scss";
 
-// TODO: find icons
+// TODO: find icons, fix style
 
 export default function Beer({ beer }) {
   return (
@@ -10,7 +11,7 @@ export default function Beer({ beer }) {
       <img src="/undraw_beer.svg" className={styles.beerImage} />
       <section className={styles.beerInfo}>
         <h2>{beer.name}</h2>
-        <p className={styles.dateAdded}>Added {beer.added}</p>
+        <p className={styles.dateAdded}>added {new Date(Date.parse(beer.date)).toDateString()}</p>
         <div className={`df df-ai-c ${styles.rating}`}>
           <Rating
             name="beer-rating"
@@ -21,14 +22,14 @@ export default function Beer({ beer }) {
           <p>{beer.rating}</p>
         </div>
         <div className={styles.beerDetails}>
-          <p>Brewed by {beer.brewer}</p>
-          <p>Type: {beer.beerType}</p>
-          <p>Serving: {beer.servingType}</p>
+          <p>brewed by: {beer.brewer}</p>
+          <p>type: {beer.beer_type}</p>
+          <p>serving: {beer.serving_type}</p>
           <p>ABV: {beer.abv}%</p>
           {beer.ibu && <p>IBU: {beer.ibu}</p>}
           {beer.notes && (
             <div>
-              <p className={styles.beerNotesTitle}>Notes:</p>
+              <p className={styles.beerNotesTitle}>notes:</p>
               <p>{beer.notes}</p>
             </div>
           )}
@@ -40,10 +41,8 @@ export default function Beer({ beer }) {
 
 export async function getServerSideProps(ctx) {
   const { id } = ctx.params;
-  const res = await await fetch("http://localhost:3000/data.json");
-  const data = await res.json();
-  const beer = data.beers.find((b) => b.id === parseInt(id));
-  if (!beer) {
+  const res = await getBeerById(id);
+  if (!res.data.payload) {
     return {
       notFound: true,
     };
@@ -51,7 +50,7 @@ export async function getServerSideProps(ctx) {
 
   return {
     props: {
-      beer,
+      beer: res.data.payload,
     },
   };
 }

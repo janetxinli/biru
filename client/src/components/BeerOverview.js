@@ -11,7 +11,7 @@ export default function BeerOverview({ beer }) {
           <span className={`df df-fc ${styles.beerInfo}`}>
             <h3>{beer.name}</h3>
             <p>{beer.brewer}</p>
-            <p className={styles.dateAdded}>{new Date(Date.parse(beer.date_added)).toDateString()}</p>
+            <p className={styles.dateAdded}>{new Date(Date.parse(beer.date)).toDateString()}</p>
             <Rating
               name="beer-rating"
               value={parseFloat(beer.rating)}
