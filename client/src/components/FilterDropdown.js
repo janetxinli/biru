@@ -24,6 +24,7 @@ export default function FilterDropdown({ label, optionMap, visibility, toggleVis
         aria-haspopup="listbox"
         aria-expanded="true"
         onClick={toggleVisibility}
+        className="btn btn-secondary"
       >
         {label} {visibility ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </button>
