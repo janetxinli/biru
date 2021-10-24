@@ -1,7 +1,7 @@
 import React from "react";
 import { Rating } from "@mui/material";
 import { getBeerById } from "../../services/beer";
-import styles from "../../styles/Beer.module.scss";
+import styles from "../../styles/pages/Beer.module.scss";
 
 // TODO: find icons, fix style
 

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Rating } from "@mui/material";
-import styles from "../styles/BeerOverview.module.scss";
+import styles from "../styles/components/BeerOverview.module.scss";
 
 export default function BeerOverview({ beer }) {
   return (

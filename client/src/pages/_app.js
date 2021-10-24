@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Layout from "../components/Layout";
-import "../styles/globals.scss";
+import "../styles/global/globals.scss";
 
 function MyApp({ Component, pageProps }) {
   return (

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { getAll } from "../services/beer";
 import BeerOverview from "../components/BeerOverview";
 import Dropdown from "../components/Dropdown";
-import styles from "../styles/Index.module.scss";
+import styles from "../styles/pages/Index.module.scss";
 
 export default function Home({ beers }) {
   // data state

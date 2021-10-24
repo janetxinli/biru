@@ -7,9 +7,7 @@ import { createBeer } from "../services/beer";
 import PageError from "./PageError";
 import Dropdown from "./Dropdown";
 import CategoryGroup from "./CategoryGroup";
-import styles from "../styles/BeerForm.module.scss";
-
-// TODO: create new hook for form
+import styles from "../styles/components/BeerForm.module.scss";
 
 export default function BeerForm() {
   const router = useRouter();

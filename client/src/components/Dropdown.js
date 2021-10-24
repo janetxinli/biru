@@ -2,7 +2,7 @@ import React from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CheckIcon from "@mui/icons-material/Check";
-import styles from "../styles/Dropdown.module.scss";
+import styles from "../styles/components/Dropdown.module.scss";
 
 export default function Dropdown({ label, optionMap, visibility, toggleVisibility, selected, className }) {
 

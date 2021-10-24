@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles/CategoryGroup.module.scss";
+import styles from "../styles/components/CategoryGroup.module.scss";
 
 export default function CategoryGroup({ categoryMap, selected, id }) {
   return (
