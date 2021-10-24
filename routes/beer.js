@@ -2,8 +2,6 @@ const router = require("express").Router();
 const error = require("../utils/error");
 const pool = require("../db");
 
-// TODO: use morgan for logging
-
 router.get("/", async (req, res, next) => {
   const { beer_type, sort, descending } = req.query;
 
