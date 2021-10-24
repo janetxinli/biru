@@ -1,7 +1,5 @@
 CREATE TYPE serving_type AS ENUM ('draft', 'bottle', 'can');
-CREATE TYPE beer_type AS ENUM ('ale', 'lager', 'porter', 'stout', 'pilsner', 'pale ale', 'wheat', 'brown', 'blonde', 'IPA', 'sour');
-
-TODO: add "other" option in beer_type
+CREATE TYPE beer_type AS ENUM ('ale', 'lager', 'porter', 'stout', 'pilsner', 'pale ale', 'wheat', 'brown', 'blonde', 'IPA', 'sour', 'other');
 
 DROP TABLE beers;
 

@@ -51,6 +51,7 @@ export default function BeerForm() {
     blonde: () => toggleBeerType("blonde"),
     IPA: () => toggleBeerType("IPA"),
     sour: () => toggleBeerType("sour"),
+    other: () => toggleBeerType("other"),
   };
 
   const toggleBeerTypeVisibility = (e) => {

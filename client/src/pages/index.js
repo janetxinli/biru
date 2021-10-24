@@ -57,6 +57,7 @@ export default function Home({ beers }) {
     blonde: () => toggleSelectedBeerType("blonde"),
     IPA: () => toggleSelectedBeerType("IPA"),
     sour: () => toggleSelectedBeerType("sour"),
+    other: () => toggleSelectedBeerType("other"),
   };
 
   useEffect(async () => {
