@@ -1,13 +1,15 @@
 CREATE TYPE serving_type AS ENUM ('draft', 'bottle', 'can');
 CREATE TYPE beer_type AS ENUM ('ale', 'lager', 'porter', 'stout', 'pilsner', 'pale ale', 'wheat', 'brown', 'blonde', 'IPA', 'sour');
 
+TODO: add "other" option in beer_type
+
 DROP TABLE beers;
 
 CREATE TABLE beers(
   ID SERIAL PRIMARY KEY,
-  name VARCHAR(30) NOT NULL,
+  name VARCHAR(50) NOT NULL,
   brewer VARCHAR(30) NOT NULL,
-  rating FLOAT(2) NOT NULL,
+  rating FLOAT(1) NOT NULL,
   serving_type serving_type,
   beer_type beer_type,
   abv FLOAT(2),

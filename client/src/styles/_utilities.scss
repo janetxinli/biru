@@ -4,6 +4,10 @@
   width: 90%;
   margin: auto;
 
+  @media (min-width: $smscreen) {
+    width: 80%;
+  }
+
   @media (min-width: $mdscreen) {
     width: 75%;
     max-width: $lgscreen;
@@ -56,10 +60,15 @@
         border-color: darken($redviolet, 5%);
       }
     }
+
+    // TODO: add styles for disabled state
+    // &:disabled {
+
+    // }
   }
 
   &-secondary {
-    background-color: lighten($bone, 5%);
+    background-color: inherit;
     border-color: lighten($shadow, 20%);
 
     &:hover {
@@ -70,5 +79,10 @@
         border-color: $shadow;
       }
     }
+
+    // TODO: add styles for disabled state
+    // &:disabled {
+
+    // }
   }
 }

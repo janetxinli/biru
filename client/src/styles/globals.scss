@@ -18,6 +18,10 @@ body {
   color: $darkumber;
 }
 
+h2 {
+  color: $redviolet;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -25,6 +29,19 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+input,
+textarea {
+  padding: 0.5em 1em;
+  font-family: "Lora", serif;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: 3px;
+}
+
+textarea {
+  resize: none;
 }
 
 // Material-UI overrides
@@ -38,4 +55,8 @@ a {
 
 .MuiRating-iconFilled {
   color: #D3A15F;
+}
+
+.MuiRating-label {
+  margin-bottom: 0;
 }

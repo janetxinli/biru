@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
+import Link from "next/link";
 import { getAll } from "../services/beer";
 import BeerOverview from "../components/BeerOverview";
-import FilterDropdown from "../components/FilterDropdown";
+import Dropdown from "../components/Dropdown";
 import styles from "../styles/Index.module.scss";
 
 export default function Home({ beers }) {
@@ -69,22 +70,25 @@ export default function Home({ beers }) {
         <title>biru</title>
       </Head>
       <section className={`df df-fc ${styles.pageHeader}`}>
-        <h2 className={styles.title}>My Beer Journal</h2>
+        <h2>My Beer Journal</h2>
         <section className="df">
-          <FilterDropdown
+          <Dropdown
             label="sort"
             optionMap={sortMap}
             visibility={sortVisible}
             toggleVisibility={toggleSortVisible}
             selected={filter.sort}
           />
-          <FilterDropdown
+          <Dropdown
             label="beer type"
             optionMap={beerTypeMap}
             visibility={beerTypeVisible}
             toggleVisibility={toggleBeerTypeVisible}
             selected={filter.beer_type}
           />
+          <Link href="/beer/new">
+            <a className={`btn btn-primary ${styles.newBeer}`}>new</a>
+          </Link>
         </section>
       </section>
       {beerList.length ? (

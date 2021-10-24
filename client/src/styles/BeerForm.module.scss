@@ -1,0 +1,118 @@
+@import "variables";
+
+.formTitle {
+  margin: 0;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+.beerForm {
+  margin: auto;
+  max-width: $mdscreen;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: auto;
+  gap: 1em 0.75em;
+
+  .beerRating,
+  .servingType {
+    justify-self: center;
+
+    p {
+      text-align: center;
+    }
+  }
+
+  .beerType {
+    button {
+      height: 2.5em;
+      width: 100%;
+      background-color: #fff;
+
+      &:hover {
+        background-image: linear-gradient(#fff, lighten($bone, 8%));
+      }
+    }
+  }
+
+  label,
+  .save {
+    grid-column: 1 / end;
+  }
+
+  label {
+    p {
+      margin-top: 0em;
+      margin-bottom: 0.5em;
+      color: darken($shadow, 20%);
+    }
+
+    input {
+      height: 2.5em;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid darken($bone, 8%);
+    }
+  }
+
+  .inputInfo {
+    color: darken($shadow, 10%);
+    font-size: 0.75em;
+    font-style: italic;
+  }
+
+  .noteChars {
+    text-align: right;
+  }
+
+  .formError {
+    p {
+      color: $redviolet;
+    }
+
+    & > input[type="text"] {
+      border-color: $redviolet;
+    }
+
+    &Label {
+      margin-top: 0.25em;
+      font-size: 0.75rem;
+    }
+  }
+
+  @media (min-width: $smscreen) {
+    .brewer,
+    .abv {
+      grid-column: 1 / 4;
+    }
+
+    .date,
+    .ibu {
+      grid-column: 4 / end;
+    }
+
+    .save {
+      grid-column: 1 / 3;
+    }
+  }
+
+  @media (min-width: $mdscreen) {
+    .beerName,
+    .beerType {
+      grid-column: 1 / 3;
+    }
+
+    .brewer,
+    .abv {
+      grid-column: 3 / 5;
+    }
+
+    .date,
+    .ibu {
+      grid-column: 5 / end;
+    }
+  }
+}

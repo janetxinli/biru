@@ -1,0 +1,12 @@
+@import "../variables";
+
+.pageError {
+  margin: 1em 0;
+  padding: 1em;
+  background-color: rgba(lighten($redviolet, 15%), 0.5);
+  border-radius: 3px;
+  
+  p {
+    margin: 0;
+  }
+}

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CheckIcon from "@mui/icons-material/Check";
-import styles from "../styles/FilterDropdown.module.scss";
+import styles from "../styles/Dropdown.module.scss";
 
-export default function FilterDropdown({ label, optionMap, visibility, toggleVisibility, selected }) {
+export default function Dropdown({ label, optionMap, visibility, toggleVisibility, selected, className }) {
 
   // create list of select elements from optionMap
   const selectElements = [];
@@ -18,7 +18,7 @@ export default function FilterDropdown({ label, optionMap, visibility, toggleVis
   }
 
   return (
-    <div className={styles.dropdown}>
+    <div className={`${styles.dropdown} ${className ? className : ""}`}>
       <button
         type="button"
         aria-haspopup="listbox"
@@ -26,7 +26,7 @@ export default function FilterDropdown({ label, optionMap, visibility, toggleVis
         onClick={toggleVisibility}
         className="btn btn-secondary"
       >
-        {label} {visibility ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+        {label} {visibility ? <ArrowDropUpIcon fontSize="inherit"/> : <ArrowDropDownIcon fontSize="inherit"/>}
       </button>
       <div
         role="listbox"

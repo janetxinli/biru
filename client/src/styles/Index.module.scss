@@ -18,8 +18,10 @@
   }
 }
 
-.title {
-  color: $redviolet;
+// need to vertically center text since link element is stretched
+.newBeer {
+  display: flex;
+  align-items: center;
 }
 
 .noMatchingBeers {

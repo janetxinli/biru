@@ -39,7 +39,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   const {
     name,
     brewer,
@@ -66,14 +66,15 @@ router.post("/", async (req, res) => {
         rating,
         serving_type,
         beer_type,
-        abv,
-        ibu,
+        abv ? parseFloat(abv) : null,
+        ibu ? parseInt(ibu) : null,
         date,
         notes,
       ]
     );
     return res.status(201).json({ payload: newBeer.rows[0] });
   } catch (e) {
+    console.log(e);
     const err = error(500, "Unable to create beer");
     next(err);
   }
