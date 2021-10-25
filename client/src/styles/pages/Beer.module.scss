@@ -1,73 +1,74 @@
 @import "../global/variables";
 
-// TODO: update styles
-
 .beerCard {
-  p {
-    margin: 0;
+  & > *:not(:last-child) {
+    margin-bottom: 1.5em;
   }
 
-  .beerImage {
+  .beerHeader {
     width: 100%;
-    max-width: 400px;
-    align-self: flex-end;
-    object-fit: cover;
 
-    @media (min-width: $mdscreen) {
-      width: 45%;
-      max-width: 520px;
-      align-self: center;
+    img {
+      min-width: 8em;
+      width: 25%;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 0.25em;
+    }
+
+    p {
+      margin-bottom: 0.5em;
+    }
+
+    .brewer {
+      font-size: 1.125rem;
+      font-weight: 500;
+    }
+  }
+
+  .beerStats {
+    padding: 1em;
+    background-color: darken($bone, 5%);
+    border-radius: 3px;
+
+    .stat {
+      &:not(:last-child) {
+        border-right: 1px solid #fff;
+        padding-right: 1.5em;
+        margin-right: 1.5em;
+      }
+
+      &Name {
+        color: darken($shadow, 15%);
+        margin-bottom: 0.5em;
+      }
+
+      &Value {
+        font-weight: 600;
+        font-size: 1.125rem;
+      }
     }
   }
 
   .beerInfo {
+    article:not(:last-child) {
+      margin-bottom: 1em;
+    }
+
+    &Icon {
+      font-size: 1.5rem;
+      margin-right: 0.5em;
+    }
+  }
+
+  .notes,
+  .beerStats,
+  .beerInfo {
     @media (min-width: $mdscreen) {
-      order: -1;
-      width: 53%;
-      border-radius: 6px;
+      margin-left: auto;
+      width: 75%;
     }
-  }
-
-  .dateAdded {
-    margin-bottom: 0.5em;
-  }
-
-  .rating {
-    p {
-      display: inline;
-      padding-left: 0.5em;
-    }
-  }
-
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 0.25em;
-
-    @media (min-width: $mdscreen) {
-      margin-top: 0;
-    }
-  }
-
-  .beerDetails {
-    margin-top: 1em;
-
-    // &>*:not(:last-child) {
-    //   border-bottom: 1px solid darken($bone, 10%);
-    // }
-
-    p {
-      padding: 1em 0;
-    }
-
-    .beerNotesTitle {
-      padding-bottom: 0;
-    }
-  }
-
-  @media (min-width: $mdscreen) {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-top: 2em;
   }
 }
