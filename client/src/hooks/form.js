@@ -1,15 +1,25 @@
 import { useState } from "react";
 
-export const useField = (type, initialValue) => {
-  const [value, setValue] = useState(initialValue || "");
+export const useForm = (initialValue) => {
+  const [form, setForm] = useState(initialValue);
 
-  const onChange = (e) => {
-    setValue(e.target.value);
+  // handle field change automatically
+  const handleFieldChange = (e) => {
+    e.preventDefault();
+    setForm({
+      ...form,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  // set property manually
+  const setFormProperty = (property, value) => {
+    setForm({ ...form, [property]: value });
   };
 
   return {
-    type,
-    value,
-    onChange
-  }
+    form,
+    handleFieldChange,
+    setFormProperty,
+  };
 };

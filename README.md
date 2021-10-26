@@ -1,6 +1,4 @@
 ## TODO
-- create new hook for form
-- update individual beer page styles
 - delete beer functionality
 - edit beer functionality
 

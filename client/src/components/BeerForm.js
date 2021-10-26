@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Rating } from "@mui/material";
 import { getToday } from "../utils/getToday";
-import { useField } from "../hooks/form";
+import { useForm } from "../hooks/form";
 import { createBeer } from "../services/beer";
 import PageError from "./PageError";
 import Dropdown from "./Dropdown";
@@ -13,15 +13,17 @@ export default function BeerForm() {
   const router = useRouter();
 
   // form field data states
-  const name = useField("text");
-  const brewer = useField("text");
-  const [rating, setRating] = useState(0);
-  const [beerType, setBeerType] = useState(null);
-  const [servingType, setServingType] = useState(null);
-  const abv = useField("text");
-  const ibu = useField("text");
-  const notes = useField("text");
-  const date = useField("date", getToday());
+  const { form, handleFieldChange, setFormProperty } = useForm({
+    name: "",
+    brewer: "",
+    rating: 0,
+    beerType: null,
+    servingType: null,
+    abv: "",
+    ibu: "",
+    notes: "",
+    date: getToday(),
+  });
 
   // form state
   const [beerTypeVisible, setBeerTypeVisible] = useState(false);
@@ -36,7 +38,7 @@ export default function BeerForm() {
   const [pageError, setPageError] = useState(null);
 
   const handleRatingChange = (e, value) => {
-    setRating(value);
+    setFormProperty("rating", value);
   };
 
   const beerTypeMap = {
@@ -60,10 +62,10 @@ export default function BeerForm() {
   };
 
   const toggleBeerType = (value) => {
-    if (beerType === value) {
-      setBeerType(null);
+    if (form.beerType === value) {
+      setFormProperty("beerType", null);
     } else {
-      setBeerType(value);
+      setFormProperty("beerType", value);
     }
   };
 
@@ -77,9 +79,9 @@ export default function BeerForm() {
     e.preventDefault();
 
     if (servingType === value) {
-      setServingType(null);
+      setFormProperty("servingType", null);
     } else {
-      setServingType(value);
+      setFormProperty("servingType", value);
     }
   };
 
@@ -97,26 +99,26 @@ export default function BeerForm() {
     // check for required fields
     let valid = true;
 
-    if (!name.value || !brewer.value || !rating) {
+    if (!form.name || !form.brewer || !form.rating) {
       valid = false;
     }
 
     // ABV must be a float
-    if (abv.value !== "" && !parseFloat(abv.value)) {
+    if (form.abv !== "" && !parseFloat(form.abv)) {
       valid = false;
     }
 
     // IBU must be an int
-    if (ibu.value !== "" && !parseInt(ibu.value)) {
+    if (form.ibu !== "" && !parseInt(form.ibu)) {
       valid = false;
     }
 
     setFormErrors({
-      name: name.value === "",
-      brewer: brewer.value === "",
-      rating: !rating,
-      abv: abv.value !== "" && !parseFloat(abv.value),
-      ibu: ibu.value !== "" && !parseInt(ibu.value),
+      name: form.name === "",
+      brewer: form.brewer === "",
+      rating: !form.rating,
+      abv: form.abv !== "" && !parseFloat(form.abv),
+      ibu: form.ibu !== "" && !parseInt(form.ibu),
     });
 
     return valid;
@@ -131,18 +133,19 @@ export default function BeerForm() {
     if (!valid) return;
 
     const newBeer = {
-      name: name.value,
-      brewer: brewer.value,
-      rating,
-      serving_type: servingType,
-      beer_type: beerType,
-      abv: abv.value,
-      ibu: ibu.value,
-      date: date.value,
-      notes: notes.value,
+      name: form.name,
+      brewer: form.brewer,
+      rating: form.rating,
+      serving_type: form.servingType,
+      beer_type: form.beerType,
+      abv: form.abv,
+      ibu: form.ibu,
+      date: form.date,
+      notes: form.notes,
     };
 
     setLoading(true);
+    
     try {
       const res = await createBeer(newBeer);
       router.push(`/beer/${res.data.payload.id}`);
@@ -159,16 +162,22 @@ export default function BeerForm() {
       {pageError && <PageError message={pageError} />}
       <form className={`${styles.beerForm}`}>
         <label
-          htmlFor="beerName"
+          htmlFor="name"
           className={`${styles.beerName} ${
             formErrors.name ? styles.formError : ""
           }`}
         >
           <p className="df df-jc-sb df-ai-c">
             Beer Name
-            <span className={styles.inputInfo}>{name.value.length}/50</span>
+            <span className={styles.inputInfo}>{form.name.length}/50</span>
           </p>
-          <input id="beerName" {...name} maxLength={50} />
+          <input
+            id="name"
+            type="text"
+            value={form.name}
+            onChange={handleFieldChange}
+            maxLength={50}
+          />
           <p className={formErrors.name ? styles.formErrorLabel : "hidden"}>
             Name is required
           </p>
@@ -181,16 +190,27 @@ export default function BeerForm() {
         >
           <p className="df df-jc-sb df-ai-c">
             Brewer
-            <span className={styles.inputInfo}>{brewer.value.length}/30</span>
+            <span className={styles.inputInfo}>{form.brewer.length}/30</span>
           </p>
-          <input id="brewer" {...brewer} maxLength={30} />
+          <input
+            id="brewer"
+            type="text"
+            value={form.brewer}
+            onChange={handleFieldChange}
+            maxLength={30}
+          />
           <p className={formErrors.brewer ? styles.formErrorLabel : "hidden"}>
             Brewer is required
           </p>
         </label>
         <label htmlFor="date" className={styles.date}>
           <p>Date</p>
-          <input id="date" {...date} />
+          <input
+            id="date"
+            type="date"
+            value={form.date}
+            onChange={handleFieldChange}
+          />
         </label>
         <label
           htmlFor="beerRating"
@@ -202,7 +222,7 @@ export default function BeerForm() {
           <Rating
             id="beerRating"
             precision={0.5}
-            value={rating}
+            value={form.rating}
             size="large"
             onChange={handleRatingChange}
           />
@@ -217,7 +237,7 @@ export default function BeerForm() {
           <CategoryGroup
             id="servingType"
             categoryMap={servingTypeMap}
-            selected={servingType}
+            selected={form.servingType}
           />
         </label>
         <label className={styles.beerType}>
@@ -225,7 +245,7 @@ export default function BeerForm() {
             Beer Type <span className={styles.inputInfo}>(optional)</span>
           </p>
           <Dropdown
-            label={beerType ? beerType : "select"}
+            label={form.beerType ? form.beerType : "select"}
             optionMap={beerTypeMap}
             visibility={beerTypeVisible}
             toggleVisibility={toggleBeerTypeVisibility}
@@ -239,7 +259,7 @@ export default function BeerForm() {
           <p>
             % ABV <span className={styles.inputInfo}>(optional)</span>
           </p>
-          <input id="abv" {...abv} />
+          <input id="abv" value={form.abv} onChange={handleFieldChange} />
           <p className={formErrors.abv ? styles.formErrorLabel : "hidden"}>
             Invalid value
           </p>
@@ -251,7 +271,7 @@ export default function BeerForm() {
           <p>
             IBU <span className={styles.inputInfo}>(optional)</span>
           </p>
-          <input id="ibu" {...ibu} />
+          <input id="ibu" value={form.ibu} onChange={handleFieldChange} />
           <p className={formErrors.ibu ? styles.formErrorLabel : "hidden"}>
             Invalid value
           </p>
@@ -260,9 +280,14 @@ export default function BeerForm() {
           <p>
             Notes <span className={styles.inputInfo}>(optional)</span>
           </p>
-          <textarea id="notes" {...notes} maxLength={255}></textarea>
+          <textarea
+            id="notes"
+            value={form.notes}
+            onChange={handleFieldChange}
+            maxLength={255}
+          ></textarea>
           <p className={`${styles.inputInfo} ${styles.noteChars}`}>
-            {255 - notes.value.length} characters remaining
+            {255 - form.notes.length} characters remaining
           </p>
         </label>
         <button
