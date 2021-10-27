@@ -71,4 +71,10 @@
       width: 75%;
     }
   }
+
+  .btnGroup {
+    & > *:not(:last-child) {
+      margin-right: 1em;
+    }
+  }
 }

@@ -1,11 +1,24 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { GiHops } from "react-icons/gi";
 import { IoBeerOutline } from "react-icons/io5";
-import { getBeerById } from "../../services/beer";
+import { getBeerById, deleteBeer } from "../../services/beer";
 import { capitalize } from "../../utils/capitalize";
 import styles from "../../styles/pages/Beer.module.scss";
 
 export default function Beer({ beer }) {
+  const router = useRouter();
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      await deleteBeer(beer.id);
+      router.push("/");
+    } catch (e) {
+      console.log(e);  // TODO: create error banner
+    }
+  };
+
   return (
     <article className={`df df-fc ${styles.beerCard}`}>
       <section className={`df df-ai-fe ${styles.beerHeader}`}>
@@ -36,12 +49,22 @@ export default function Beer({ beer }) {
       <section className={`df df-fc ${styles.beerInfo}`}>
         <article className="df df-ai-c">
           <GiHops className={styles.beerInfoIcon} />
-          <p>Beer Type: {capitalize(beer.beer_type)}</p>
+          <p>Beer Type: {beer.beer_type ? capitalize(beer.beer_type) : "N/A"}</p>
         </article>
         <article className="df df-ai-c">
           <IoBeerOutline className={styles.beerInfoIcon} />
-          <p>Serving: {capitalize(beer.serving_type)}</p>
+          <p>Serving: {beer.serving_type ? capitalize(beer.serving_type) : "N/A"}</p>
         </article>
+      </section>
+      <section className={`df df-jc-fe ${styles.btnGroup}`}>
+        <button className="btn btn-secondary">Edit</button>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          onClick={handleDelete}
+        >
+          Delete
+        </button>
       </section>
     </article>
   );
