@@ -1,29 +1,31 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Rating } from "@mui/material";
-import { getToday } from "../utils/getToday";
+import { getFormattedDate } from "../utils/getFormattedDate";
 import { useForm } from "../hooks/form";
-import { createBeer } from "../services/beer";
-import PageError from "./PageError";
+import { createBeer, editBeer } from "../services/beer";
 import Dropdown from "./Dropdown";
 import CategoryGroup from "./CategoryGroup";
 import styles from "../styles/components/BeerForm.module.scss";
 
-export default function BeerForm() {
+// TODO: wrapper component for validated form inputs?
+export default function BeerForm({ setError, editMode, formValues }) {
   const router = useRouter();
 
   // form field data states
-  const { form, handleFieldChange, setFormProperty } = useForm({
-    name: "",
-    brewer: "",
-    rating: 0,
-    beerType: null,
-    servingType: null,
-    abv: "",
-    ibu: "",
-    notes: "",
-    date: getToday(),
-  });
+  const { form, handleFieldChange, setFormProperty } = editMode
+    ? useForm(formValues)
+    : useForm({
+        name: "",
+        brewer: "",
+        rating: 0,
+        beerType: null,
+        servingType: null,
+        abv: "",
+        ibu: "",
+        notes: "",
+        date: getFormattedDate(),
+      });
 
   // form state
   const [beerTypeVisible, setBeerTypeVisible] = useState(false);
@@ -35,7 +37,6 @@ export default function BeerForm() {
     abv: false,
     ibu: false,
   });
-  const [pageError, setPageError] = useState(null);
 
   const handleRatingChange = (e, value) => {
     setFormProperty("rating", value);
@@ -126,31 +127,30 @@ export default function BeerForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setPageError(null);
+    setError(null);
     resetErrors();
 
     const valid = validateFields();
     if (!valid) return;
 
     const newBeer = {
-      name: form.name,
-      brewer: form.brewer,
-      rating: form.rating,
+      ...form,
       serving_type: form.servingType,
       beer_type: form.beerType,
-      abv: form.abv,
-      ibu: form.ibu,
-      date: form.date,
-      notes: form.notes,
     };
 
     setLoading(true);
-    
+
     try {
-      const res = await createBeer(newBeer);
+      let res;
+      if (editMode) {
+        res = await editBeer(form.id, newBeer);
+      } else {
+        res = await createBeer(newBeer);
+      }
       router.push(`/beer/${res.data.payload.id}`);
     } catch (e) {
-      setPageError("Oops, an error occurred. Please try again.");
+      setError("Oops, an error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -158,8 +158,6 @@ export default function BeerForm() {
 
   return (
     <>
-      <h2 className={styles.formTitle}>Add a New Beer</h2>
-      {pageError && <PageError message={pageError} />}
       <form className={`${styles.beerForm}`}>
         <label
           htmlFor="name"
