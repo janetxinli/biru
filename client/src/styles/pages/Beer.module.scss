@@ -73,6 +73,20 @@
   }
 
   .btnGroup {
+    justify-content: center;
+
+    @media (min-width: $smscreen) {
+      justify-content: flex-end;
+    }
+
+    button {
+      flex-grow: 1;
+
+      @media (min-width: $smscreen) {
+        flex-grow: 0;
+      }
+    }
+
     & > *:not(:last-child) {
       margin-right: 1em;
     }

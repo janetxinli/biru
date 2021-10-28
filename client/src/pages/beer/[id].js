@@ -71,7 +71,7 @@ export default function Beer({ beer }) {
             </p>
           </article>
         </section>
-        <section className={`df df-jc-fe ${styles.btnGroup}`}>
+        <section className={`df ${styles.btnGroup}`}>
           <button
             type="submit"
             className="btn btn-secondary"

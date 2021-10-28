@@ -54,6 +54,7 @@
   border-style: solid;
   border-radius: 4px;
   font-size: 0.875rem;
+  font-weight: 500;
 
   &-primary {
     background-color: $redviolet;
@@ -69,10 +70,10 @@
       }
     }
 
-    // TODO: add styles for disabled state
-    // &:disabled {
-
-    // }
+    &:disabled {
+      background: rgba($redviolet, 80%);
+      border-color: rgba($redviolet, 80%);
+    }
   }
 
   &-secondary {
@@ -88,9 +89,8 @@
       }
     }
 
-    // TODO: add styles for disabled state
-    // &:disabled {
-
-    // }
+    &:disabled {
+      color: rgba($darkumber, 80%);
+    }
   }
 }
