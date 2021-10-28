@@ -15,3 +15,7 @@ export const createBeer = async (newBeer) => {
 export const deleteBeer = async (id) => {
   return axios.delete(`http://localhost:3001/api/beer/${id}`);
 };
+
+export const editBeer = async (id, newBeer) => {
+  return axios.put(`http://localhost:3001/api/beer/${id}`, newBeer);
+};

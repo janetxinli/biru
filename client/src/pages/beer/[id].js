@@ -15,8 +15,13 @@ export default function Beer({ beer }) {
       await deleteBeer(beer.id);
       router.push("/");
     } catch (e) {
-      console.log(e);  // TODO: create error banner
+      console.log(e); // TODO: create error banner
     }
+  };
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    router.push(`/beer/edit/${beer.id}`);
   };
 
   return (
@@ -49,15 +54,25 @@ export default function Beer({ beer }) {
       <section className={`df df-fc ${styles.beerInfo}`}>
         <article className="df df-ai-c">
           <GiHops className={styles.beerInfoIcon} />
-          <p>Beer Type: {beer.beer_type ? capitalize(beer.beer_type) : "N/A"}</p>
+          <p>
+            Beer Type: {beer.beer_type ? capitalize(beer.beer_type) : "N/A"}
+          </p>
         </article>
         <article className="df df-ai-c">
           <IoBeerOutline className={styles.beerInfoIcon} />
-          <p>Serving: {beer.serving_type ? capitalize(beer.serving_type) : "N/A"}</p>
+          <p>
+            Serving: {beer.serving_type ? capitalize(beer.serving_type) : "N/A"}
+          </p>
         </article>
       </section>
       <section className={`df df-jc-fe ${styles.btnGroup}`}>
-        <button className="btn btn-secondary">Edit</button>
+        <button
+          type="submit"
+          className="btn btn-secondary"
+          onClick={handleEdit}
+        >
+          Edit
+        </button>
         <button
           type="submit"
           className="btn btn-primary"
