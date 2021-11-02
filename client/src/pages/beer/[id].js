@@ -60,14 +60,13 @@ export default function Beer({ beer }) {
           <article className="df df-ai-c">
             <GiHops className={styles.beerInfoIcon} />
             <p>
-              Beer Type: {beer.beer_type ? capitalize(beer.beer_type) : "N/A"}
+              Beer Type: {beer.beerType ? capitalize(beer.beerType) : "N/A"}
             </p>
           </article>
           <article className="df df-ai-c">
             <IoBeerOutline className={styles.beerInfoIcon} />
             <p>
-              Serving:{" "}
-              {beer.serving_type ? capitalize(beer.serving_type) : "N/A"}
+              Serving: {beer.servingType ? capitalize(beer.servingType) : "N/A"}
             </p>
           </article>
         </section>

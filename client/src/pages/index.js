@@ -12,7 +12,7 @@ export default function Home({ beers }) {
   const [filter, setFilter] = useState({
     sort: "date",
     descending: true,
-    beer_type: null,
+    beerType: null,
   });
 
   // menu button state
@@ -32,10 +32,10 @@ export default function Home({ beers }) {
   };
 
   const toggleSelectedBeerType = (beerType) => {
-    if (beerType === filter.beer_type) {
-      setFilter({ ...filter, beer_type: null });
+    if (beerType === filter.beerType) {
+      setFilter({ ...filter, beerType: null });
     } else {
-      setFilter({ ...filter, beer_type: beerType });
+      setFilter({ ...filter, beerType });
     }
   };
 
@@ -85,7 +85,7 @@ export default function Home({ beers }) {
             optionMap={beerTypeMap}
             visibility={beerTypeVisible}
             toggleVisibility={toggleBeerTypeVisible}
-            selected={filter.beer_type}
+            selected={filter.beerType}
           />
           <Link href="/beer/new">
             <a className={`btn btn-primary ${styles.newBeer}`}>new</a>
@@ -106,7 +106,7 @@ export async function getServerSideProps() {
   const defaultFilters = {
     sort: "date",
     descending: true,
-    beer_type: null,
+    beerType: null,
   };
   const res = await getAll(defaultFilters);
 

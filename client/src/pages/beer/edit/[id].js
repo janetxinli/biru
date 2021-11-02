@@ -24,12 +24,17 @@ export async function getServerSideProps(ctx) {
     };
   }
 
+  // convert null valuess to empty strings
+  for (const [k, v] of Object.entries(res.data.payload)) {
+    if (v === null) {
+      res.data.payload[k] = "";
+    }
+  }
+
   return {
     props: {
       beer: {
         ...res.data.payload,
-        servingType: res.data.payload.serving_type,
-        beerType: res.data.payload.beer_type,
         date: getFormattedDate(res.data.payload.date),
       },
     },

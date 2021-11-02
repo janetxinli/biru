@@ -133,20 +133,14 @@ export default function BeerForm({ setError, editMode, formValues }) {
     const valid = validateFields();
     if (!valid) return;
 
-    const newBeer = {
-      ...form,
-      serving_type: form.servingType,
-      beer_type: form.beerType,
-    };
-
     setLoading(true);
 
     try {
       let res;
       if (editMode) {
-        res = await editBeer(form.id, newBeer);
+        res = await editBeer(form.id, form);
       } else {
-        res = await createBeer(newBeer);
+        res = await createBeer(form);
       }
       router.push(`/beer/${res.data.payload.id}`);
     } catch (e) {
