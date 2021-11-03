@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { StatusCodes } = require("http-status-codes");
 const error = require("../utils/error");
 const { Beer } = require("../models");
 
@@ -21,7 +22,7 @@ router.get("/", async (req, res, next) => {
   if (sortBy === "date" || sortBy === "name" || sortBy === "rating") {
     order.push(sortBy);
   } else {
-    const err = error(400, "Invalid ordering parameter");
+    const err = error(StatusCodes.BAD_REQUEST, "Invalid ordering parameter");
     next(err);
   }
 
@@ -32,7 +33,7 @@ router.get("/", async (req, res, next) => {
     const beers = await Beer.findAll(queryObj);
     return res.json({ payload: beers });
   } catch (e) {
-    const err = error(500, e.message);
+    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
     next(err);
   }
 });
@@ -42,12 +43,12 @@ router.get("/:id", async (req, res, next) => {
   try {
     const beer = await Beer.findOne({ where: { id } });
     if (!beer) {
-      const err = error(404, "Beer does not exist");
+      const err = error(StatusCodes.NOT_FOUND, "Beer does not exist");
       next(err);
     }
     return res.json({ payload: beer });
   } catch (e) {
-    const err = error(500, "Server error");
+    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, "Server error");
     next(err);
   }
 });
@@ -55,11 +56,6 @@ router.get("/:id", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   const { name, brewer, rating, servingType, beerType, abv, ibu, date, notes } =
     req.body;
-  // check that name, brewer and rating exist
-  if (!name || !brewer || !rating)
-    return res
-      .status(400)
-      .send({ message: "'name', 'brewer' and 'rating' are required" });
 
   try {
     const newBeer = await Beer.create({
@@ -73,9 +69,9 @@ router.post("/", async (req, res, next) => {
       date,
       notes,
     });
-    return res.status(201).json({ payload: newBeer });
+    return res.status(StatusCodes.CREATED).json({ payload: newBeer });
   } catch (e) {
-    const err = error(500, "Unable to create beer");
+    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
     next(err);
   }
 });
@@ -101,25 +97,26 @@ router.put("/:id", async (req, res, next) => {
       { where: { id }, returning: true }
     );
 
-    return res.status(201).json({ payload: updatedBeer[1][0] });
+    return res.status(StatusCodes.OK).json({ payload: updatedBeer[1][0] });
   } catch (e) {
-    const err = error(500, "Unable to update beer");
+    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
     next(err);
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res, next) => {
   const { id } = req.params;
 
   try {
     const beer = await Beer.findOne({ where: { id } });
     if (!beer) {
-      const err = error(404, "Beer does not exist");
+      const err = error(StatusCodes.NOT_FOUND, "Beer does not exist");
+      next(err);
     }
     await beer.destroy();
-    return res.status(204).end();
+    return res.status(StatusCodes.NO_CONTENT).end();
   } catch (e) {
-    const err = error(500, "Server error");
+    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
     next(err);
   }
 });
