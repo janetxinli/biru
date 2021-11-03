@@ -44,7 +44,10 @@ module.exports = (sequelize, DataTypes) => {
       abv: DataTypes.FLOAT(2),
       ibu: DataTypes.INTEGER,
       notes: DataTypes.STRING,
-      date: DataTypes.DATE,
+      date: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
     },
     {
       sequelize,
