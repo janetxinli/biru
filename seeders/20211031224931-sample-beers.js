@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return await queryInterface.bulkInsert(
@@ -15,6 +13,7 @@ module.exports = {
           date: new Date("2021-09-20"),
           notes:
             "This is a classic everyday beer made for glugging. Citrusy, hoppey and piney.",
+          userId: 1,
         },
         {
           name: "Electric Unicorn",
@@ -27,6 +26,7 @@ module.exports = {
           date: new Date("2021-09-23"),
           notes:
             "A light, citrusy and bitter IPA. Great for sipping on the beach or watching a game",
+          userId: 2,
         },
         {
           name: "Fluffy Cloud IPA",
@@ -37,6 +37,7 @@ module.exports = {
           abv: 6.5,
           date: new Date("2021-10-01"),
           notes: "This is a lovely hazy IPA with citrusy notes.",
+          userId: 2,
         },
         {
           name: "Lavender Sour",
@@ -46,6 +47,7 @@ module.exports = {
           beerType: "sour",
           abv: 4.9,
           date: new Date("2021-09-24"),
+          userId: 1,
         },
         {
           name: "Nebulousness",
@@ -55,6 +57,7 @@ module.exports = {
           beerType: "IPA",
           abv: 7,
           date: new Date("2021-10-16"),
+          userId: 2,
         },
       ],
       {}

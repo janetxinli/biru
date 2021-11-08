@@ -41,7 +41,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
-    const beer = await Beer.findOne({ where: { id } });
+    const beer = await Beer.findByPk(id);
     if (!beer) {
       const err = error(StatusCodes.NOT_FOUND, "Beer does not exist");
       next(err);
@@ -108,7 +108,7 @@ router.delete("/:id", async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const beer = await Beer.findOne({ where: { id } });
+    const beer = await Beer.findByPk(id);
     if (!beer) {
       const err = error(StatusCodes.NOT_FOUND, "Beer does not exist");
       next(err);
