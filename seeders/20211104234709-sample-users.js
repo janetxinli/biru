@@ -16,7 +16,7 @@ module.exports = {
       },
     ];
     const users = seedUsers.map(async (u) => {
-      return await User.create(u);
+      return User.create(u);
     });
     await Promise.all(users);
   },

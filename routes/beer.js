@@ -23,7 +23,7 @@ router.get("/", async (req, res, next) => {
     order.push(sortBy);
   } else {
     const err = error(StatusCodes.BAD_REQUEST, "Invalid ordering parameter");
-    next(err);
+    return next(err);
   }
 
   if (descending) order.push("DESC");
@@ -34,7 +34,7 @@ router.get("/", async (req, res, next) => {
     return res.json({ payload: beers });
   } catch (e) {
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
-    next(err);
+    return next(err);
   }
 });
 
@@ -42,14 +42,17 @@ router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
     const beer = await Beer.findByPk(id);
+
+    // beer with specified id not found
     if (!beer) {
       const err = error(StatusCodes.NOT_FOUND, "Beer does not exist");
-      next(err);
+      return next(err);
     }
+
     return res.json({ payload: beer });
   } catch (e) {
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, "Server error");
-    next(err);
+    return next(err);
   }
 });
 
@@ -68,11 +71,12 @@ router.post("/", async (req, res, next) => {
       ibu: ibu ? parseInt(ibu) : null,
       date,
       notes,
+      userId: req.user.id,
     });
     return res.status(StatusCodes.CREATED).json({ payload: newBeer });
   } catch (e) {
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
-    next(err);
+    return next(err);
   }
 });
 
@@ -82,6 +86,13 @@ router.put("/:id", async (req, res, next) => {
     req.body;
 
   try {
+    const beer = await Beer.findByPk(id);
+
+    // beer does not belong to authorized user
+    if (beer.userId !== req.user.id) {
+      const err = error(StatusCodes.UNAUTHORIZED, "Unauthorized to edit beer");
+      return next(err);
+    }
     const updatedBeer = await Beer.update(
       {
         name,
@@ -93,6 +104,7 @@ router.put("/:id", async (req, res, next) => {
         ibu: ibu ? parseInt(ibu) : null,
         date,
         notes,
+        userId: req.user.id,
       },
       { where: { id }, returning: true }
     );
@@ -100,7 +112,7 @@ router.put("/:id", async (req, res, next) => {
     return res.status(StatusCodes.OK).json({ payload: updatedBeer[1][0] });
   } catch (e) {
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
-    next(err);
+    return next(err);
   }
 });
 
@@ -109,15 +121,27 @@ router.delete("/:id", async (req, res, next) => {
 
   try {
     const beer = await Beer.findByPk(id);
+
+    // beer with specified id not found
     if (!beer) {
       const err = error(StatusCodes.NOT_FOUND, "Beer does not exist");
-      next(err);
+      return next(err);
     }
+
+    // beer does not belong to authorized user
+    if (beer.userId !== req.user.id) {
+      const err = error(
+        StatusCodes.UNAUTHORIZED,
+        "Unauthorized to delete beer"
+      );
+      return next(err);
+    }
+
     await beer.destroy();
     return res.status(StatusCodes.NO_CONTENT).end();
   } catch (e) {
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
-    next(err);
+    return next(err);
   }
 });
 

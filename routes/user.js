@@ -1,16 +1,15 @@
 const router = require("express").Router();
 const { StatusCodes } = require("http-status-codes");
-const passport = require("../passport");
 const error = require("../utils/error");
 const { User, Beer } = require("../models");
 
 router.get("/", async (req, res, next) => {
   try {
     const allUsers = await User.findAll();
-    res.status(StatusCodes.OK).json({ payload: allUsers });
+    return res.status(StatusCodes.OK).json({ payload: allUsers });
   } catch (e) {
     const err = error(500, "Cannot get all users");
-    next(err);
+    return next(err);
   }
 });
 
@@ -21,14 +20,14 @@ router.get("/:id", async (req, res, next) => {
 
     if (!user) {
       // No user is found
-      const err = error(404, "User not found");
-      next(err);
-    } else {
-      res.status(StatusCodes.OK).json({ payload: user });
+      const err = error(StatusCodes.NOT_FOUND, "User not found");
+      return next(err);
     }
+
+    return res.status(StatusCodes.OK).json({ payload: user });
   } catch (e) {
     const err = error(500, "Cannot get user");
-    next(err);
+    return next(err);
   }
 });
 
@@ -41,11 +40,11 @@ router.get("/:id/beer", async (req, res, next) => {
         id,
       },
     });
-    res.status(StatusCodes.OK).json({ payload: beers });
+
+    return res.status(StatusCodes.OK).json({ payload: beers[0] });
   } catch (e) {
-    console.log(e);
     const err = error(500, "Unable to get beer list");
-    next(err);
+    return next(err);
   }
 });
 
