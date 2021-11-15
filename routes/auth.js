@@ -32,7 +32,14 @@ router.post(
     const { user } = req;
     try {
       const token = jwt.sign(user.id, JWT_SECRET);
-      return res.status(StatusCodes.OK).json({ payload: { token } });
+      return res
+        .cookie("biruCookie", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV !== "development", // TODO: make expire
+          sameSite: "none",
+        })
+        .status(StatusCodes.OK)
+        .json({ message: "Logged in successfully" });
     } catch (e) {
       const err = error(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to log in");
       return next(err);

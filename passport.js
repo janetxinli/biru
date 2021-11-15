@@ -2,7 +2,7 @@ const passport = require("passport");
 const localStrategy = require("passport-local").Strategy;
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require("passport-jwt").ExtractJwt;
-const jwt = require("jsonwebtoken");
+const cookieExtractor = require("./utils/cookieExtractor");
 const { JWT_SECRET } = require("./utils/config");
 const { User } = require("./models");
 
@@ -44,8 +44,8 @@ passport.use(
   "jwt",
   new JwtStrategy(
     {
+      jwtFromRequest: cookieExtractor,
       secretOrKey: JWT_SECRET,
-      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     },
     async (jwtPayload, done) => {
       try {
@@ -53,7 +53,7 @@ passport.use(
         const user = await User.findByPk(jwtPayload);
 
         if (!user) {
-          return done(null, false, { message: "Invalid token credentials" });
+          return done(null, false, { message: "Invalid credentials" });
         }
 
         return done(null, user);
