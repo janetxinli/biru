@@ -2,7 +2,6 @@
 - error banner 'x' button
 - include import ordering eslint 
 - be able to filter based on several beer types
-- convert frontend to use arrow functions
 
 ## Resources
 - coolors: https://coolors.co/5e0b15-90323d-d9cab3-bc8034-8c7a6b

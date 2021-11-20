@@ -6,9 +6,9 @@ import { useForm } from "../hooks/form";
 import { createBeer, editBeer } from "../services/beer";
 import Dropdown from "./Dropdown";
 import CategoryGroup from "./CategoryGroup";
+import Input from "./Input";
 import styles from "../styles/components/BeerForm.module.scss";
 
-// TODO: wrapper component for validated form inputs?
 // TODO: add cancel button
 const BeerForm = ({ setError, editMode, formValues }) => {
   const router = useRouter();
@@ -80,7 +80,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
   const toggleServingType = (e, value) => {
     e.preventDefault();
 
-    if (servingType === value) {
+    if (form.servingType === value) {
       setFormProperty("servingType", null);
     } else {
       setFormProperty("servingType", value);
@@ -154,64 +154,45 @@ const BeerForm = ({ setError, editMode, formValues }) => {
   return (
     <>
       <form className={`${styles.beerForm}`}>
-        <label
+        <Input
+          type="text"
+          label="Beer Name"
+          className={styles.beerName}
           htmlFor="name"
-          className={`${styles.beerName} ${
-            formErrors.name ? styles.formError : ""
-          }`}
-        >
-          <p className="df df-jc-sb df-ai-c">
-            Beer Name
-            <span className={styles.inputInfo}>{form.name.length}/50</span>
-          </p>
-          <input
-            id="name"
-            type="text"
-            value={form.name}
-            onChange={handleFieldChange}
-            maxLength={50}
-          />
-          <p className={formErrors.name ? styles.formErrorLabel : "hidden"}>
-            Name is required
-          </p>
-        </label>
-        <label
+          value={form.name}
+          handleChange={handleFieldChange}
+          infoLabel={`${form.name.length} / 50`}
+          error={formErrors.name}
+          errorMessage="Name is required"
+          maxLength={50}
+        />
+        <Input
+          type="text"
+          label="Brewer"
+          className={styles.brewer}
           htmlFor="brewer"
-          className={`${styles.brewer} ${
-            formErrors.brewer ? styles.formError : ""
-          }`}
-        >
-          <p className="df df-jc-sb df-ai-c">
-            Brewer
-            <span className={styles.inputInfo}>{form.brewer.length}/30</span>
-          </p>
-          <input
-            id="brewer"
-            type="text"
-            value={form.brewer}
-            onChange={handleFieldChange}
-            maxLength={30}
-          />
-          <p className={formErrors.brewer ? styles.formErrorLabel : "hidden"}>
-            Brewer is required
-          </p>
-        </label>
-        <label htmlFor="date" className={styles.date}>
-          <p>Date</p>
-          <input
-            id="date"
-            type="date"
-            value={form.date}
-            onChange={handleFieldChange}
-          />
-        </label>
-        <label
+          value={form.brewer}
+          handleChange={handleFieldChange}
+          infoLabel={`${form.brewer.length} / 30`}
+          error={formErrors.brewer}
+          errorMessage="Brewer is required"
+          maxLength={30}
+        />
+        <Input
+          type="date"
+          label="Date"
+          className={styles.date}
+          htmlFor="date"
+          value={form.date}
+          onChange={handleFieldChange}
+        />
+        <Input
+          label="Rating"
+          className={styles.beerRating}
           htmlFor="beerRating"
-          className={`${styles.beerRating} ${
-            formErrors.rating ? styles.formError : ""
-          }`}
+          error={formErrors.rating}
+          errorMessage="Rating is required"
         >
-          <p>Rating</p>
           <Rating
             id="beerRating"
             precision={0.5}
@@ -219,70 +200,66 @@ const BeerForm = ({ setError, editMode, formValues }) => {
             size="large"
             onChange={handleRatingChange}
           />
-          <p className={formErrors.rating ? styles.formErrorLabel : "hidden"}>
-            Rating is required
-          </p>
-        </label>
-        <label htmlFor="servingType" className={styles.servingType}>
-          <p>
-            Serving Type <span className={styles.inputInfo}>(optional)</span>
-          </p>
+        </Input>
+        <Input
+          label="Serving Type"
+          className={styles.servingType}
+          htmlFor="servingType"
+          infoLabel="(optional)"
+        >
           <CategoryGroup
             id="servingType"
             categoryMap={servingTypeMap}
             selected={form.servingType}
           />
-        </label>
-        <label className={styles.beerType}>
-          <p>
-            Beer Type <span className={styles.inputInfo}>(optional)</span>
-          </p>
+        </Input>
+        <Input
+          label="Beer Type"
+          className={styles.beerType}
+          infoLabel="(optional)"
+        >
           <Dropdown
             label={form.beerType ? form.beerType : "select"}
             optionMap={beerTypeMap}
             visibility={beerTypeVisible}
             toggleVisibility={toggleBeerTypeVisibility}
           />
-        </label>
-
-        <label
+        </Input>
+        <Input
+          type="text"
+          label="% ABV"
+          className={styles.abv}
           htmlFor="abv"
-          className={`${styles.abv} ${formErrors.abv ? styles.formError : ""}`}
-        >
-          <p>
-            % ABV <span className={styles.inputInfo}>(optional)</span>
-          </p>
-          <input id="abv" value={form.abv} onChange={handleFieldChange} />
-          <p className={formErrors.abv ? styles.formErrorLabel : "hidden"}>
-            Invalid value
-          </p>
-        </label>
-        <label
+          value={form.abv}
+          onChange={handleFieldChange}
+          infoLabel="optional"
+          error={formErrors.abv}
+          errorMessage="Invalid value"
+        />
+        <Input
+          type="text"
+          label="IBU"
+          className={styles.ibu}
           htmlFor="ibu"
-          className={`${styles.ibu} ${formErrors.ibu ? styles.formError : ""}`}
+          value={form.ibu}
+          onChange={handleFieldChange}
+          infoLabel="(optional)"
+          error={formErrors.ibu}
+          errorMessage="Invalid value"
+        />
+        <Input
+          label="Notes"
+          htmlFor="notes"
+          className={styles.notes}
+          infoLabel={`${255 - form.notes.length} characters remaining`}
         >
-          <p>
-            IBU <span className={styles.inputInfo}>(optional)</span>
-          </p>
-          <input id="ibu" value={form.ibu} onChange={handleFieldChange} />
-          <p className={formErrors.ibu ? styles.formErrorLabel : "hidden"}>
-            Invalid value
-          </p>
-        </label>
-        <label htmlFor="notes" className={styles.notes}>
-          <p>
-            Notes <span className={styles.inputInfo}>(optional)</span>
-          </p>
           <textarea
             id="notes"
             value={form.notes}
             onChange={handleFieldChange}
             maxLength={255}
           ></textarea>
-          <p className={`${styles.inputInfo} ${styles.noteChars}`}>
-            {255 - form.notes.length} characters remaining
-          </p>
-        </label>
+        </Input>
         <button
           type="submit"
           className={`btn btn-primary ${styles.save}`}
