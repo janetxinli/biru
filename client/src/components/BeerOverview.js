@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Rating } from "@mui/material";
 import styles from "../styles/components/BeerOverview.module.scss";
 
-export default function BeerOverview({ beer }) {
+const BeerOverview = ({ beer }) => {
   return (
     <article className={styles.beerOverview}>
       <Link href={`/beer/${beer.id}`}>
@@ -11,7 +11,9 @@ export default function BeerOverview({ beer }) {
           <span className={`df df-fc ${styles.beerInfo}`}>
             <h3>{beer.name}</h3>
             <p>{beer.brewer}</p>
-            <p className={styles.dateAdded}>{new Date(Date.parse(beer.date)).toDateString()}</p>
+            <p className={styles.dateAdded}>
+              {new Date(Date.parse(beer.date)).toDateString()}
+            </p>
             <Rating
               name="beer-rating"
               value={parseFloat(beer.rating)}
@@ -26,4 +28,6 @@ export default function BeerOverview({ beer }) {
       </Link>
     </article>
   );
-}
+};
+
+export default BeerOverview;

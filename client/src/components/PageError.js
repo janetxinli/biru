@@ -3,10 +3,12 @@ import styles from "../styles/components/PageError.module.scss";
 
 // TODO: add "hide" button
 
-export default function PageError({ message }) {
+const PageError = ({ message }) => {
   return (
     <div className={styles.pageError}>
       <p>{message}</p>
     </div>
   );
-}
+};
+
+export default PageError;

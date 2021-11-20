@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { logout } from "../services/auth";
 import styles from "../styles/components/Header.module.scss";
 
-export default function Header({ loggedIn }) {
+const Header = ({ loggedIn }) => {
   const router = useRouter();
 
   const handleLogout = async (e) => {
@@ -29,4 +29,6 @@ export default function Header({ loggedIn }) {
       )}
     </header>
   );
-}
+};
+
+export default Header;

@@ -10,7 +10,7 @@ import styles from "../styles/components/BeerForm.module.scss";
 
 // TODO: wrapper component for validated form inputs?
 // TODO: add cancel button
-export default function BeerForm({ setError, editMode, formValues }) {
+const BeerForm = ({ setError, editMode, formValues }) => {
   const router = useRouter();
 
   // form field data states
@@ -294,4 +294,6 @@ export default function BeerForm({ setError, editMode, formValues }) {
       </form>
     </>
   );
-}
+};
+
+export default BeerForm;
