@@ -1,17 +1,18 @@
 const router = require("express").Router();
 const { StatusCodes } = require("http-status-codes");
 const error = require("../utils/error");
-const { Beer } = require("../models");
+const { Beer, User } = require("../models");
 
 router.get("/", async (req, res, next) => {
   const { beerType, sort, descending } = req.query;
+  const { id } = req.user;
 
   // define query object
-  const queryObj = {};
+  const where = {};
 
   // filter by beerType
   if (beerType) {
-    queryObj["where"] = { beerType };
+    where.beerType = beerType;
   }
 
   // sort result
@@ -27,10 +28,15 @@ router.get("/", async (req, res, next) => {
   }
 
   if (descending) order.push("DESC");
-  queryObj["order"] = [order];
 
   try {
-    const beers = await Beer.findAll(queryObj);
+    const beers = await User.findByPk(id, {
+      include: {
+        model: Beer,
+        where,
+      },
+      order: [[{ model: Beer }, ...order]],
+    });
     return res.json({ payload: beers });
   } catch (e) {
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);

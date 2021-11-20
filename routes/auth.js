@@ -35,7 +35,7 @@ router.post(
       return res
         .cookie("biruCookie", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV !== "development", // TODO: make expire
+          secure: true, // TODO: make expire
           sameSite: "none",
         })
         .status(StatusCodes.OK)
@@ -46,5 +46,18 @@ router.post(
     }
   }
 );
+
+router.get("/logout", async (req, res, next) => {
+  try {
+    return res
+      .clearCookie("biruCookie")
+      .status(StatusCodes.OK)
+      .json({ message: "Logged out successfully " })
+      .send();
+  } catch (e) {
+    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to log out");
+    return next(err);
+  }
+});
 
 module.exports = router;

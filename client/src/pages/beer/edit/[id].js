@@ -3,9 +3,12 @@ import { getBeerById } from "../../../services/beer";
 import { getFormattedDate } from "../../../utils/getFormattedDate";
 import BeerForm from "../../../components/BeerForm";
 import PageError from "../../../components/PageError";
+import { extractToken } from "../../../utils/extractToken";
+import { notFound, redirectToLogin } from "../../../utils/serverSide";
 
-export default function EditBeer({ beer }) {
+const EditBeer = ({ beer }) => {
   const [error, setError] = useState(null);
+
   return (
     <>
       <h2>Edit Beer</h2>
@@ -13,30 +16,39 @@ export default function EditBeer({ beer }) {
       <BeerForm editMode formValues={beer} setError={setError} />
     </>
   );
-}
+};
 
-export async function getServerSideProps(ctx) {
-  const { id } = ctx.params;
-  const res = await getBeerById(id);
-  if (!res.data.payload) {
-    return {
-      notFound: true,
-    };
+export const getServerSideProps = async (ctx) => {
+  const token = extractToken(ctx);
+
+  if (!token) {
+    return redirectToLogin;
   }
 
-  // convert null valuess to empty strings
-  for (const [k, v] of Object.entries(res.data.payload)) {
-    if (v === null) {
-      res.data.payload[k] = "";
+  try {
+    const {
+      data: { payload },
+    } = await getBeerById(ctx.params.id, token);
+
+    // convert null values to empty strings
+    for (const [k, v] of Object.entries(payload)) {
+      if (v === null) {
+        payload[k] = "";
+      }
     }
-  }
 
-  return {
-    props: {
-      beer: {
-        ...res.data.payload,
-        date: getFormattedDate(res.data.payload.date),
+    return {
+      props: {
+        beer: {
+          ...payload,
+          date: getFormattedDate(payload.date), // make date conform to input format
+        },
+        loggedIn: true,
       },
-    },
-  };
-}
+    };
+  } catch (error) {
+    return notFound;
+  }
+};
+
+export default EditBeer;

@@ -4,17 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon index.js",
+    "dev": "NODE_ENV=development nodemon --ignore ./client/ index.js",
     "client": "cd client && npm run dev",
     "db:create": "sequelize-cli db:create",
     "db:migrate": "sequelize-cli db:migrate",
     "db:g:migration": "sequelize-cli migration:generate --name",
     "db:g:seed": "sequelize-cli seed:generate --name",
     "db:seeds": "sequelize-cli db:seed:all",
-    "db:reset": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
-    "test": "NODE_ENV=test jest",
-    "pretest": "NODE_ENV=test npm run db:reset",
-    "db:create:test": "NODE_ENV=test sequelize-cli db:create"
+    "db:reset": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",
@@ -43,19 +40,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "http-status-codes": "^2.1.4",
-    "jest": "^27.3.1",
     "prettier": "^2.4.1",
-    "sequelize-cli": "^6.2.0",
-    "supertest": "^6.1.6"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "client/"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/test/setup.js"
-    ]
+    "sequelize-cli": "^6.2.0"
   }
 }

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import BeerForm from "../../components/BeerForm";
 import PageError from "../../components/PageError";
+import { extractToken } from "../../utils/extractToken";
+import { redirectToLogin } from "../../utils/serverSide";
 
-export default function New() {
+const New = () => {
   const [error, setError] = useState(null);
 
   return (
@@ -12,4 +14,20 @@ export default function New() {
       <BeerForm setError={setError} />
     </>
   );
-}
+};
+
+export const getServerSideProps = async (ctx) => {
+  const token = extractToken(ctx);
+
+  if (!token) {
+    return redirectToLogin;
+  }
+
+  return {
+    props: {
+      loggedIn: true,
+    },
+  };
+};
+
+export default New;

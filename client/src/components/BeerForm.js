@@ -9,6 +9,7 @@ import CategoryGroup from "./CategoryGroup";
 import styles from "../styles/components/BeerForm.module.scss";
 
 // TODO: wrapper component for validated form inputs?
+// TODO: add cancel button
 export default function BeerForm({ setError, editMode, formValues }) {
   const router = useRouter();
 

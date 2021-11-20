@@ -14,7 +14,6 @@ app.use(
   cors({
     credentials: true,
     origin: "http://localhost:3000",
-    exposedHeaders: ["Set-Cookie"],
   })
 );
 app.use(express.json());

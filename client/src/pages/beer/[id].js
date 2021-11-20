@@ -6,11 +6,13 @@ import { getBeerById, deleteBeer } from "../../services/beer";
 import { capitalize } from "../../utils/capitalize";
 import PageError from "../../components/PageError";
 import styles from "../../styles/pages/Beer.module.scss";
+import { extractToken } from "../../utils/extractToken";
+import { notFound, redirectToLogin } from "../../utils/serverSide";
 
-export default function Beer({ beer }) {
-  const [error, setError] = useState(null);
-
+const Beer = ({ beer }) => {
   const router = useRouter();
+
+  const [error, setError] = useState(null);
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -89,20 +91,27 @@ export default function Beer({ beer }) {
       </article>
     </>
   );
-}
+};
 
-export async function getServerSideProps(ctx) {
-  const { id } = ctx.params;
-  const res = await getBeerById(id);
-  if (!res.data.payload) {
-    return {
-      notFound: true,
-    };
+export const getServerSideProps = async (ctx) => {
+  const token = extractToken(ctx);
+
+  if (!token) {
+    return redirectToLogin;
   }
 
-  return {
-    props: {
-      beer: res.data.payload,
-    },
-  };
-}
+  try {
+    const res = await getBeerById(ctx.params.id, token);
+
+    return {
+      props: {
+        beer: res.data.payload,
+        loggedIn: true,
+      },
+    };
+  } catch (error) {
+    return notFound;
+  }
+};
+
+export default Beer;
