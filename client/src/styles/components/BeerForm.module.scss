@@ -29,9 +29,16 @@
     }
   }
 
-  label,
-  .save {
+  label {
     grid-column: 1 / end;
+  }
+
+  .save {
+    grid-column: 1 / 4;
+  }
+
+  .cancel {
+    grid-column: 4 / end;
   }
 
   @media (min-width: $smscreen) {
@@ -44,20 +51,18 @@
     .ibu {
       grid-column: 4 / end;
     }
-
-    .save {
-      grid-column: 1 / 3;
-    }
   }
 
   @media (min-width: $mdscreen) {
     .beerName,
-    .beerType {
+    .beerType,
+    .save {
       grid-column: 1 / 3;
     }
 
     .brewer,
-    .abv {
+    .abv,
+    .cancel {
       grid-column: 3 / 5;
     }
 

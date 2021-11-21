@@ -10,7 +10,6 @@ import CategoryGroup from "./CategoryGroup";
 import Input from "./Input";
 import styles from "../styles/components/BeerForm.module.scss";
 
-// TODO: add cancel button
 const BeerForm = ({ setError, editMode, formValues }) => {
   const router = useRouter();
 
@@ -141,6 +140,15 @@ const BeerForm = ({ setError, editMode, formValues }) => {
     }
   };
 
+  const handleCancel = (e) => {
+    e.preventDefault();
+    if (editMode) {
+      router.push(`/beer/${form.id}`)
+    } else {
+      router.push("/")
+    }
+  };
+
   return (
     <>
       <form className={`${styles.beerForm}`}>
@@ -257,6 +265,14 @@ const BeerForm = ({ setError, editMode, formValues }) => {
           disabled={loading}
         >
           Save
+        </button>
+        <button
+          type="submit"
+          className={`btn btn-secondary ${styles.cancel}`}
+          onClick={handleCancel}
+          disabled={loading}
+        >
+          Cancel
         </button>
       </form>
     </>
