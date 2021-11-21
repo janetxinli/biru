@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Rating } from "@mui/material";
+import { beerTypes, servingTypes } from "../utils/dataTypes";
 import { getFormattedDate } from "../utils/getFormattedDate";
 import { useForm } from "../hooks/form";
 import { createBeer, editBeer } from "../services/beer";
@@ -43,20 +44,10 @@ const BeerForm = ({ setError, editMode, formValues }) => {
     setFormProperty("rating", value);
   };
 
-  const beerTypeMap = {
-    ale: () => toggleBeerType("ale"),
-    lager: () => toggleBeerType("lager"),
-    porter: () => toggleBeerType("porter"),
-    stout: () => toggleBeerType("stout"),
-    pilsner: () => toggleBeerType("pilsner"),
-    "pale ale": () => toggleBeerType("pale ale"),
-    wheat: () => toggleBeerType("wheat"),
-    brown: () => toggleBeerType("brown"),
-    blonde: () => toggleBeerType("blonde"),
-    IPA: () => toggleBeerType("IPA"),
-    sour: () => toggleBeerType("sour"),
-    other: () => toggleBeerType("other"),
-  };
+  const beerTypeMap = beerTypes.reduce(
+    (o, t) => ({ ...o, [t]: () => toggleBeerType(t) }),
+    {}
+  );
 
   const toggleBeerTypeVisibility = (e) => {
     e.preventDefault();
@@ -71,11 +62,10 @@ const BeerForm = ({ setError, editMode, formValues }) => {
     }
   };
 
-  const servingTypeMap = {
-    can: (e) => toggleServingType(e, "can"),
-    bottle: (e) => toggleServingType(e, "bottle"),
-    draft: (e) => toggleServingType(e, "draft"),
-  };
+  const servingTypeMap = servingTypes.reduce(
+    (o, t) => ({ ...o, [t]: (e) => toggleServingType(e, t) }),
+    {}
+  );
 
   const toggleServingType = (e, value) => {
     e.preventDefault();

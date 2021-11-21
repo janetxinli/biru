@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { beerTypes } from "../utils/dataTypes";
 import { getAll } from "../services/beer";
 import BeerOverview from "../components/BeerOverview";
 import Dropdown from "../components/Dropdown";
 import PageError from "../components/PageError";
-import styles from "../styles/pages/Index.module.scss";
 import { extractToken } from "../utils/extractToken";
 import { notFound, redirectToLogin } from "../utils/serverSide";
+import styles from "../styles/pages/Index.module.scss";
 
 const Home = ({ data, initialQuery }) => {
   // data state
@@ -62,20 +63,10 @@ const Home = ({ data, initialQuery }) => {
     rating: () => setFilter({ ...filter, descending: true, sort: "rating" }),
   };
 
-  const beerTypeMap = {
-    ale: () => toggleSelectedBeerType("ale"),
-    lager: () => toggleSelectedBeerType("lager"),
-    porter: () => toggleSelectedBeerType("porter"),
-    stout: () => toggleSelectedBeerType("stout"),
-    pilsner: () => toggleSelectedBeerType("pilsner"),
-    "pale ale": () => toggleSelectedBeerType("pale ale"),
-    wheat: () => toggleSelectedBeerType("wheat"),
-    brown: () => toggleSelectedBeerType("brown"),
-    blonde: () => toggleSelectedBeerType("blonde"),
-    IPA: () => toggleSelectedBeerType("IPA"),
-    sour: () => toggleSelectedBeerType("sour"),
-    other: () => toggleSelectedBeerType("other"),
-  };
+  const beerTypeMap = beerTypes.reduce(
+    (o, t) => ({ ...o, [t]: () => toggleSelectedBeerType(t) }),
+    {}
+  );
 
   let beerListElement;
   if (beerList && !beerList.length) {
