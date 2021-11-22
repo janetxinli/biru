@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { logout } from "../services/auth";
+import PageError from "./PageError";
 import styles from "../styles/components/Header.module.scss";
 
 const Header = ({ loggedIn }) => {
   const router = useRouter();
+
+  const [error, setError] = useState(null);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -13,21 +16,30 @@ const Header = ({ loggedIn }) => {
       await logout();
       router.push("/login");
     } catch (e) {
-      console.log(e); // TODO: create global error handler
+      setError("Unable to log out. Please try again.");
     }
   };
 
   return (
-    <header className="container df df-ai-c df-jc-sb">
-      <h1 className={styles.logo}>
-        <Link href="/">biru</Link>
-      </h1>
-      {loggedIn && (
-        <button className="btn btn-secondary" onClick={handleLogout}>
-          log out
-        </button>
+    <>
+      <header className="container df df-ai-c df-jc-sb">
+        <h1 className={styles.logo}>
+          <Link href="/">biru</Link>
+        </h1>
+        {loggedIn && (
+          <button className="btn btn-secondary" onClick={handleLogout}>
+            log out
+          </button>
+        )}
+      </header>
+      {error !== null && (
+        <PageError
+          className="container"
+          message={error}
+          closeError={() => setError(null)}
+        />
       )}
-    </header>
+    </>
   );
 };
 
