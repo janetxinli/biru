@@ -108,7 +108,7 @@ const Home = ({ data, initialQuery }) => {
       {error === null ? (
         <section>{beerListElement}</section>
       ) : (
-        <PageError message={error} />
+        <PageError message={error} closeError={() => setError(null)} />
       )}
     </>
   );

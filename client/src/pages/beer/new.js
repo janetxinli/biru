@@ -10,7 +10,7 @@ const New = () => {
   return (
     <>
       <h2>Add a New Beer</h2>
-      {error && <PageError message={error} />}
+      {error && <PageError message={error} closeError={() => setError(null)} />}
       <BeerForm setError={setError} />
     </>
   );

@@ -12,7 +12,7 @@ const EditBeer = ({ beer }) => {
   return (
     <>
       <h2>Edit Beer</h2>
-      {error && <PageError message={error} />}
+      {error && <PageError message={error} closeError={() => setError(null)} />}
       <BeerForm editMode formValues={beer} setError={setError} />
     </>
   );

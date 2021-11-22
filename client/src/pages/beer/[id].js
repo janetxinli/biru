@@ -31,7 +31,7 @@ const Beer = ({ beer }) => {
 
   return (
     <>
-      {error && <PageError message={error} />}
+      {error && <PageError message={error} closeError={() => setError(null)} />}
       <article className={`df df-fc ${styles.beerCard}`}>
         <section className={`df df-ai-fe ${styles.beerHeader}`}>
           <img src="/undraw_beer.svg" />

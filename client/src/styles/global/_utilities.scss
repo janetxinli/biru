@@ -93,4 +93,10 @@
       color: rgba($darkumber, 80%);
     }
   }
+
+  &-icon {
+    background: none;
+    border: none;
+    padding: 0 0.5em;
+  }
 }
