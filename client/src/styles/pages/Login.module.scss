@@ -1,0 +1,26 @@
+@import "../global/variables";
+
+.login {
+  width: 100%;
+  margin: auto;
+
+  @media (min-width: $smscreen) {
+    width: 20em;
+    padding: 1em;
+    border-radius: 3px;
+    border: 2px solid $bone;
+  }
+
+  & > *:not(:last-child) {
+    margin-bottom: 1em;
+  }
+
+  h2 {
+    text-align: center;
+    margin: 0;
+  }
+
+  .signup {
+    text-align: center;
+  }
+}
