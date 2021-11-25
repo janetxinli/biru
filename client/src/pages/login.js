@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { extractToken } from "../utils/extractToken";
-import { useForm } from "../hooks/form";
+import useForm from "../hooks/form";
 import { login } from "../services/auth";
 import Input from "../components/Input";
 import styles from "../styles/pages/Login.module.scss";

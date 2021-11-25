@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { Rating } from "@mui/material";
 import { beerTypes, servingTypes } from "../utils/dataTypes";
 import { getFormattedDate } from "../utils/getFormattedDate";
-import { useForm } from "../hooks/form";
+import useForm from "../hooks/form";
 import { createBeer, editBeer } from "../services/beer";
 import Dropdown from "./Dropdown";
 import CategoryGroup from "./CategoryGroup";
@@ -143,11 +143,13 @@ const BeerForm = ({ setError, editMode, formValues }) => {
   const handleCancel = (e) => {
     e.preventDefault();
     if (editMode) {
-      router.push(`/beer/${form.id}`)
+      router.push(`/beer/${form.id}`);
     } else {
-      router.push("/")
+      router.push("/");
     }
   };
+
+  // TODO: use onSubmit instead of button type="submit"
 
   return (
     <>
