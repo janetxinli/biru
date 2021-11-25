@@ -81,10 +81,14 @@ const Signup = () => {
   return (
     <>
       <h2 className={styles.welcome}>Welcome to biru!</h2>
-      {error !== null && (
-        <PageError message={error} closeError={() => setError(null)} />
-      )}
       <form className={styles.signup} onSubmit={handleSignup}>
+        {error !== null && (
+          <PageError
+            message={error}
+            closeError={() => setError(null)}
+            className={styles.error}
+          />
+        )}
         <Input
           type="text"
           label="Name"
