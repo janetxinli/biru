@@ -9,7 +9,11 @@ const PageError = ({ message, className, closeError }) => {
   };
 
   return (
-    <div className={`df df-ai-c df-jc-sb ${className} ${styles.pageError}`}>
+    <div
+      className={`df df-ai-c df-jc-sb ${className ? className : ""} ${
+        styles.pageError
+      }`}
+    >
       <p>{message}</p>
       <button className="btn btn-icon df df-ai-c df-jc-c" onClick={handleClose}>
         <CloseIcon className={styles.close} />

@@ -12,3 +12,10 @@ export const logout = async () => {
     withCredentials: true,
   });
 };
+
+export const signup = async (username, password, name, bio) => {
+  const newUser = { username, password, name, bio };
+  return axios.post("http://localhost:3001/api/auth/signup", newUser, {
+    withCredentials: true,
+  });
+};

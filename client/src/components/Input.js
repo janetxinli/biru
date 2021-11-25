@@ -17,7 +17,9 @@ const Input = ({
   return (
     <label
       htmlFor={htmlFor}
-      className={`${styles.input} ${className} ${error ? styles.formError : ""}`}
+      className={`${styles.input} ${className ? className : ""} ${
+        error ? styles.formError : ""
+      }`}
     >
       <p className="df df-jc-sb df-ai-c">
         {label}
