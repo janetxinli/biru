@@ -1,8 +1,9 @@
 const passport = require("passport");
+const { StatusCodes } = require("http-status-codes");
 const localStrategy = require("passport-local").Strategy;
 const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJWT = require("passport-jwt").ExtractJwt;
 const cookieExtractor = require("./utils/cookieExtractor");
+const error = require("./utils/error");
 const { JWT_SECRET } = require("./utils/config");
 const { User } = require("./models");
 
@@ -22,19 +23,21 @@ passport.use(
 
         // no user with given username
         if (!user.length) {
-          return done(null, false, { message: "User not found" });
+          const err = error(StatusCodes.NOT_FOUND, "User not found");
+          return done(err, false);
         }
 
         const validate = await user[0].validatePassword(password);
 
         // passwords do not match
         if (!validate) {
-          return done(null, false, { message: "Wrong password" });
+          const err = error(StatusCodes.UNAUTHORIZED, "Wrong password");
+          return done(err, false);
         }
 
         return done(null, user[0]);
       } catch (e) {
-        done(e);
+        return done(e);
       }
     }
   )
@@ -53,12 +56,13 @@ passport.use(
         const user = await User.findByPk(jwtPayload);
 
         if (!user) {
-          return done(null, false, { message: "Invalid credentials" });
+          const err = error(StatusCodes.UNAUTHORIZED, "Invalid credentials");
+          return done(err, false);
         }
 
         return done(null, user);
       } catch (e) {
-        done(e);
+        return done(e);
       }
     }
   )

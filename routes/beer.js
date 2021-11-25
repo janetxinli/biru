@@ -33,6 +33,7 @@ router.get("/", async (req, res, next) => {
     const beers = await User.findByPk(id, {
       include: {
         model: Beer,
+        required: false,
         where,
       },
       order: [[{ model: Beer }, ...order]],

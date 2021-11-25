@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const beerRouter = require("./routes/beer");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
-const middleware = require("./utils/middleware");
+const { authenticateJwt, errorHandler } = require("./utils/middleware");
 const passport = require("./passport");
 
 const app = express();
@@ -28,17 +28,9 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRouter);
 
 // require authenticated users for access
-app.use(
-  "/api/user",
-  passport.authenticate("jwt", { session: false }),
-  userRouter
-);
-app.use(
-  "/api/beer",
-  passport.authenticate("jwt", { session: false }),
-  beerRouter
-);
+app.use("/api/user", authenticateJwt, userRouter);
+app.use("/api/beer", authenticateJwt, beerRouter);
 
-app.use(middleware.errorHandler);
+app.use(errorHandler);
 
 module.exports = app;

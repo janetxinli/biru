@@ -8,13 +8,14 @@ router.get("/", async (req, res, next) => {
     const allUsers = await User.findAll();
     return res.status(StatusCodes.OK).json({ payload: allUsers });
   } catch (e) {
-    const err = error(500, "Cannot get all users");
+    const err = error(500, "Cannot get users");
     return next(err);
   }
 });
 
 router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
+
   try {
     const user = await User.findByPk(id);
 
@@ -33,6 +34,7 @@ router.get("/:id", async (req, res, next) => {
 
 router.get("/:id/beer", async (req, res, next) => {
   const { id } = req.params;
+  
   try {
     const beers = await User.findAll({
       include: Beer,
