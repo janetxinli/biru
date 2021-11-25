@@ -28,7 +28,7 @@ const Home = ({ data, initialQuery }) => {
       setError(null);
       try {
         const { data } = await getAll(filter);
-        setBeerList(data.payload ? data.payload.Beers : []);
+        setBeerList(data.payload.Beers);
       } catch (error) {
         setError("Cannot get beer journal right now.");
       }
@@ -70,9 +70,9 @@ const Home = ({ data, initialQuery }) => {
 
   let beerListElement;
   if (beerList && !beerList.length) {
-    // no beers
+    // no beers to show
     beerListElement = (
-      <p className={styles.noMatchingBeers}>No matching beers.</p>
+      <p className={styles.noMatchingBeers}>Nothing to show. Add a new beer!</p>
     );
   } else {
     beerListElement = beerList.map((b) => <BeerOverview key={b.id} beer={b} />);

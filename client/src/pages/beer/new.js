@@ -9,7 +9,7 @@ const New = () => {
 
   return (
     <>
-      <h2>Add a New Beer</h2>
+      <h2 className="text-center">Add a New Beer</h2>
       {error && <PageError message={error} closeError={() => setError(null)} />}
       <BeerForm setError={setError} />
     </>

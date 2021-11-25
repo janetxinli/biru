@@ -149,11 +149,9 @@ const BeerForm = ({ setError, editMode, formValues }) => {
     }
   };
 
-  // TODO: use onSubmit instead of button type="submit"
-
   return (
     <>
-      <form className={`${styles.beerForm}`}>
+      <form className={`${styles.beerForm}`} onSubmit={handleSubmit}>
         <Input
           type="text"
           label="Beer Name"
@@ -205,7 +203,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
           label="Serving Type"
           className={styles.servingType}
           htmlFor="servingType"
-          infoLabel="(optional)"
+          infoLabel="optional"
         >
           <CategoryGroup
             id="servingType"
@@ -216,7 +214,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
         <Input
           label="Beer Type"
           className={styles.beerType}
-          infoLabel="(optional)"
+          infoLabel="optional"
         >
           <Dropdown
             label={form.beerType ? form.beerType : "select"}
@@ -243,7 +241,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
           htmlFor="ibu"
           value={form.ibu}
           onChange={handleFieldChange}
-          infoLabel="(optional)"
+          infoLabel="optional"
           error={formErrors.ibu}
           errorMessage="Invalid value"
         />
@@ -263,13 +261,11 @@ const BeerForm = ({ setError, editMode, formValues }) => {
         <button
           type="submit"
           className={`btn btn-primary ${styles.save}`}
-          onClick={handleSubmit}
           disabled={loading}
         >
           Save
         </button>
         <button
-          type="submit"
           className={`btn btn-secondary ${styles.cancel}`}
           onClick={handleCancel}
           disabled={loading}
