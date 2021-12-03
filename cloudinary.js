@@ -5,7 +5,6 @@ const {
 } = require("./utils/config");
 
 const cloudinary = require("cloudinary").v2;
-const streamifier = require("streamifier");
 
 cloudinary.config({
   cloud_name: CLOUDINARY_CLOUD_NAME,
