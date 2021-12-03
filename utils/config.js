@@ -2,10 +2,15 @@ require("dotenv").config();
 
 const PORT = process.env.PORT || 3001;
 const JWT_SECRET = "cherrypie";
+
 const POSTGRES_USER = process.env.POSTGRES_USER;
 const POSTGRES_HOST = process.env.POSTGRES_HOST;
 const POSTGRES_DATABASE = process.env.POSTGRES_DATABASE;
 const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD;
+
+const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
+const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 
 module.exports = {
   PORT,
@@ -14,4 +19,7 @@ module.exports = {
   POSTGRES_HOST,
   POSTGRES_DATABASE,
   POSTGRES_PASSWORD,
+  CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET,
 };

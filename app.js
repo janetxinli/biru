@@ -2,8 +2,9 @@ const cors = require("cors");
 const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
-const beerRouter = require("./routes/beer");
 const authRouter = require("./routes/auth");
+const beerRouter = require("./routes/beer");
+const imageRouter = require("./routes/image");
 const userRouter = require("./routes/user");
 const { authenticateJwt, errorHandler } = require("./utils/middleware");
 const passport = require("./passport");
@@ -30,6 +31,7 @@ app.use("/api/auth", authRouter);
 // require authenticated users for access
 app.use("/api/user", authenticateJwt, userRouter);
 app.use("/api/beer", authenticateJwt, beerRouter);
+app.use("/api/image", authenticateJwt, imageRouter);
 
 app.use(errorHandler);
 
