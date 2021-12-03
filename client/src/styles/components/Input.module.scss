@@ -1,4 +1,5 @@
 @import "../global/variables";
+@import "../global/utilities";
 
 .input {
   p {
@@ -7,11 +8,11 @@
     color: darken($shadow, 20%);
   }
 
-  input {
+  input:not([type="file"]) {
     height: 2.5em;
   }
 
-  input,
+  input:not([type="file"]),
   textarea {
     width: 100%;
     border: 1px solid darken($bone, 8%);
@@ -29,12 +30,11 @@
     color: $redviolet;
   }
 
-  & > input {
-    border-color: $redviolet;
+  & > input:not([type="file"]) {
+    @include error-border;
   }
 
   &Label {
-    margin-top: 0.25em;
-    font-size: 0.75rem;
+    @include error-text;
   }
 }

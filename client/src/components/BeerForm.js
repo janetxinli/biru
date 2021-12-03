@@ -7,6 +7,7 @@ import useForm from "../hooks/form";
 import { createBeer, editBeer } from "../services/beer";
 import Dropdown from "./Dropdown";
 import CategoryGroup from "./CategoryGroup";
+import ImageCropAndUpload from "./ImageCropAndUpload";
 import Input from "./Input";
 import styles from "../styles/components/BeerForm.module.scss";
 
@@ -26,18 +27,24 @@ const BeerForm = ({ setError, editMode, formValues }) => {
         ibu: "",
         notes: "",
         date: getFormattedDate(),
+        imageUrl: null,
       });
 
   // form state
   const [beerTypeVisible, setBeerTypeVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState({
-    name: false,
-    brewer: false,
-    rating: false,
-    abv: false,
-    ibu: false,
+    imageUrl: null,
+    name: null,
+    brewer: null,
+    rating: null,
+    abv: null,
+    ibu: null,
   });
+
+  const setImage = (url) => {
+    setFormProperty("imageUrl", url);
+  };
 
   const handleRatingChange = (e, value) => {
     setFormProperty("rating", value);
@@ -87,32 +94,25 @@ const BeerForm = ({ setError, editMode, formValues }) => {
   };
 
   const validateFields = () => {
-    // check for required fields
-    let valid = true;
+    const errors = {
+      name: form.name === "" ? "Required" : null,
+      brewer: form.brewer === "" ? "Required" : null,
+      rating: !form.rating ? "Required" : null,
+      abv: form.abv !== "" && !parseFloat(form.abv) ? "Invalid value" : null,
+      ibu: form.ibu !== "" && !parseInt(form.ibu) ? "Invalid value" : null,
+    };
 
-    if (!form.name || !form.brewer || !form.rating) {
-      valid = false;
+    setFormErrors(errors);
+
+    let validity = true;
+    for (const prop in errors) {
+      if (errors[prop] !== null) {
+        validity = false;
+        break;
+      }
     }
 
-    // ABV must be a float
-    if (form.abv !== "" && !parseFloat(form.abv)) {
-      valid = false;
-    }
-
-    // IBU must be an int
-    if (form.ibu !== "" && !parseInt(form.ibu)) {
-      valid = false;
-    }
-
-    setFormErrors({
-      name: form.name === "",
-      brewer: form.brewer === "",
-      rating: !form.rating,
-      abv: form.abv !== "" && !parseFloat(form.abv),
-      ibu: form.ibu !== "" && !parseInt(form.ibu),
-    });
-
-    return valid;
+    return validity;
   };
 
   const handleSubmit = async (e) => {
@@ -152,6 +152,13 @@ const BeerForm = ({ setError, editMode, formValues }) => {
   return (
     <>
       <form className={`${styles.beerForm}`} onSubmit={handleSubmit}>
+        <ImageCropAndUpload
+          onComplete={setImage}
+          className={styles.imageCropAndUpload}
+          error={formErrors.imageUrl}
+          setError={(e) => setFormErrors({ ...formErrors, imageUrl: e })}
+          initialImage={editMode ? form.imageUrl : undefined}
+        />
         <Input
           type="text"
           label="Beer Name"
@@ -161,7 +168,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
           handleChange={handleFieldChange}
           infoLabel={`${form.name.length} / 50`}
           error={formErrors.name}
-          errorMessage="Name is required"
+          errorMessage={formErrors.name}
           maxLength={50}
         />
         <Input
@@ -173,7 +180,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
           handleChange={handleFieldChange}
           infoLabel={`${form.brewer.length} / 30`}
           error={formErrors.brewer}
-          errorMessage="Brewer is required"
+          errorMessage={formErrors.brewer}
           maxLength={30}
         />
         <Input
@@ -189,7 +196,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
           className={styles.beerRating}
           htmlFor="beerRating"
           error={formErrors.rating}
-          errorMessage="Rating is required"
+          errorMessage={formErrors.rating}
         >
           <Rating
             id="beerRating"
@@ -232,7 +239,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
           onChange={handleFieldChange}
           infoLabel="optional"
           error={formErrors.abv}
-          errorMessage="Invalid value"
+          errorMessage={formErrors.abv}
         />
         <Input
           type="text"
@@ -243,7 +250,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
           onChange={handleFieldChange}
           infoLabel="optional"
           error={formErrors.ibu}
-          errorMessage="Invalid value"
+          errorMessage={formErrors.ibu}
         />
         <Input
           label="Notes"

@@ -1,11 +1,14 @@
 const { uploadToCloudinary } = require("../cloudinary");
 const error = require("../utils/error");
+const globalConfig = require("../globalConfig.json");
 const multer = require("multer");
 const router = require("express").Router();
 const { StatusCodes } = require("http-status-codes");
 
+// images will be base64-encoded
+// base64 makes images approximately 33% larger
 const upload = multer({
-  limits: { fieldSize: 10 * (4 / 3) * Math.pow(10, 6) },
+  limits: { fieldSize: (4 / 3) * globalConfig.maxImageSize },
 });
 
 router.post("/upload", upload.none("image"), async (req, res, next) => {

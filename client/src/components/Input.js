@@ -9,7 +9,6 @@ const Input = ({
   value,
   handleChange,
   infoLabel,
-  error,
   errorMessage,
   children,
   ...rest
@@ -18,7 +17,9 @@ const Input = ({
     <label
       htmlFor={htmlFor}
       className={`${styles.input} ${className ? className : ""} ${
-        error ? styles.formError : ""
+        errorMessage !== undefined && errorMessage !== null
+          ? styles.formError
+          : null
       }`}
     >
       <p className="df df-jc-sb df-ai-c">
@@ -38,8 +39,8 @@ const Input = ({
           {...rest} // maxLength, etc.
         />
       )}
-      {error && (
-        <p className={error ? styles.formErrorLabel : "hidden"}>
+      {errorMessage && (
+        <p className={errorMessage !== null ? styles.formErrorLabel : "hidden"}>
           {errorMessage}
         </p>
       )}
