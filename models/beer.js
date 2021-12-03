@@ -48,6 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: false,
       },
+      imageUrl: DataTypes.STRING,
     },
     {
       sequelize,

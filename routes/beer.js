@@ -64,8 +64,18 @@ router.get("/:id", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { name, brewer, rating, servingType, beerType, abv, ibu, date, notes } =
-    req.body;
+  const {
+    name,
+    brewer,
+    rating,
+    servingType,
+    beerType,
+    abv,
+    ibu,
+    date,
+    notes,
+    imageUrl,
+  } = req.body;
 
   try {
     const newBeer = await Beer.create({
@@ -79,6 +89,7 @@ router.post("/", async (req, res, next) => {
       date,
       notes,
       userId: req.user.id,
+      imageUrl,
     });
     return res.status(StatusCodes.CREATED).json({ payload: newBeer });
   } catch (e) {
