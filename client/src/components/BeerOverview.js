@@ -4,6 +4,8 @@ import { Rating } from "@mui/material";
 import styles from "../styles/components/BeerOverview.module.scss";
 
 const BeerOverview = ({ beer }) => {
+  const imgSrc = beer.imageUrl ? beer.imageUrl : "/beerIconSquare.svg";
+
   return (
     <article className={styles.beerOverview}>
       <Link href={`/beer/${beer.id}`}>
@@ -23,7 +25,7 @@ const BeerOverview = ({ beer }) => {
               className={styles.rating}
             />
           </span>
-          <img src="/undraw_beer.svg" className={styles.beerImage} />
+          <img src={imgSrc} className={styles.beerImage} alt={beer.name} />
         </a>
       </Link>
     </article>

@@ -1,17 +1,30 @@
 @import "../global/variables";
 
 .beerCard {
+  width: 100%;
+  margin: 2em auto 0 auto;
+  padding: 1em 2em;
+  background-color: darken($bone, 5%);
+  border-radius: 3px;
+
   & > *:not(:last-child) {
     margin-bottom: 1.5em;
   }
 
+  @media (min-width: $mdscreen) {
+    width: 70%;
+
+  }
+
+  .beerImg {
+    width: 25%;
+    min-width: 8em;
+    margin: auto;
+    padding-bottom: 1.5em;
+  }
+
   .beerHeader {
     width: 100%;
-
-    img {
-      min-width: 8em;
-      width: 25%;
-    }
 
     h2 {
       margin-top: 0;
@@ -30,12 +43,12 @@
 
   .beerStats {
     padding: 1em;
-    background-color: darken($bone, 5%);
+    background-color: lighten($bone, 5%);
     border-radius: 3px;
 
     .stat {
       &:not(:last-child) {
-        border-right: 1px solid #fff;
+        border-right: 1px solid darken($bone, 5%);
         padding-right: 1.5em;
         margin-right: 1.5em;
       }
@@ -67,8 +80,7 @@
   .beerStats,
   .beerInfo {
     @media (min-width: $mdscreen) {
-      margin-left: auto;
-      width: 75%;
+      width: 100%;
     }
   }
 
