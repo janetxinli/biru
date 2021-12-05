@@ -1,9 +1,8 @@
 const router = require("express").Router();
-const jwt = require("jsonwebtoken");
 const { StatusCodes } = require("http-status-codes");
 const { authenticateLogin } = require("../utils/middleware");
 const error = require("../utils/error");
-const { JWT_SECRET } = require("../utils/config");
+const { SESSION_NAME } = require("../utils/config");
 const { User } = require("../models");
 
 router.post("/signup", async (req, res, next) => {
@@ -31,35 +30,18 @@ router.post("/signup", async (req, res, next) => {
 });
 
 router.post("/login", authenticateLogin, async (req, res, next) => {
-  const { user } = req;
-
-  try {
-    const token = jwt.sign(user.id, JWT_SECRET);
-
-    return res
-      .cookie("biruCookie", token, {
-        httpOnly: true,
-        secure: true, // TODO: make expire
-        sameSite: "none",
-      })
-      .status(StatusCodes.OK)
-      .json({ message: "Logged in successfully" });
-  } catch (e) {
-    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to log in");
-    return next(err);
-  }
+  return res.status(StatusCodes.OK).json({ message: "Logged in successfully" });
 });
 
 router.get("/logout", async (req, res, next) => {
-  try {
+  req.session.destroy((err) => {
+    if (err) return next(err);
+
     return res
-      .clearCookie("biruCookie")
+      .clearCookie(SESSION_NAME)
       .status(StatusCodes.OK)
-      .json({ message: "Logged out successfully " });
-  } catch (e) {
-    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to log out");
-    return next(err);
-  }
+      .json({ message: "Logged out successfully" });
+  });
 });
 
 module.exports = router;

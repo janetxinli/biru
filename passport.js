@@ -1,10 +1,7 @@
 const passport = require("passport");
 const { StatusCodes } = require("http-status-codes");
 const localStrategy = require("passport-local").Strategy;
-const JwtStrategy = require("passport-jwt").Strategy;
-const cookieExtractor = require("./utils/cookieExtractor");
 const error = require("./utils/error");
-const { JWT_SECRET } = require("./utils/config");
 const { User } = require("./models");
 
 passport.use(
@@ -35,7 +32,10 @@ passport.use(
           return done(err, false);
         }
 
-        return done(null, user[0]);
+        req.logIn(user[0], (err) => {
+          if (err) return done(err);
+          return done(null, user[0]);
+        });
       } catch (e) {
         return done(e);
       }
@@ -43,29 +43,20 @@ passport.use(
   )
 );
 
-passport.use(
-  "jwt",
-  new JwtStrategy(
-    {
-      jwtFromRequest: cookieExtractor,
-      secretOrKey: JWT_SECRET,
-    },
-    async (jwtPayload, done) => {
-      try {
-        // search for a user with given credentials
-        const user = await User.findByPk(jwtPayload);
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
 
-        if (!user) {
-          const err = error(StatusCodes.UNAUTHORIZED, "Invalid credentials");
-          return done(err, false);
-        }
+passport.deserializeUser(async (id, done) => {
+  const user = await User.unscoped().findByPk(id);
+  if (!user) {
+    const err = error(StatusCodes.NOT_FOUND, "User not found");
+    return done(err, false);
+  }
 
-        return done(null, user);
-      } catch (e) {
-        return done(e);
-      }
-    }
-  )
-);
+  return done(null, user);
+});
+
+passport.session();
 
 module.exports = passport;

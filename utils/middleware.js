@@ -1,4 +1,6 @@
+const { StatusCodes } = require("http-status-codes");
 const passport = require("../passport");
+const error = require("../utils/error");
 
 const passportHandler = (req, next) => {
   const handler = (err, user, info) => {
@@ -14,19 +16,16 @@ const passportHandler = (req, next) => {
 };
 
 const authenticateLogin = (req, res, next) => {
-  passport.authenticate(
-    "login",
-    { session: false },
-    passportHandler(req, next)
-  )(req, res, next);
+  passport.authenticate("login", passportHandler(req, next))(req, res, next);
 };
 
-const authenticateJwt = (req, res, next) => {
-  passport.authenticate("jwt", { session: false }, passportHandler(req, next))(
-    req,
-    res,
-    next
-  );
+const requireLogin = (req, res, next) => {
+  if (!req.session.passport?.user) {
+    const e = error(StatusCodes.UNAUTHORIZED, "Not authorized");
+    return next(e);
+  }
+
+  return next();
 };
 
 const errorHandler = (err, req, res, next) => {
@@ -36,6 +35,6 @@ const errorHandler = (err, req, res, next) => {
 
 module.exports = {
   authenticateLogin,
-  authenticateJwt,
+  requireLogin,
   errorHandler,
 };

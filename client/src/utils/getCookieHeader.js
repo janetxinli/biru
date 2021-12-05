@@ -1,7 +1,9 @@
+import globalConfig from "../../../globalConfig.json";
+
 export const getCookieHeader = (token) => {
   return {
     headers: {
-      Cookie: `biruCookie=${token}; HttpOnly;`,
+      Cookie: `${globalConfig.SESSION_NAME}=${token}; HttpOnly;`,
     },
   };
 };
