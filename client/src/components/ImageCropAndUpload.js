@@ -27,7 +27,7 @@ const ImageCropAndUpload = ({
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       // check file size
-      if (fileSize > globalConfig.maxImageSize) {
+      if (fileSize > globalConfig.MAX_IMAGE_SIZE) {
         setError("Maximum file size is 10MB");
       } else {
         const url = URL.createObjectURL(e.target.files[0]);

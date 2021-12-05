@@ -8,7 +8,7 @@ const { StatusCodes } = require("http-status-codes");
 // images will be base64-encoded
 // base64 makes images approximately 33% larger
 const upload = multer({
-  limits: { fieldSize: (4 / 3) * globalConfig.maxImageSize },
+  limits: { fieldSize: (4 / 3) * globalConfig.MAX_IMAGE_SIZE },
 });
 
 router.post("/upload", upload.none("image"), async (req, res, next) => {
