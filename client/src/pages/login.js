@@ -5,6 +5,7 @@ import { extractToken } from "../utils/extractToken";
 import useForm from "../hooks/form";
 import { login } from "../services/auth";
 import Input from "../components/Input";
+import PageError from "../components/PageError";
 import styles from "../styles/pages/Login.module.scss";
 
 const Login = () => {
@@ -15,23 +16,32 @@ const Login = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError(null);
     setLoading(true);
 
     try {
       await login(form.username, form.password);
       router.push("/");
     } catch (e) {
+      setError(e.response.data.error || "Unable to log in. Please try again");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form className={`df df-fc df-ai-s df-jc-c ${styles.login}`}>
+    <form
+      className={`df df-fc df-ai-s df-jc-c ${styles.login}`}
+      onSubmit={handleLogin}
+    >
       <h2>Login</h2>
+      {error !== null && (
+        <PageError message={error} closeError={() => setError(null)} className={styles.error} />
+      )}
       <Input
         type="text"
         label="Username"
@@ -49,12 +59,11 @@ const Login = () => {
       <button
         className="btn btn-primary"
         type="submit"
-        onClick={handleLogin}
-        disabled={loading}
+        disabled={loading || form.username === "" || form.password === ""}
       >
         Log In
       </button>
-      <p className={styles.signup}>
+      <p className="text-center">
         New to biru?{" "}
         <Link href="/signup">
           <a>Sign up here.</a>

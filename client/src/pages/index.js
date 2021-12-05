@@ -30,7 +30,7 @@ const Home = ({ data, initialQuery }) => {
         const { data } = await getAll(filter);
         setBeerList(data.payload.Beers);
       } catch (error) {
-        setError("Cannot get beer journal right now.");
+        setError("Cannot get your beer journal right now.");
       }
     };
 
@@ -108,7 +108,7 @@ const Home = ({ data, initialQuery }) => {
       {error === null ? (
         <section>{beerListElement}</section>
       ) : (
-        <PageError message={error} closeError={() => setError(null)} />
+        <PageError message={error} />
       )}
     </>
   );

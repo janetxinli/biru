@@ -15,9 +15,14 @@ const PageError = ({ message, className, closeError }) => {
       }`}
     >
       <p>{message}</p>
-      <button className="btn btn-icon df df-ai-c df-jc-c" onClick={handleClose}>
-        <CloseIcon className={styles.close} />
-      </button>
+      {closeError !== undefined && (
+        <button
+          className="btn btn-icon df df-ai-c df-jc-c"
+          onClick={handleClose}
+        >
+          <CloseIcon className={styles.close} />
+        </button>
+      )}
     </div>
   );
 };

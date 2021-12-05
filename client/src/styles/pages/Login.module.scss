@@ -11,12 +11,16 @@
     border: 2px solid $bone;
   }
 
-  & > *:not(:last-child) {
-    margin-bottom: 1em;
+  & > *:not(:first-child) {
+    margin-top: 1em;
   }
 
   h2 {
     text-align: center;
     margin: 0;
+  }
+
+  .error {
+    margin-bottom: 0;
   }
 }
