@@ -1,0 +1,32 @@
+@import "../global/utilities";
+@import "../global/variables";
+
+.imageInput {
+  height: 12em;
+  width: 12em;
+  position: relative;
+  border: 1px solid $bone;
+  border-radius: 3px;
+  background-color: lighten($bone, 2%);
+  cursor: pointer;
+
+  &Hidden {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.8;
+  }
+
+  .label {
+    font-weight: 500;
+    position: absolute;
+    left: 0.5em;
+    bottom: 1em;
+  }
+}

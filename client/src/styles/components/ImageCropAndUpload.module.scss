@@ -1,0 +1,39 @@
+@import "../global/utilities";
+
+.cropContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 2;
+  background-color: lighten($bone, 5%);
+
+  .cropImage {
+    position: relative;
+    height: 90%;
+  }
+
+  .cropControls {
+    position: relative;
+    height: 10%;
+    margin: 0 3em;
+
+    & > :not(:last-child) {
+      margin-right: 1em;
+    }
+
+    .rotateBtn {
+      margin-right: 1.5em;
+    }
+  }
+}
+
+.errorBorder {
+  @include error-border;
+}
+
+.errorText {
+  @include error-text;
+  text-align: left;
+}

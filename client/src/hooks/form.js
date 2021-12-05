@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useForm = (initialValue) => {
+const useForm = (initialValue) => {
   const [form, setForm] = useState(initialValue);
 
   // handle field change automatically
@@ -23,3 +23,5 @@ export const useForm = (initialValue) => {
     setFormProperty,
   };
 };
+
+export default useForm;

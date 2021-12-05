@@ -41,6 +41,10 @@
   &-ai-fe {
     align-items: flex-end;
   }
+
+  &-ai-s {
+    align-items: stretch;
+  }
 }
 
 .hidden {
@@ -55,6 +59,7 @@
   border-radius: 4px;
   font-size: 0.875rem;
   font-weight: 500;
+  cursor: pointer;
 
   &-primary {
     background-color: $redviolet;
@@ -93,4 +98,32 @@
       color: rgba($darkumber, 80%);
     }
   }
+
+  &-icon {
+    min-width: 0;
+    background: none;
+    border: none;
+    padding: 0;
+
+    
+    &:hover,
+    &:active,
+    &:focus {
+      color: lighten($darkumber, 10%);
+    }
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+@mixin error-border {
+  border-color: $redviolet;
+}
+
+@mixin error-text {
+  color: $redviolet;
+  margin-top: 0.25em;
+  font-size: 0.75rem;
 }

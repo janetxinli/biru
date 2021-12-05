@@ -4,15 +4,23 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CheckIcon from "@mui/icons-material/Check";
 import styles from "../styles/components/Dropdown.module.scss";
 
-export default function Dropdown({ label, optionMap, visibility, toggleVisibility, selected, className }) {
-
+const Dropdown = ({
+  label,
+  optionMap,
+  visibility,
+  toggleVisibility,
+  selected,
+  className,
+}) => {
   // create list of select elements from optionMap
   const selectElements = [];
   for (const [name, onClick] of Object.entries(optionMap)) {
     selectElements.push(
       <div id={name} key={name} role="option" onClick={onClick}>
         {selected === name && <CheckIcon fontSize="inherit" />}
-        <p className={selected !== name ? styles.shiftRight : undefined}>{name}</p>
+        <p className={selected !== name ? styles.shiftRight : undefined}>
+          {name}
+        </p>
       </div>
     );
   }
@@ -26,7 +34,12 @@ export default function Dropdown({ label, optionMap, visibility, toggleVisibilit
         onClick={toggleVisibility}
         className="btn btn-secondary"
       >
-        {label} {visibility ? <ArrowDropUpIcon fontSize="inherit"/> : <ArrowDropDownIcon fontSize="inherit"/>}
+        {label}{" "}
+        {visibility ? (
+          <ArrowDropUpIcon fontSize="inherit" />
+        ) : (
+          <ArrowDropDownIcon fontSize="inherit" />
+        )}
       </button>
       <div
         role="listbox"
@@ -38,4 +51,6 @@ export default function Dropdown({ label, optionMap, visibility, toggleVisibilit
       </div>
     </div>
   );
-}
+};
+
+export default Dropdown;

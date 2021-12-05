@@ -1,17 +1,18 @@
 const router = require("express").Router();
 const { StatusCodes } = require("http-status-codes");
 const error = require("../utils/error");
-const { Beer } = require("../models");
+const { Beer, User } = require("../models");
 
 router.get("/", async (req, res, next) => {
   const { beerType, sort, descending } = req.query;
+  const { id } = req.user;
 
   // define query object
-  const queryObj = {};
+  const where = {};
 
   // filter by beerType
   if (beerType) {
-    queryObj["where"] = { beerType };
+    where.beerType = beerType;
   }
 
   // sort result
@@ -23,39 +24,58 @@ router.get("/", async (req, res, next) => {
     order.push(sortBy);
   } else {
     const err = error(StatusCodes.BAD_REQUEST, "Invalid ordering parameter");
-    next(err);
+    return next(err);
   }
 
   if (descending) order.push("DESC");
-  queryObj["order"] = [order];
 
   try {
-    const beers = await Beer.findAll(queryObj);
+    const beers = await User.findByPk(id, {
+      include: {
+        model: Beer,
+        required: false,
+        where,
+      },
+      order: [[{ model: Beer }, ...order]],
+    });
     return res.json({ payload: beers });
   } catch (e) {
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
-    next(err);
+    return next(err);
   }
 });
 
 router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
-    const beer = await Beer.findOne({ where: { id } });
+    const beer = await Beer.findByPk(id);
+
+    // beer with specified id not found
     if (!beer) {
       const err = error(StatusCodes.NOT_FOUND, "Beer does not exist");
-      next(err);
+      return next(err);
     }
+
     return res.json({ payload: beer });
   } catch (e) {
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, "Server error");
-    next(err);
+    return next(err);
   }
 });
 
 router.post("/", async (req, res, next) => {
-  const { name, brewer, rating, servingType, beerType, abv, ibu, date, notes } =
-    req.body;
+  const {
+    name,
+    brewer,
+    rating,
+    servingType,
+    beerType,
+    abv,
+    ibu,
+    date,
+    notes,
+    imageUrl,
+  } = req.body;
 
   try {
     const newBeer = await Beer.create({
@@ -68,11 +88,13 @@ router.post("/", async (req, res, next) => {
       ibu: ibu ? parseInt(ibu) : null,
       date,
       notes,
+      userId: req.user.id,
+      imageUrl,
     });
     return res.status(StatusCodes.CREATED).json({ payload: newBeer });
   } catch (e) {
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
-    next(err);
+    return next(err);
   }
 });
 
@@ -82,6 +104,13 @@ router.put("/:id", async (req, res, next) => {
     req.body;
 
   try {
+    const beer = await Beer.findByPk(id);
+
+    // beer does not belong to authorized user
+    if (beer.userId !== req.user.id) {
+      const err = error(StatusCodes.UNAUTHORIZED, "Unauthorized to edit beer");
+      return next(err);
+    }
     const updatedBeer = await Beer.update(
       {
         name,
@@ -93,6 +122,7 @@ router.put("/:id", async (req, res, next) => {
         ibu: ibu ? parseInt(ibu) : null,
         date,
         notes,
+        userId: req.user.id,
       },
       { where: { id }, returning: true }
     );
@@ -100,7 +130,7 @@ router.put("/:id", async (req, res, next) => {
     return res.status(StatusCodes.OK).json({ payload: updatedBeer[1][0] });
   } catch (e) {
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
-    next(err);
+    return next(err);
   }
 });
 
@@ -108,16 +138,28 @@ router.delete("/:id", async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const beer = await Beer.findOne({ where: { id } });
+    const beer = await Beer.findByPk(id);
+
+    // beer with specified id not found
     if (!beer) {
       const err = error(StatusCodes.NOT_FOUND, "Beer does not exist");
-      next(err);
+      return next(err);
     }
+
+    // beer does not belong to authorized user
+    if (beer.userId !== req.user.id) {
+      const err = error(
+        StatusCodes.UNAUTHORIZED,
+        "Unauthorized to delete beer"
+      );
+      return next(err);
+    }
+
     await beer.destroy();
     return res.status(StatusCodes.NO_CONTENT).end();
   } catch (e) {
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
-    next(err);
+    return next(err);
   }
 });
 

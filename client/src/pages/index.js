@@ -1,23 +1,41 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { beerTypes } from "../utils/dataTypes";
 import { getAll } from "../services/beer";
 import BeerOverview from "../components/BeerOverview";
 import Dropdown from "../components/Dropdown";
+import PageError from "../components/PageError";
+import { extractToken } from "../utils/extractToken";
+import { notFound, redirectToLogin } from "../utils/serverSide";
 import styles from "../styles/pages/Index.module.scss";
 
-export default function Home({ beers }) {
+const Home = ({ data, initialQuery }) => {
   // data state
-  const [beerList, setBeerList] = useState(beers);
-  const [filter, setFilter] = useState({
-    sort: "date",
-    descending: true,
-    beerType: null,
-  });
+  const [beerList, setBeerList] = useState(data.Beers);
+  const [filter, setFilter] = useState(initialQuery);
 
   // menu button state
   const [sortVisible, setSortVisible] = useState(false);
   const [beerTypeVisible, setBeerTypeVisible] = useState(false);
+
+  // page state
+  const [error, setError] = useState(null);
+
+  // update beerList on filter/sort change
+  useEffect(() => {
+    const updateBeers = async () => {
+      setError(null);
+      try {
+        const { data } = await getAll(filter);
+        setBeerList(data.payload.Beers);
+      } catch (error) {
+        setError("Cannot get your beer journal right now.");
+      }
+    };
+
+    updateBeers();
+  }, [filter]);
 
   const toggleSortVisible = (e) => {
     e.preventDefault();
@@ -45,25 +63,20 @@ export default function Home({ beers }) {
     rating: () => setFilter({ ...filter, descending: true, sort: "rating" }),
   };
 
-  const beerTypeMap = {
-    ale: () => toggleSelectedBeerType("ale"),
-    lager: () => toggleSelectedBeerType("lager"),
-    porter: () => toggleSelectedBeerType("porter"),
-    stout: () => toggleSelectedBeerType("stout"),
-    pilsner: () => toggleSelectedBeerType("pilsner"),
-    "pale ale": () => toggleSelectedBeerType("pale ale"),
-    wheat: () => toggleSelectedBeerType("wheat"),
-    brown: () => toggleSelectedBeerType("brown"),
-    blonde: () => toggleSelectedBeerType("blonde"),
-    IPA: () => toggleSelectedBeerType("IPA"),
-    sour: () => toggleSelectedBeerType("sour"),
-    other: () => toggleSelectedBeerType("other"),
-  };
+  const beerTypeMap = beerTypes.reduce(
+    (o, t) => ({ ...o, [t]: () => toggleSelectedBeerType(t) }),
+    {}
+  );
 
-  useEffect(async () => {
-    const res = await getAll(filter);
-    setBeerList(res.data.payload);
-  }, [filter]);
+  let beerListElement;
+  if (beerList && !beerList.length) {
+    // no beers to show
+    beerListElement = (
+      <p className={styles.noMatchingBeers}>Nothing to show. Add a new beer!</p>
+    );
+  } else {
+    beerListElement = beerList.map((b) => <BeerOverview key={b.id} beer={b} />);
+  }
 
   return (
     <>
@@ -71,7 +84,7 @@ export default function Home({ beers }) {
         <title>biru</title>
       </Head>
       <section className={`df df-fc ${styles.pageHeader}`}>
-        <h2>My Beer Journal</h2>
+        <h2>{data.name}'s Beer Journal</h2>
         <section className="df">
           <Dropdown
             label="sort"
@@ -92,25 +105,42 @@ export default function Home({ beers }) {
           </Link>
         </section>
       </section>
-      {beerList.length ? (
-        beerList.map((b) => <BeerOverview key={b.id} beer={b} />)
+      {error === null ? (
+        <section>{beerListElement}</section>
       ) : (
-        <p className={styles.noMatchingBeers}>No matching beers.</p>
+        <PageError message={error} />
       )}
     </>
   );
-}
+};
 
-export async function getServerSideProps() {
-  // sort beers by descending date by default
-  const defaultFilters = {
-    sort: "date",
-    descending: true,
-    beerType: null,
-  };
-  const res = await getAll(defaultFilters);
+export const getServerSideProps = async (ctx) => {
+  const token = extractToken(ctx);
 
-  return {
-    props: { beers: res.data.payload },
-  };
-}
+  // no logged in user
+  if (!token) {
+    return redirectToLogin;
+  }
+
+  try {
+    const initialQuery = {
+      sort: "date",
+      descending: true,
+      beerType: null,
+    };
+
+    const res = await getAll(initialQuery, token);
+
+    return {
+      props: {
+        data: res.data.payload,
+        loggedIn: true,
+        initialQuery,
+      },
+    };
+  } catch (err) {
+    return notFound;
+  }
+};
+
+export default Home;

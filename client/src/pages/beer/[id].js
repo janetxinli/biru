@@ -5,12 +5,14 @@ import { IoBeerOutline } from "react-icons/io5";
 import { getBeerById, deleteBeer } from "../../services/beer";
 import { capitalize } from "../../utils/capitalize";
 import PageError from "../../components/PageError";
+import { extractToken } from "../../utils/extractToken";
+import { notFound, redirectToLogin } from "../../utils/serverSide";
 import styles from "../../styles/pages/Beer.module.scss";
 
-export default function Beer({ beer }) {
-  const [error, setError] = useState(null);
-
+const Beer = ({ beer }) => {
   const router = useRouter();
+
+  const [error, setError] = useState(null);
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -27,17 +29,17 @@ export default function Beer({ beer }) {
     router.push(`/beer/edit/${beer.id}`);
   };
 
+  const imgSrc = beer.imageUrl ? beer.imageUrl : "/beerIconSquare.svg";
+
   return (
-    <>
-      {error && <PageError message={error} />}
+    <div className="df df-fc df-jc-c">
+      {error && <PageError message={error} closeError={() => setError(null)} />}
       <article className={`df df-fc ${styles.beerCard}`}>
-        <section className={`df df-ai-fe ${styles.beerHeader}`}>
-          <img src="/undraw_beer.svg" />
-          <section className="df df-fc">
-            <h2>{beer.name}</h2>
-            <p className={styles.brewer}>{beer.brewer}</p>
-            <p>Added {new Date(Date.parse(beer.date)).toDateString()}</p>
-          </section>
+        <img src={imgSrc} alt={beer.name} className={styles.beerImg} />
+        <section className={`df df-fc df-ai-c ${styles.beerHeader}`}>
+          <h2>{beer.name}</h2>
+          <p className={styles.brewer}>{beer.brewer}</p>
+          <p>Added {new Date(Date.parse(beer.date)).toDateString()}</p>
         </section>
         {beer.notes && <p className={styles.notes}>{beer.notes}</p>}
         <section className={`df df-jc-c ${styles.beerStats}`}>
@@ -87,22 +89,29 @@ export default function Beer({ beer }) {
           </button>
         </section>
       </article>
-    </>
+    </div>
   );
-}
+};
 
-export async function getServerSideProps(ctx) {
-  const { id } = ctx.params;
-  const res = await getBeerById(id);
-  if (!res.data.payload) {
-    return {
-      notFound: true,
-    };
+export const getServerSideProps = async (ctx) => {
+  const token = extractToken(ctx);
+
+  if (!token) {
+    return redirectToLogin;
   }
 
-  return {
-    props: {
-      beer: res.data.payload,
-    },
-  };
-}
+  try {
+    const res = await getBeerById(ctx.params.id, token);
+
+    return {
+      props: {
+        beer: res.data.payload,
+        loggedIn: true,
+      },
+    };
+  } catch (error) {
+    return notFound;
+  }
+};
+
+export default Beer;

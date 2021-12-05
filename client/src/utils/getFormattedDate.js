@@ -1,6 +1,5 @@
 // get a date formatted as YYYY-MM-DD
-export const getFormattedDate = (date=null) => {
-  console.log(date);
+export const getFormattedDate = (date = null) => {
   let oldDate;
   if (!date) {
     oldDate = new Date();
@@ -9,6 +8,9 @@ export const getFormattedDate = (date=null) => {
   }
 
   const dateStrings = oldDate.toLocaleDateString().split("/");
-  const orderedDateStrings = [dateStrings[2], ...dateStrings.splice(0, 2)];
+  const orderedDateStrings = [
+    dateStrings[2],
+    ...dateStrings.splice(0, 2).map((d) => d.padStart(2, "0")),
+  ];
   return orderedDateStrings.join("-");
 };

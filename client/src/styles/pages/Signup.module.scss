@@ -1,0 +1,36 @@
+@import "../global/variables";
+
+.welcome {
+  margin-top: 0;
+  text-align: center;
+}
+
+.signup {
+  margin: 0 auto;
+  max-width: $smscreen;
+  display: grid;
+  gap: 1em 0.75em;
+
+  @media (min-width: $smscreen) {
+    grid-template-columns: repeat(2, 1fr);
+
+    h2,
+    .bio {
+      grid-column: 1 / end;
+    }
+
+    .name,
+    .password {
+      grid-column: 1 / 2;
+    }
+
+    .username,
+    .passwordConfirm {
+      grid-column: 2 / end;
+    }
+  }
+
+  .error {
+    grid-column: 1 / end;
+  }
+}

@@ -27,7 +27,7 @@ p {
 }
 
 a {
-  color: inherit;
+  color: $rosewood;
   text-decoration: none;
 }
 
@@ -63,4 +63,9 @@ textarea {
 
 .MuiRating-label {
   margin-bottom: 0;
+}
+
+.MuiSlider-root {
+  color: $darkumber;
+  width: 12em;
 }

@@ -1,0 +1,40 @@
+@import "../global/variables";
+@import "../global/utilities";
+
+.input {
+  p {
+    margin-top: 0em;
+    margin-bottom: 0.5em;
+    color: darken($shadow, 20%);
+  }
+
+  input:not([type="file"]) {
+    height: 2.5em;
+  }
+
+  input:not([type="file"]),
+  textarea {
+    width: 100%;
+    border: 1px solid darken($bone, 8%);
+  }
+}
+
+.inputInfo {
+  color: darken($shadow, 10%);
+  font-size: 0.75em;
+  font-style: italic;
+}
+
+.formError {
+  p {
+    color: $redviolet;
+  }
+
+  & > input:not([type="file"]) {
+    @include error-border;
+  }
+
+  &Label {
+    @include error-text;
+  }
+}
