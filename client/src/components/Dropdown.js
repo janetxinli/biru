@@ -12,15 +12,21 @@ const Dropdown = ({
   selected,
   className,
 }) => {
+  let checkSelected;
+  if (typeof selected === "string" || selected === null) {
+    checkSelected = (value) => selected === value;
+  } else {
+    checkSelected = (value) => selected.includes(value);
+  }
+
   // create list of select elements from optionMap
   const selectElements = [];
   for (const [name, onClick] of Object.entries(optionMap)) {
+    const inSelected = checkSelected(name);
     selectElements.push(
       <div id={name} key={name} role="option" onClick={onClick}>
-        {selected === name && <CheckIcon fontSize="inherit" />}
-        <p className={selected !== name ? styles.shiftRight : undefined}>
-          {name}
-        </p>
+        {inSelected && <CheckIcon fontSize="inherit" />}
+        <p className={!inSelected ? styles.shiftRight : undefined}>{name}</p>
       </div>
     );
   }

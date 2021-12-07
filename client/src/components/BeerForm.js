@@ -228,6 +228,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
             optionMap={beerTypeMap}
             visibility={beerTypeVisible}
             toggleVisibility={toggleBeerTypeVisibility}
+            selected={form.beerType}
           />
         </Input>
         <Input

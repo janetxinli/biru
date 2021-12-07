@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { StatusCodes } = require("http-status-codes");
 const { Beer, User } = require("../models");
 const error = require("../utils/error");
@@ -11,7 +12,9 @@ const getAll = async (req, res, next) => {
 
   // filter by beerType
   if (beerType) {
-    where.beerType = beerType;
+    where.beerType = {
+      [Op.in]: beerType,
+    };
   }
 
   // sort result

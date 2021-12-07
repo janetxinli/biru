@@ -50,10 +50,13 @@ const Home = ({ data, initialQuery }) => {
   };
 
   const toggleSelectedBeerType = (beerType) => {
-    if (beerType === filter.beerType) {
-      setFilter({ ...filter, beerType: null });
+    if (filter.beerType.includes(beerType)) {
+      setFilter({
+        ...filter,
+        beerType: filter.beerType.filter((v) => v !== beerType),
+      });
     } else {
-      setFilter({ ...filter, beerType });
+      setFilter({ ...filter, beerType: filter.beerType.concat(beerType) });
     }
   };
 
@@ -126,7 +129,7 @@ export const getServerSideProps = async (ctx) => {
     const initialQuery = {
       sort: "date",
       descending: true,
-      beerType: null,
+      beerType: [],
     };
 
     const res = await getAll(initialQuery, token);
