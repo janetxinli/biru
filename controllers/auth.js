@@ -11,7 +11,7 @@ const signup = async (req, res, next) => {
       username,
       password,
       name,
-      bio,
+      bio: bio || null,
     });
 
     return res
@@ -28,7 +28,9 @@ const signup = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-  return res.status(StatusCodes.OK).json({ message: "Logged in successfully" });
+  const { username, id } = req.user;
+
+  return res.status(StatusCodes.OK).json({ user: { username, id } });
 };
 
 const logout = async (req, res, next) => {
@@ -42,8 +44,23 @@ const logout = async (req, res, next) => {
   });
 };
 
+const check = async (req, res, next) => {
+  const { user } = req;
+
+  const response = { authenticated: user !== undefined };
+
+  if (user) {
+    response.user = {
+      username: user.username,
+      id: user.id,
+    };
+  }
+  return res.status(StatusCodes.OK).json(response);
+};
+
 module.exports = {
   signup,
   login,
   logout,
+  check,
 };
