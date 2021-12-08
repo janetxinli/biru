@@ -19,3 +19,9 @@ export const signup = async (username, password, name, bio) => {
     withCredentials: true,
   });
 };
+
+export const check = async () => {
+  return axios.get("http://localhost:3001/api/auth/check", {
+    withCredentials: true,
+  });
+};
