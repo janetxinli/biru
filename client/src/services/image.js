@@ -1,7 +1,6 @@
 import axios from "axios";
-import { getCookieHeader } from "../utils/getCookieHeader";
 
-export const uploadImage = async (encoded, token = null) => {
+export const uploadImage = async (encoded) => {
   // create FormData object with image
   const form = new FormData();
 
@@ -9,6 +8,5 @@ export const uploadImage = async (encoded, token = null) => {
 
   return axios.post("http://localhost:3001/api/image/upload", form, {
     withCredentials: true,
-    ...(token && getCookieHeader(token)),
   });
 };
