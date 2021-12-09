@@ -1,18 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { GiHops } from "react-icons/gi";
 import { IoBeerOutline } from "react-icons/io5";
 import { getBeerById, deleteBeer } from "../../services/beer";
 import { capitalize } from "../../utils/capitalize";
+import withAuth from "../../hocs/withAuth";
 import PageError from "../../components/PageError";
-import { extractToken } from "../../utils/extractToken";
-import { notFound, redirectToLogin } from "../../utils/serverSide";
 import styles from "../../styles/pages/Beer.module.scss";
 
-const Beer = ({ beer }) => {
+const Beer = () => {
   const router = useRouter();
 
+  const [beer, setBeer] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setError(null);
+
+    const loadBeer = async () => {
+      const { id } = router.query;
+
+      try {
+        const res = await getBeerById(id);
+        setBeer(res.data.payload);
+      } catch (e) {
+        if (e.response.status === 404) {
+          router.push("/404");
+        }
+        setError("Oops, cannot get beer info right now.");
+      }
+    };
+
+    loadBeer();
+  }, []);
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -28,6 +48,8 @@ const Beer = ({ beer }) => {
     e.preventDefault();
     router.push(`/beer/edit/${beer.id}`);
   };
+
+  if (!beer) return <p>Loading...</p>;
 
   const imgSrc = beer.imageUrl ? beer.imageUrl : "/beerIconSquare.svg";
 
@@ -93,25 +115,4 @@ const Beer = ({ beer }) => {
   );
 };
 
-export const getServerSideProps = async (ctx) => {
-  const token = extractToken(ctx);
-
-  if (!token) {
-    return redirectToLogin;
-  }
-
-  try {
-    const res = await getBeerById(ctx.params.id, token);
-
-    return {
-      props: {
-        beer: res.data.payload,
-        loggedIn: true,
-      },
-    };
-  } catch (error) {
-    return notFound;
-  }
-};
-
-export default Beer;
+export default withAuth(Beer);

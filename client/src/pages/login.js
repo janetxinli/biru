@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { extractToken } from "../utils/extractToken";
 import useForm from "../hooks/form";
 import { login } from "../services/auth";
+import { useAuth } from "../context/auth";
+import withAuth from "../hocs/withAuth";
 import Input from "../components/Input";
 import PageError from "../components/PageError";
 import styles from "../styles/pages/Login.module.scss";
 
 const Login = () => {
+  const { loginUser } = useAuth();
   const router = useRouter();
 
   const { form, handleFieldChange } = useForm({
@@ -24,7 +26,8 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(form.username, form.password);
+      const res = await login(form.username, form.password);
+      loginUser(res.data.user);
       router.push("/");
     } catch (e) {
       setError(e.response.data.error || "Unable to log in. Please try again");
@@ -40,7 +43,11 @@ const Login = () => {
     >
       <h2>Login</h2>
       {error !== null && (
-        <PageError message={error} closeError={() => setError(null)} className={styles.error} />
+        <PageError
+          message={error}
+          closeError={() => setError(null)}
+          className={styles.error}
+        />
       )}
       <Input
         type="text"
@@ -73,20 +80,4 @@ const Login = () => {
   );
 };
 
-export const getServerSideProps = (ctx) => {
-  const token = extractToken(ctx);
-
-  // redirect to index if user is logged in
-  if (token) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
-  return { props: {} };
-};
-
-export default Login;
+export default withAuth(Login, "/", false);

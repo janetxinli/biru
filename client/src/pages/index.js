@@ -3,17 +3,23 @@ import Head from "next/head";
 import Link from "next/link";
 import { beerTypes } from "../utils/dataTypes";
 import { getAll } from "../services/beer";
+import { useAuth } from "../context/auth";
 import BeerOverview from "../components/BeerOverview";
 import Dropdown from "../components/Dropdown";
 import PageError from "../components/PageError";
-import { extractToken } from "../utils/extractToken";
-import { notFound, redirectToLogin } from "../utils/serverSide";
+import withAuth from "../hocs/withAuth";
 import styles from "../styles/pages/Index.module.scss";
 
-const Home = ({ data, initialQuery }) => {
+const Home = () => {
+  const { user } = useAuth();
+
   // data state
-  const [beerList, setBeerList] = useState(data.Beers);
-  const [filter, setFilter] = useState(initialQuery);
+  const [beerList, setBeerList] = useState(null);
+  const [filter, setFilter] = useState({
+    sort: "date",
+    descending: true,
+    beerType: [],
+  });
 
   // menu button state
   const [sortVisible, setSortVisible] = useState(false);
@@ -71,6 +77,8 @@ const Home = ({ data, initialQuery }) => {
     {}
   );
 
+  if (!beerList) return <p>Loading...</p>;
+
   let beerListElement;
   if (beerList && !beerList.length) {
     // no beers to show
@@ -87,7 +95,7 @@ const Home = ({ data, initialQuery }) => {
         <title>biru</title>
       </Head>
       <section className={`df df-fc ${styles.pageHeader}`}>
-        <h2>{data.name}'s Beer Journal</h2>
+        <h2>{user.username}'s Beer Journal</h2>
         <section className="df">
           <Dropdown
             label="sort"
@@ -117,33 +125,4 @@ const Home = ({ data, initialQuery }) => {
   );
 };
 
-export const getServerSideProps = async (ctx) => {
-  const token = extractToken(ctx);
-
-  // no logged in user
-  if (!token) {
-    return redirectToLogin;
-  }
-
-  try {
-    const initialQuery = {
-      sort: "date",
-      descending: true,
-      beerType: [],
-    };
-
-    const res = await getAll(initialQuery, token);
-
-    return {
-      props: {
-        data: res.data.payload,
-        loggedIn: true,
-        initialQuery,
-      },
-    };
-  } catch (err) {
-    return notFound;
-  }
-};
-
-export default Home;
+export default withAuth(Home);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import useForm from "../hooks/form";
+import withAuth from "../hocs/withAuth";
 import { signup } from "../services/auth";
 import Input from "../components/Input";
 import PageError from "../components/PageError";
@@ -157,4 +158,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default withAuth(Signup, "/", false);
