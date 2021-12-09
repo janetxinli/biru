@@ -1,6 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const error = require("../utils/error");
-const { uploadToCloudinary } = require("../server/cloudinary");
+const { uploadToCloudinary } = require("../cloudinary");
 
 const upload = async (req, res, next) => {
   const { image } = req.body;

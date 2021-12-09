@@ -1,5 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
-const passport = require("../../passport");
+const passport = require("../passport");
 const error = require("./error");
 
 const passportHandler = (req, next) => {

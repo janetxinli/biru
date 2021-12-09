@@ -15,6 +15,10 @@
     "radix": ["error", "as-needed"],
     "consistent-return": "warn",
     "no-param-reassign": ["error", { "props": false }],
-    "prefer-destructuring": "warn"
+    "prefer-destructuring": "warn",
+    "node/no-unpublished-require": [
+      "error",
+      { "allowModules": ["globalConfig.json"] }
+    ]
   }
 }
