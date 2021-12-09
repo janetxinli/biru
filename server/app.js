@@ -10,13 +10,13 @@ const {
   SESSION_SECRET,
   SESSION_COOKIE_MAX_AGE,
 } = require("./utils/config");
-const { sequelize } = require("./models");
-const authRouter = require("./routes/auth");
-const beerRouter = require("./routes/beer");
-const imageRouter = require("./routes/image");
-const userRouter = require("./routes/user");
+const { sequelize } = require("../models");
+const authRouter = require("../routes/auth");
+const beerRouter = require("../routes/beer");
+const imageRouter = require("../routes/image");
+const userRouter = require("../routes/user");
 const { requireLogin, errorHandler } = require("./utils/middleware");
-const passport = require("./passport");
+const passport = require("../passport");
 
 const app = express();
 const store = new SequelizeStore({ db: sequelize });

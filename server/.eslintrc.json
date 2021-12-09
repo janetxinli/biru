@@ -16,6 +16,5 @@
     "consistent-return": "warn",
     "no-param-reassign": ["error", { "props": false }],
     "prefer-destructuring": "warn"
-  },
-  "ignorePatterns": ["client/*"]
+  }
 }
