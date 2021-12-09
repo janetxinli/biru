@@ -1,13 +1,21 @@
 {
-  "extends": ["airbnb", "prettier", "plugin:node/recommended"],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "extends": ["airbnb-base", "prettier", "plugin:node/recommended"],
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
     "no-unused-vars": "warn",
-    "no-console": "off",
+    "no-console": "warn",
     "func-names": "off",
     "no-process-exit": "off",
     "object-shorthand": "off",
-    "class-methods-use-this": "off"
-  }
+    "class-methods-use-this": "off",
+    "radix": ["error", "as-needed"],
+    "consistent-return": "warn",
+    "no-param-reassign": ["error", { "props": false }],
+    "prefer-destructuring": "warn"
+  },
+  "ignorePatterns": ["client/*"]
 }

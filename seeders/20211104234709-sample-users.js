@@ -15,13 +15,9 @@ module.exports = {
         name: "Jane Smith",
       },
     ];
-    const users = seedUsers.map(async (u) => {
-      return User.create(u);
-    });
+    const users = seedUsers.map(async (u) => User.create(u));
     await Promise.all(users);
   },
 
-  down: async (queryInterface, Sequelize) => {
-    return await User.destroy({ truncate: true });
-  },
+  down: async (queryInterface, Sequelize) => User.destroy({ truncate: true }),
 };

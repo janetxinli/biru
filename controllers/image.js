@@ -12,10 +12,10 @@ const upload = async (req, res, next) => {
   }
 
   try {
-    const upload = await uploadToCloudinary(image);
+    const result = await uploadToCloudinary(image);
     return res
       .status(StatusCodes.CREATED)
-      .json({ payload: { url: upload.secure_url } });
+      .json({ payload: { url: result.secure_url } });
   } catch (e) {
     return next(e);
   }

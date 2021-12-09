@@ -1,17 +1,17 @@
-"use strict";
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class Beer extends Model {
     static associate(models) {
-      const { Beer, User } = models;
+      const { User } = models;
 
-      Beer.belongsTo(User, {
+      this.belongsTo(User, {
         foreignKey: "userId",
         onDelete: "CASCADE",
       });
     }
   }
+
   Beer.init(
     {
       name: {

@@ -1,12 +1,12 @@
 const passport = require("passport");
 const { StatusCodes } = require("http-status-codes");
-const localStrategy = require("passport-local").Strategy;
+const LocalStrategy = require("passport-local").Strategy;
 const error = require("./utils/error");
 const { User } = require("./models");
 
 passport.use(
   "login",
-  new localStrategy(
+  new LocalStrategy(
     {
       passReqToCallback: true,
     },

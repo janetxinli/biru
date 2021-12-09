@@ -3,7 +3,8 @@ const globalConfig = require("../globalConfig.json");
 
 const PORT = process.env.PORT || 3001;
 
-const IN_PROD = process.env.NODE_ENV === "production";
+const ENV = process.env.NODE_ENV || "development";
+const IN_PROD = ENV === "production";
 
 const POSTGRES_USER = process.env.POSTGRES_USER;
 const POSTGRES_HOST = process.env.POSTGRES_HOST;
@@ -21,6 +22,7 @@ const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 module.exports = {
   PORT,
   IN_PROD,
+  ENV,
   POSTGRES_USER,
   POSTGRES_HOST,
   POSTGRES_DATABASE,

@@ -4,9 +4,9 @@ const bcrypt = require("bcrypt");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      const { Beer, User } = models;
+      const { Beer } = models;
 
-      User.hasMany(Beer, {
+      this.hasMany(Beer, {
         foreignKey: "userId",
       });
     }
@@ -14,11 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     static async hashPassword(password) {
       const saltRounds = 10;
 
-      return await bcrypt.hash(password, saltRounds);
+      return bcrypt.hash(password, saltRounds);
     }
 
     async validatePassword(givenPassword) {
-      return await bcrypt.compare(givenPassword, this.password);
+      return bcrypt.compare(givenPassword, this.password);
     }
   }
 
