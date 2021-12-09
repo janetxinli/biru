@@ -1,10 +1,10 @@
 import React from "react";
 import Header from "./Header";
 
-const Layout = ({ loggedIn, children }) => {
+const Layout = ({ children }) => {
   return (
     <>
-      <Header loggedIn={loggedIn} />
+      <Header />
       <main className="container">{children}</main>
     </>
   );
