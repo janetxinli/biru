@@ -15,10 +15,10 @@ const Input = ({
 }) => (
   <label
     htmlFor={htmlFor}
-    className={`${styles.input} ${className !== undefined && className} ${
+    className={`${styles.input} ${className || ""} ${
       errorMessage !== undefined && errorMessage !== null
         ? styles.formError
-        : null
+        : ""
     }`}
   >
     <p className="df df-jc-sb df-ai-c">

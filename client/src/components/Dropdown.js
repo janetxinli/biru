@@ -34,7 +34,7 @@ const Dropdown = ({
         aria-selected={inSelected}
       >
         {inSelected && <CheckIcon fontSize="inherit" />}
-        <p className={!inSelected ? styles.shiftRight : undefined}>{name}</p>
+        <p className={!inSelected ? styles.shiftRight : ""}>{name}</p>
       </div>
     );
   }
