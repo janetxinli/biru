@@ -1,3 +1,4 @@
+import React from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "../context/auth";
 
@@ -13,7 +14,7 @@ const withAuth = (
 
     if (authenticated !== expectedStatus) {
       router.push(redirectPath);
-      return <></>;
+      return null;
     }
 
     return <WrappedComponent {...props} />;

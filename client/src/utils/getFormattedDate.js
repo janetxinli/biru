@@ -1,5 +1,5 @@
 // get a date formatted as YYYY-MM-DD
-export const getFormattedDate = (date = null) => {
+const getFormattedDate = (date = null) => {
   let oldDate;
   if (!date) {
     oldDate = new Date();
@@ -14,3 +14,5 @@ export const getFormattedDate = (date = null) => {
   ];
   return orderedDateStrings.join("-");
 };
+
+export default getFormattedDate;

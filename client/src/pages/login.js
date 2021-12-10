@@ -73,7 +73,7 @@ const Login = () => {
       <p className="text-center">
         New to biru?{" "}
         <Link href="/signup">
-          <a>Sign up here.</a>
+          <a href="/signup">Sign up here.</a>
         </Link>
       </p>
     </form>

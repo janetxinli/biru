@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const uploadImage = async (encoded) => {
+const uploadImage = async (encoded) => {
   // create FormData object with image
   const form = new FormData();
 
@@ -10,3 +10,5 @@ export const uploadImage = async (encoded) => {
     withCredentials: true,
   });
 };
+
+export default uploadImage;

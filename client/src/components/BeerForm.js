@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Rating } from "@mui/material";
 import { beerTypes, servingTypes } from "../utils/dataTypes";
-import { getFormattedDate } from "../utils/getFormattedDate";
+import getFormattedDate from "../utils/getFormattedDate";
 import useForm from "../hooks/form";
 import { createBeer, editBeer } from "../services/beer";
 import Dropdown from "./Dropdown";
@@ -50,11 +50,6 @@ const BeerForm = ({ setError, editMode, formValues }) => {
     setFormProperty("rating", value);
   };
 
-  const beerTypeMap = beerTypes.reduce(
-    (o, t) => ({ ...o, [t]: () => toggleBeerType(t) }),
-    {}
-  );
-
   const toggleBeerTypeVisibility = (e) => {
     e.preventDefault();
     setBeerTypeVisible(!beerTypeVisible);
@@ -68,8 +63,8 @@ const BeerForm = ({ setError, editMode, formValues }) => {
     }
   };
 
-  const servingTypeMap = servingTypes.reduce(
-    (o, t) => ({ ...o, [t]: (e) => toggleServingType(e, t) }),
+  const beerTypeMap = beerTypes.reduce(
+    (o, t) => ({ ...o, [t]: () => toggleBeerType(t) }),
     {}
   );
 
@@ -82,6 +77,11 @@ const BeerForm = ({ setError, editMode, formValues }) => {
       setFormProperty("servingType", value);
     }
   };
+
+  const servingTypeMap = servingTypes.reduce(
+    (o, t) => ({ ...o, [t]: (e) => toggleServingType(e, t) }),
+    {}
+  );
 
   const resetErrors = () => {
     setFormErrors({
@@ -105,8 +105,8 @@ const BeerForm = ({ setError, editMode, formValues }) => {
     setFormErrors(errors);
 
     let validity = true;
-    for (const prop in errors) {
-      if (errors[prop] !== null) {
+    for (const v of Object.values(errors)) {
+      if (v !== null) {
         validity = false;
         break;
       }
@@ -150,138 +150,133 @@ const BeerForm = ({ setError, editMode, formValues }) => {
   };
 
   return (
-    <>
-      <form className={`${styles.beerForm}`} onSubmit={handleSubmit}>
-        <ImageCropAndUpload
-          onComplete={setImage}
-          className={styles.imageCropAndUpload}
-          error={formErrors.imageUrl}
-          setError={(e) => setFormErrors({ ...formErrors, imageUrl: e })}
-          initialImage={editMode ? form.imageUrl : undefined}
+    <form className={`${styles.beerForm}`} onSubmit={handleSubmit}>
+      <ImageCropAndUpload
+        onComplete={setImage}
+        className={styles.imageCropAndUpload}
+        error={formErrors.imageUrl}
+        setError={(e) => setFormErrors({ ...formErrors, imageUrl: e })}
+        initialImage={editMode ? form.imageUrl : undefined}
+      />
+      <Input
+        type="text"
+        label="Beer Name"
+        className={styles.beerName}
+        htmlFor="name"
+        value={form.name}
+        handleChange={handleFieldChange}
+        infoLabel={`${form.name.length} / 50`}
+        error={formErrors.name}
+        errorMessage={formErrors.name}
+        maxLength={50}
+      />
+      <Input
+        type="text"
+        label="Brewer"
+        className={styles.brewer}
+        htmlFor="brewer"
+        value={form.brewer}
+        handleChange={handleFieldChange}
+        infoLabel={`${form.brewer.length} / 30`}
+        error={formErrors.brewer}
+        errorMessage={formErrors.brewer}
+        maxLength={30}
+      />
+      <Input
+        type="date"
+        label="Date"
+        className={styles.date}
+        htmlFor="date"
+        value={form.date}
+        onChange={handleFieldChange}
+      />
+      <Input
+        label="Rating"
+        className={styles.beerRating}
+        htmlFor="beerRating"
+        error={formErrors.rating}
+        errorMessage={formErrors.rating}
+      >
+        <Rating
+          id="beerRating"
+          precision={0.5}
+          value={form.rating}
+          size="large"
+          onChange={handleRatingChange}
         />
-        <Input
-          type="text"
-          label="Beer Name"
-          className={styles.beerName}
-          htmlFor="name"
-          value={form.name}
-          handleChange={handleFieldChange}
-          infoLabel={`${form.name.length} / 50`}
-          error={formErrors.name}
-          errorMessage={formErrors.name}
-          maxLength={50}
+      </Input>
+      <Input
+        label="Serving Type"
+        className={styles.servingType}
+        htmlFor="servingType"
+        infoLabel="optional"
+      >
+        <CategoryGroup
+          id="servingType"
+          categoryMap={servingTypeMap}
+          selected={form.servingType}
         />
-        <Input
-          type="text"
-          label="Brewer"
-          className={styles.brewer}
-          htmlFor="brewer"
-          value={form.brewer}
-          handleChange={handleFieldChange}
-          infoLabel={`${form.brewer.length} / 30`}
-          error={formErrors.brewer}
-          errorMessage={formErrors.brewer}
-          maxLength={30}
+      </Input>
+      <Input label="Beer Type" className={styles.beerType} infoLabel="optional">
+        <Dropdown
+          label={form.beerType ? form.beerType : "select"}
+          optionMap={beerTypeMap}
+          visibility={beerTypeVisible}
+          toggleVisibility={toggleBeerTypeVisibility}
+          selected={form.beerType}
         />
-        <Input
-          type="date"
-          label="Date"
-          className={styles.date}
-          htmlFor="date"
-          value={form.date}
+      </Input>
+      <Input
+        type="text"
+        label="% ABV"
+        className={styles.abv}
+        htmlFor="abv"
+        value={form.abv}
+        onChange={handleFieldChange}
+        infoLabel="optional"
+        error={formErrors.abv}
+        errorMessage={formErrors.abv}
+      />
+      <Input
+        type="text"
+        label="IBU"
+        className={styles.ibu}
+        htmlFor="ibu"
+        value={form.ibu}
+        onChange={handleFieldChange}
+        infoLabel="optional"
+        error={formErrors.ibu}
+        errorMessage={formErrors.ibu}
+      />
+      <Input
+        label="Notes"
+        htmlFor="notes"
+        className={styles.notes}
+        infoLabel={`${255 - form.notes.length} characters remaining`}
+      >
+        <textarea
+          id="notes"
+          value={form.notes}
           onChange={handleFieldChange}
+          maxLength={255}
         />
-        <Input
-          label="Rating"
-          className={styles.beerRating}
-          htmlFor="beerRating"
-          error={formErrors.rating}
-          errorMessage={formErrors.rating}
-        >
-          <Rating
-            id="beerRating"
-            precision={0.5}
-            value={form.rating}
-            size="large"
-            onChange={handleRatingChange}
-          />
-        </Input>
-        <Input
-          label="Serving Type"
-          className={styles.servingType}
-          htmlFor="servingType"
-          infoLabel="optional"
-        >
-          <CategoryGroup
-            id="servingType"
-            categoryMap={servingTypeMap}
-            selected={form.servingType}
-          />
-        </Input>
-        <Input
-          label="Beer Type"
-          className={styles.beerType}
-          infoLabel="optional"
-        >
-          <Dropdown
-            label={form.beerType ? form.beerType : "select"}
-            optionMap={beerTypeMap}
-            visibility={beerTypeVisible}
-            toggleVisibility={toggleBeerTypeVisibility}
-            selected={form.beerType}
-          />
-        </Input>
-        <Input
-          type="text"
-          label="% ABV"
-          className={styles.abv}
-          htmlFor="abv"
-          value={form.abv}
-          onChange={handleFieldChange}
-          infoLabel="optional"
-          error={formErrors.abv}
-          errorMessage={formErrors.abv}
-        />
-        <Input
-          type="text"
-          label="IBU"
-          className={styles.ibu}
-          htmlFor="ibu"
-          value={form.ibu}
-          onChange={handleFieldChange}
-          infoLabel="optional"
-          error={formErrors.ibu}
-          errorMessage={formErrors.ibu}
-        />
-        <Input
-          label="Notes"
-          htmlFor="notes"
-          className={styles.notes}
-          infoLabel={`${255 - form.notes.length} characters remaining`}
-        >
-          <textarea
-            id="notes"
-            value={form.notes}
-            onChange={handleFieldChange}
-            maxLength={255}
-          ></textarea>
-        </Input>
-        <button
-          type="submit"
-          className={`btn btn-primary ${styles.save}`}
-          disabled={loading}
-        >
-          Save
-        </button>
-        <button
-          className={`btn btn-secondary ${styles.cancel}`}
-          onClick={handleCancel}
-          disabled={loading}
-        >
-          Cancel
-        </button>
-      </form>
-    </>
+      </Input>
+      <button
+        type="submit"
+        className={`btn btn-primary ${styles.save}`}
+        disabled={loading}
+      >
+        Save
+      </button>
+      <button
+        className={`btn btn-secondary ${styles.cancel}`}
+        onClick={handleCancel}
+        disabled={loading}
+        type="button"
+      >
+        Cancel
+      </button>
+    </form>
   );
 };
 

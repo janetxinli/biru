@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { check } from "../services/auth";
 
 const AuthContext = createContext({
@@ -12,7 +18,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("checking auth status");
     const checkAuthStatus = async () => {
       const res = await check();
       setAuthenticated(res.data.authenticated);
@@ -27,20 +32,28 @@ export const AuthProvider = ({ children }) => {
     checkAuthStatus();
   }, []);
 
-  const loginUser = async (user) => {
+  const loginUser = async (newUser) => {
     setAuthenticated(true);
-    setUser(user);
+    setUser(newUser);
   };
 
-  const logoutUser = async (user) => {
+  const logoutUser = async () => {
     setUser(null);
     setAuthenticated(false);
   };
 
+  const contextObj = useMemo(
+    () => ({
+      authenticated,
+      user,
+      loginUser,
+      logoutUser,
+    }),
+    []
+  );
+
   return (
-    <AuthContext.Provider
-      value={{ authenticated, user, loginUser, logoutUser }}
-    >
+    <AuthContext.Provider value={contextObj}>
       {!loading && children}
     </AuthContext.Provider>
   );

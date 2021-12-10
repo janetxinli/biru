@@ -7,11 +7,10 @@ export const login = async (username, password) => {
   });
 };
 
-export const logout = async () => {
-  return axios.get("http://localhost:3001/api/auth/logout", {
+export const logout = async () =>
+  axios.get("http://localhost:3001/api/auth/logout", {
     withCredentials: true,
   });
-};
 
 export const signup = async (username, password, name, bio) => {
   const newUser = { username, password, name, bio };
@@ -20,8 +19,7 @@ export const signup = async (username, password, name, bio) => {
   });
 };
 
-export const check = async () => {
-  return axios.get("http://localhost:3001/api/auth/check", {
+export const check = async () =>
+  axios.get("http://localhost:3001/api/auth/check", {
     withCredentials: true,
   });
-};

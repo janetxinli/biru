@@ -3,8 +3,8 @@ import Cropper from "react-easy-crop";
 import CropRotateIcon from "@mui/icons-material/CropRotate";
 import Slider from "@mui/material/Slider";
 import ImageInput from "./ImageInput";
-import { cropImage } from "../utils/cropImage";
-import { uploadImage } from "../services/image";
+import cropImage from "../utils/cropImage";
+import uploadImage from "../services/image";
 import globalConfig from "../../../globalConfig.json";
 import styles from "../styles/components/ImageCropAndUpload.module.scss";
 
@@ -27,7 +27,7 @@ const ImageCropAndUpload = ({
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       // check file size
-      if (fileSize > globalConfig.MAX_IMAGE_SIZE) {
+      if (e.target.files[0].size > globalConfig.MAX_IMAGE_SIZE) {
         setError("Maximum file size is 10MB");
       } else {
         const url = URL.createObjectURL(e.target.files[0]);
@@ -37,8 +37,8 @@ const ImageCropAndUpload = ({
     }
   };
 
-  const onCropComplete = (croppedArea, croppedAreaPixels) => {
-    setCroppedAreaPixels(croppedAreaPixels);
+  const onCropComplete = (croppedArea, pixels) => {
+    setCroppedAreaPixels(pixels);
   };
 
   const handleZoomChange = (e, value) => {
@@ -84,7 +84,7 @@ const ImageCropAndUpload = ({
   };
 
   return (
-    <article className={className ? className : null}>
+    <article className={className !== undefined && className}>
       <ImageInput
         handleChange={handleImageChange}
         label="Upload an Image"
@@ -110,6 +110,7 @@ const ImageCropAndUpload = ({
             <button
               className={`btn btn-icon ${styles.rotateBtn}`}
               onClick={handleRotate}
+              type="button"
             >
               <CropRotateIcon />
             </button>
@@ -127,10 +128,15 @@ const ImageCropAndUpload = ({
               className="btn btn-primary"
               onClick={handleSave}
               disabled={loading}
+              type="submit"
             >
               Save
             </button>
-            <button className="btn btn-secondary" onClick={handleCancel}>
+            <button
+              className="btn btn-secondary"
+              onClick={handleCancel}
+              type="button"
+            >
               Cancel
             </button>
           </section>

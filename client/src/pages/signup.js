@@ -148,7 +148,7 @@ const Signup = () => {
             value={form.bio}
             onChange={handleFieldChange}
             maxLength={255}
-          ></textarea>
+          />
         </Input>
         <button className="btn btn-primary" type="submit" disabled={loading}>
           Sign Up

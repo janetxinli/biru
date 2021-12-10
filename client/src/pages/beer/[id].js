@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { GiHops } from "react-icons/gi";
 import { IoBeerOutline } from "react-icons/io5";
 import { getBeerById, deleteBeer } from "../../services/beer";
-import { capitalize } from "../../utils/capitalize";
+import capitalize from "../../utils/capitalize";
 import withAuth from "../../hocs/withAuth";
 import PageError from "../../components/PageError";
 import styles from "../../styles/pages/Beer.module.scss";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { getBeerById } from "../../../services/beer";
-import { getFormattedDate } from "../../../utils/getFormattedDate";
+import getFormattedDate from "../../../utils/getFormattedDate";
 import BeerForm from "../../../components/BeerForm";
 import PageError from "../../../components/PageError";
 import withAuth from "../../../hocs/withAuth";

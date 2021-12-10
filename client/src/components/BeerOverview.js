@@ -9,7 +9,7 @@ const BeerOverview = ({ beer }) => {
   return (
     <article className={styles.beerOverview}>
       <Link href={`/beer/${beer.id}`}>
-        <a className="df df-jc-sb df-ai-c">
+        <a className="df df-jc-sb df-ai-c" href={`/beer/${beer.id}`}>
           <span className={`df df-fc ${styles.beerInfo}`}>
             <h3>{beer.name}</h3>
             <p>{beer.brewer}</p>

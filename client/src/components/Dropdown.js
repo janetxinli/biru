@@ -24,7 +24,15 @@ const Dropdown = ({
   for (const [name, onClick] of Object.entries(optionMap)) {
     const inSelected = checkSelected(name);
     selectElements.push(
-      <div id={name} key={name} role="option" onClick={onClick}>
+      <div
+        id={name}
+        key={name}
+        role="option"
+        onClick={onClick}
+        onKeyPress={onClick}
+        tabIndex="0"
+        aria-selected={inSelected}
+      >
         {inSelected && <CheckIcon fontSize="inherit" />}
         <p className={!inSelected ? styles.shiftRight : undefined}>{name}</p>
       </div>
@@ -32,7 +40,9 @@ const Dropdown = ({
   }
 
   return (
-    <div className={`${styles.dropdown} ${className ? className : ""}`}>
+    <div
+      className={`${styles.dropdown} ${className !== undefined && className}`}
+    >
       <button
         type="button"
         aria-haspopup="listbox"

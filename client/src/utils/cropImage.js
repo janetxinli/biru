@@ -1,16 +1,13 @@
 // create new image
-const createImage = async (url) => {
-  return new Promise((resolve, reject) => {
+const createImage = async (url) =>
+  new Promise((resolve, reject) => {
     const image = new Image();
     image.addEventListener("load", () => resolve(image));
     image.addEventListener("error", (e) => reject(e));
     image.src = url;
   });
-};
 
-const getRadians = (degrees) => {
-  return (degrees * Math.PI) / 180;
-};
+const getRadians = (degrees) => (degrees * Math.PI) / 180;
 
 const getBoundingBoxSize = (width, height, radians) => {
   const c = Math.abs(Math.cos(radians));
@@ -22,7 +19,7 @@ const getBoundingBoxSize = (width, height, radians) => {
   return [newWidth, newHeight];
 };
 
-export const cropImage = async (url, fileType, pixelCrop, rotation = 0) => {
+const cropImage = async (url, fileType, pixelCrop, rotation = 0) => {
   const image = await createImage(url);
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -61,3 +58,5 @@ export const cropImage = async (url, fileType, pixelCrop, rotation = 0) => {
 
   return canvas.toDataURL(fileType);
 };
+
+export default cropImage;

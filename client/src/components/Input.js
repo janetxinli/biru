@@ -12,40 +12,36 @@ const Input = ({
   errorMessage,
   children,
   ...rest
-}) => {
-  return (
-    <label
-      htmlFor={htmlFor}
-      className={`${styles.input} ${className ? className : ""} ${
-        errorMessage !== undefined && errorMessage !== null
-          ? styles.formError
-          : null
-      }`}
-    >
-      <p className="df df-jc-sb df-ai-c">
-        {label}
-        {infoLabel !== undefined && (
-          <span className={styles.inputInfo}>{infoLabel}</span>
-        )}
+}) => (
+  <label
+    htmlFor={htmlFor}
+    className={`${styles.input} ${className !== undefined && className} ${
+      errorMessage !== undefined && errorMessage !== null
+        ? styles.formError
+        : null
+    }`}
+  >
+    <p className="df df-jc-sb df-ai-c">
+      {label}
+      {infoLabel !== undefined && (
+        <span className={styles.inputInfo}>{infoLabel}</span>
+      )}
+    </p>
+    {children || (
+      <input
+        id={htmlFor}
+        type={type}
+        value={value}
+        onChange={handleChange}
+        {...rest} // maxLength, etc.
+      />
+    )}
+    {errorMessage && (
+      <p className={errorMessage !== null ? styles.formErrorLabel : "hidden"}>
+        {errorMessage}
       </p>
-      {children ? (
-        children
-      ) : (
-        <input
-          id={htmlFor}
-          type={type}
-          value={value}
-          onChange={handleChange}
-          {...rest} // maxLength, etc.
-        />
-      )}
-      {errorMessage && (
-        <p className={errorMessage !== null ? styles.formErrorLabel : "hidden"}>
-          {errorMessage}
-        </p>
-      )}
-    </label>
-  );
-};
+    )}
+  </label>
+);
 
 export default Input;

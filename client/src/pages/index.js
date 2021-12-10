@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { beerTypes } from "../utils/dataTypes";
@@ -35,7 +35,7 @@ const Home = () => {
       try {
         const { data } = await getAll(filter);
         setBeerList(data.payload.Beers);
-      } catch (error) {
+      } catch (e) {
         setError("Cannot get your beer journal right now.");
       }
     };
@@ -95,7 +95,7 @@ const Home = () => {
         <title>biru</title>
       </Head>
       <section className={`df df-fc ${styles.pageHeader}`}>
-        <h2>{user.username}'s Beer Journal</h2>
+        <h2>{user.username}&apos;s Beer Journal</h2>
         <section className="df">
           <Dropdown
             label="sort"
@@ -112,7 +112,9 @@ const Home = () => {
             selected={filter.beerType}
           />
           <Link href="/beer/new">
-            <a className={`btn btn-primary ${styles.newBeer}`}>new</a>
+            <a className={`btn btn-primary ${styles.newBeer}`} href="/beer/new">
+              new
+            </a>
           </Link>
         </section>
       </section>

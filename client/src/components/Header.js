@@ -32,7 +32,11 @@ const Header = () => {
           <Link href="/">biru</Link>
         </h1>
         {authenticated && (
-          <button className="btn btn-secondary" onClick={handleLogout}>
+          <button
+            className="btn btn-secondary"
+            onClick={handleLogout}
+            type="button"
+          >
             log out
           </button>
         )}
