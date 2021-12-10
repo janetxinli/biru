@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { check } from "../services/auth";
+import { checkAuthStatus } from "../services/auth";
 
 const AuthContext = createContext({
   authenticated: false,
@@ -18,23 +18,18 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuthStatus = async () => {
-      const res = await check();
+    const initializeAuth = async () => {
+      const res = await checkAuthStatus();
       setAuthenticated(res.data.authenticated);
 
       if (res.data.user) {
         setUser(res.data.user);
       }
+
+      setLoading(false);
     };
 
-    setLoading(true);
-    checkAuthStatus();
-    setLoading(false);
-
-    return () => {
-      setAuthenticated(false);
-      setUser(null);
-    };
+    initializeAuth();
   }, []);
 
   const loginUser = async (newUser) => {
