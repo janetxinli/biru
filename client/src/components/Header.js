@@ -3,11 +3,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { logout } from "../services/auth";
 import { useAuth } from "../context/auth";
+import NavBar from "./NavBar";
 import PageError from "./PageError";
 import styles from "../styles/components/Header.module.scss";
 
 const Header = () => {
-  const { authenticated, user, logoutUser } = useAuth();
+  const { authenticated, logoutUser } = useAuth();
   const router = useRouter();
 
   const [error, setError] = useState(null);
@@ -31,15 +32,7 @@ const Header = () => {
         <h1 className={styles.logo}>
           <Link href="/">biru</Link>
         </h1>
-        {authenticated && (
-          <button
-            className="btn btn-secondary"
-            onClick={handleLogout}
-            type="button"
-          >
-            log out
-          </button>
-        )}
+        {authenticated && <NavBar handleLogout={handleLogout} />}
       </header>
       {error !== null && (
         <PageError
