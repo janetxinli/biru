@@ -77,7 +77,7 @@ const Home = () => {
     {}
   );
 
-  if (!beerList) return <p>Loading...</p>;
+  if (!beerList || !user) return <p>Loading...</p>;
 
   let beerListElement;
   if (beerList && !beerList.length) {

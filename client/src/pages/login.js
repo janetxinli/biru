@@ -31,7 +31,6 @@ const Login = () => {
       router.push("/");
     } catch (e) {
       setError(e.response.data.error || "Unable to log in. Please try again");
-    } finally {
       setLoading(false);
     }
   };

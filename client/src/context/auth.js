@@ -25,11 +25,16 @@ export const AuthProvider = ({ children }) => {
       if (res.data.user) {
         setUser(res.data.user);
       }
-
-      setLoading(false);
     };
 
+    setLoading(true);
     checkAuthStatus();
+    setLoading(false);
+
+    return () => {
+      setAuthenticated(false);
+      setUser(null);
+    };
   }, []);
 
   const loginUser = async (newUser) => {
@@ -49,7 +54,7 @@ export const AuthProvider = ({ children }) => {
       loginUser,
       logoutUser,
     }),
-    []
+    [authenticated, user]
   );
 
   return (
