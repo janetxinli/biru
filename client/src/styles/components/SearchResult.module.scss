@@ -1,0 +1,21 @@
+@import "../global/variables";
+
+.searchResult {
+  background-color: lighten($bone, 9%);
+  padding: 0.5em 1em;
+  border-radius: 3px;
+
+  &:not(:last-child) {
+    margin-bottom: 1em;
+  }
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-size: 1rem;
+  }
+
+  p {
+    font-size: 0.75rem;
+  }
+}

@@ -21,12 +21,14 @@ const Input = ({
         : ""
     }`}
   >
-    <p className="df df-jc-sb df-ai-c">
-      {label}
-      {infoLabel !== undefined && (
-        <span className={styles.inputInfo}>{infoLabel}</span>
-      )}
-    </p>
+    {label !== undefined && (
+      <p className="df df-jc-sb df-ai-c">
+        {label}
+        {infoLabel !== undefined && (
+          <span className={styles.inputInfo}>{infoLabel}</span>
+        )}
+      </p>
+    )}
     {children || (
       <input
         id={htmlFor}
