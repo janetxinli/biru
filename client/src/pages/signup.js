@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import useForm from "../hooks/form";
 import withAuth from "../hocs/withAuth";
-import { signup } from "../services/auth";
 import Input from "../components/Input";
 import PageError from "../components/PageError";
+import { signup } from "../services/auth";
 import styles from "../styles/pages/Signup.module.scss";
 
 const Signup = () => {
-  const { form, handleFieldChange } = useForm({
+  const router = useRouter();
+
+  // form field data state
+  const { form, handleFieldChange, setFormProperty } = useForm({
     username: "",
     password: "",
     passwordConfirm: "",
@@ -16,44 +19,41 @@ const Signup = () => {
     bio: "",
   });
 
+  // form state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [formErrors, setFormErrors] = useState({
-    username: false,
-    password: false,
-    passwordConfirm: false,
-    name: false,
+    username: null,
+    password: null,
+    passwordConfirm: null,
+    name: null,
   });
 
-  const router = useRouter();
-
   const validateFields = () => {
-    // check for required fields
-    let valid = true;
-
-    if (
-      !form.username ||
-      !form.password ||
-      !form.passwordConfirm ||
-      !form.name
-    ) {
-      valid = false;
-    }
-
     // passwords must match
     if (form.password !== form.passwordConfirm) {
-      valid = false;
       setError("Passwords must match");
     }
 
-    setFormErrors({
-      name: form.name === "",
-      username: form.username === "",
-      password: form.password === "",
-      passwordConfirm: form.passwordConfirm === "",
-    });
+    const errors = {
+      name: form.name === "" ? "Name is required" : null,
+      username: form.username === null ? "Username is required" : null,
+      password: form.password === null ? "Password is required" : null,
+      passwordConfirm:
+        form.passwordConfirm === null ? "Please confirm your password" : null,
+    };
 
-    return valid;
+    setFormErrors(errors);
+
+    let validity = true;
+    for (const v of Object.values(errors)) {
+      if (v !== null) {
+        validity = false;
+        break;
+      }
+    }
+
+    return validity;
   };
 
   const handleSignup = async (e) => {
@@ -98,8 +98,7 @@ const Signup = () => {
           value={form.name}
           onChange={handleFieldChange}
           maxLength={255}
-          error={formErrors.name}
-          errorMessage="Name is required"
+          errorMessage={formErrors.name}
         />
         <Input
           type="text"
@@ -109,8 +108,7 @@ const Signup = () => {
           value={form.username}
           onChange={handleFieldChange}
           maxLength={32}
-          error={formErrors.username}
-          errorMessage="Username is required"
+          errorMessage={formErrors.username}
         />
         <Input
           type="password"
@@ -121,8 +119,7 @@ const Signup = () => {
           onChange={handleFieldChange}
           autoComplete="new-password"
           maxLength={255}
-          error={formErrors.password}
-          errorMessage="Password is required"
+          errorMessage={formErrors.password}
         />
         <Input
           type="password"
@@ -133,8 +130,7 @@ const Signup = () => {
           onChange={handleFieldChange}
           autoComplete="new-password"
           maxLength={255}
-          error={formErrors.passwordConfirm}
-          errorMessage="Please confirm your password"
+          errorMessage={formErrors.passwordConfirm}
         />
         <Input
           label="Bio"

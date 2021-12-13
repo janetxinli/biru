@@ -166,7 +166,6 @@ const BeerForm = ({ setError, editMode, formValues }) => {
         value={form.name}
         handleChange={handleFieldChange}
         infoLabel={`${form.name.length} / 50`}
-        error={formErrors.name}
         errorMessage={formErrors.name}
         maxLength={50}
       />
@@ -178,7 +177,6 @@ const BeerForm = ({ setError, editMode, formValues }) => {
         value={form.brewer}
         handleChange={handleFieldChange}
         infoLabel={`${form.brewer.length} / 30`}
-        error={formErrors.brewer}
         errorMessage={formErrors.brewer}
         maxLength={30}
       />
@@ -194,7 +192,6 @@ const BeerForm = ({ setError, editMode, formValues }) => {
         label="Rating"
         className={styles.beerRating}
         htmlFor="beerRating"
-        error={formErrors.rating}
         errorMessage={formErrors.rating}
       >
         <Rating
@@ -234,7 +231,6 @@ const BeerForm = ({ setError, editMode, formValues }) => {
         value={form.abv}
         onChange={handleFieldChange}
         infoLabel="optional"
-        error={formErrors.abv}
         errorMessage={formErrors.abv}
       />
       <Input
@@ -245,7 +241,6 @@ const BeerForm = ({ setError, editMode, formValues }) => {
         value={form.ibu}
         onChange={handleFieldChange}
         infoLabel="optional"
-        error={formErrors.ibu}
         errorMessage={formErrors.ibu}
       />
       <Input

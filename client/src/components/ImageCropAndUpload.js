@@ -11,7 +11,7 @@ import styles from "../styles/components/ImageCropAndUpload.module.scss";
 const ImageCropAndUpload = ({
   onComplete,
   className,
-  error,
+  errorMessage,
   setError,
   initialImage,
 }) => {
@@ -90,7 +90,7 @@ const ImageCropAndUpload = ({
         label="Upload an Image"
         htmlFor="beerImage"
         preview={preview}
-        className={error ? styles.errorBorder : null}
+        className={errorMessage ? styles.errorBorder : null}
       />
       {image.url !== null && (
         <div className={styles.cropContainer}>
@@ -142,7 +142,7 @@ const ImageCropAndUpload = ({
           </section>
         </div>
       )}
-      {error !== null && <p className={styles.errorText}>{error}</p>}
+      {errorMessage !== null && <p className={styles.errorText}>{errorMessage}</p>}
     </article>
   );
 };
