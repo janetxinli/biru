@@ -11,12 +11,12 @@ import ImageCropAndUpload from "./ImageCropAndUpload";
 import Input from "./Input";
 import styles from "../styles/components/BeerForm.module.scss";
 
-const BeerForm = ({ setError, editMode, formValues }) => {
+const BeerForm = ({ setError, editValues }) => {
   const router = useRouter();
 
   // form field data states
-  const { form, handleFieldChange, setFormProperty } = editMode
-    ? useForm(formValues)
+  const { form, handleFieldChange, setFormProperty } = editValues
+    ? useForm(editValues)
     : useForm({
         name: "",
         brewer: "",
@@ -127,7 +127,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
 
     try {
       let res;
-      if (editMode) {
+      if (editValues) {
         res = await editBeer(form.id, form);
       } else {
         res = await createBeer(form);
@@ -142,7 +142,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
 
   const handleCancel = (e) => {
     e.preventDefault();
-    if (editMode) {
+    if (editValues) {
       router.push(`/beer/${form.id}`);
     } else {
       router.push("/");
@@ -156,7 +156,7 @@ const BeerForm = ({ setError, editMode, formValues }) => {
         className={styles.imageCropAndUpload}
         error={formErrors.imageUrl}
         setError={(e) => setFormErrors({ ...formErrors, imageUrl: e })}
-        initialImage={editMode ? form.imageUrl : undefined}
+        initialImage={editValues ? form.imageUrl : undefined}
       />
       <Input
         type="text"

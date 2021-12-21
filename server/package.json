@@ -8,6 +8,7 @@
     "db:create": "sequelize-cli db:create",
     "db:migrate": "sequelize-cli db:migrate",
     "db:g:migration": "sequelize-cli migration:generate --name",
+    "db:migrate:undo": "sequelize-cli db:migrate:undo",
     "db:g:seed": "sequelize-cli seed:generate --name",
     "db:seeds": "sequelize-cli db:seed:all",
     "db:reset": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && npx sequelize-cli db:seed:all"

@@ -1,0 +1,11 @@
+@import "../global/variables";
+
+.navBar {
+  a {
+    color: $darkumber;
+  }
+
+  > *:not(:last-child) {
+    margin-right: 1em;
+  }
+}

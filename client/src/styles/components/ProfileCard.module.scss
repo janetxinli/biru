@@ -1,0 +1,52 @@
+@import "../global/variables";
+
+.profileCard {
+  width: 100%;
+  background-color: $bone;
+  padding: 1em;
+  border-radius: 3px;
+
+  @media (min-width: $lgscreen) {
+    flex-direction: column;
+    align-self: start;
+  }
+
+  img {
+    width: 25%;
+    max-width: 8em;
+    align-self: start;
+
+    @media (min-width: $lgscreen) {
+      width: 100%;
+      max-width: 12em;
+      margin-bottom: 1em;
+    }
+  }
+
+  .userInfo {
+    margin-left: 1em;
+
+    @media (min-width: $lgscreen) {
+      margin-left: 0;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 0.25em;
+    }
+
+    .username {
+      font-size: 1.125rem;
+      font-weight: 500;
+      margin-bottom: 0.25em;
+    }
+
+    .editProfile {
+      margin-top: 1.5em;
+
+      @media (min-width: $lgscreen) {
+        margin-top: 1em;
+      }
+    }
+  }
+}

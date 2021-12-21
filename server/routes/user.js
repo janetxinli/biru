@@ -5,8 +5,8 @@ router.get("/", userController.getAll);
 
 router.get("/search", userController.searchUsers);
 
-router.get("/:id", userController.getUser);
+router.get("/:username", userController.getUser);
 
-router.get("/:id/beer", userController.getUsersBeers);
+router.get("/:username/profile", userController.getProfile);
 
 module.exports = router;

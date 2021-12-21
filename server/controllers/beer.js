@@ -1,51 +1,6 @@
-const { Op } = require("sequelize");
 const { StatusCodes } = require("http-status-codes");
-const { Beer, User } = require("../models");
+const { Beer } = require("../models");
 const error = require("../utils/error");
-
-const getAll = async (req, res, next) => {
-  const { beerType, sort, descending } = req.query;
-  const { id } = req.user;
-
-  // define query object
-  const where = {};
-
-  // filter by beerType
-  if (beerType) {
-    where.beerType = {
-      [Op.in]: beerType,
-    };
-  }
-
-  // sort result
-  // sort by date by default
-  const sortBy = sort || "name";
-  const order = [];
-
-  if (sortBy === "date" || sortBy === "name" || sortBy === "rating") {
-    order.push(sortBy);
-  } else {
-    const err = error(StatusCodes.BAD_REQUEST, "Invalid ordering parameter");
-    return next(err);
-  }
-
-  if (descending) order.push("DESC");
-
-  try {
-    const beers = await User.findByPk(id, {
-      include: {
-        model: Beer,
-        required: false,
-        where,
-      },
-      order: [[{ model: Beer }, ...order]],
-    });
-    return res.json({ payload: beers });
-  } catch (e) {
-    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
-    return next(err);
-  }
-};
 
 const getBeer = async (req, res, next) => {
   const { id } = req.params;
@@ -167,7 +122,6 @@ const deleteBeer = async (req, res, next) => {
 };
 
 module.exports = {
-  getAll,
   getBeer,
   createBeer,
   updateBeer,

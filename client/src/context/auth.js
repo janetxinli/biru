@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("initializeAuth called");
     const initializeAuth = async () => {
       const res = await checkAuthStatus();
       setAuthenticated(res.data.authenticated);
@@ -33,13 +34,17 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const loginUser = async (newUser) => {
+    setLoading(true);
     setAuthenticated(true);
     setUser(newUser);
+    setLoading(false);
   };
 
   const logoutUser = async () => {
+    setLoading(true);
     setUser(null);
     setAuthenticated(false);
+    setLoading(false);
   };
 
   const contextObj = useMemo(

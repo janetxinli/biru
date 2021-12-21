@@ -14,41 +14,72 @@ const getAll = async (req, res, next) => {
 };
 
 const getUser = async (req, res, next) => {
-  const { id } = req.params;
+  const { username } = req.params;
 
   try {
-    const user = await User.findByPk(id);
+    const user = await User.findAll({
+      where: {
+        username,
+      },
+    });
 
-    if (!user) {
+    if (!user.length) {
       // No user is found
       const err = error(StatusCodes.NOT_FOUND, "User not found");
       return next(err);
     }
 
-    return res.status(StatusCodes.OK).json({ payload: user });
+    return res.status(StatusCodes.OK).json({ payload: user[0] });
   } catch (e) {
     const err = error(StatusCodes.BAD_REQUEST, "Cannot get user");
     return next(err);
   }
 };
 
-const getUsersBeers = async (req, res, next) => {
-  const { id } = req.params;
+const getProfile = async (req, res, next) => {
+  const { username } = req.params;
+  const { beerType, sort, descending } = req.query;
+
+  // define query object
+  const beerQuery = {};
+
+  // filter by beerType
+  if (beerType) {
+    beerQuery.beerType = {
+      [Op.in]: beerType,
+    };
+  }
+
+  // sort result
+  // sort by date by default
+  const sortBy = sort || "name";
+  const order = [];
+
+  if (sortBy === "date" || sortBy === "name" || sortBy === "rating") {
+    order.push(sortBy);
+  } else {
+    const err = error(StatusCodes.BAD_REQUEST, "Invalid ordering parameter");
+    return next(err);
+  }
+
+  if (descending) order.push("DESC");
 
   try {
-    const beers = await User.findAll({
-      include: Beer,
+    const data = await User.findAll({
       where: {
-        id,
+        username,
       },
+      include: {
+        model: Beer,
+        required: false,
+        where: beerQuery,
+      },
+      order: [[{ model: Beer }, ...order]],
     });
 
-    return res.status(StatusCodes.OK).json({ payload: beers[0] });
+    return res.json({ payload: data[0] });
   } catch (e) {
-    const err = error(
-      StatusCodes.INTERNAL_SERVER_ERROR,
-      "Unable to get beer list"
-    );
+    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
     return next(err);
   }
 };
@@ -66,6 +97,7 @@ const searchUsers = async (req, res, next) => {
       where: {
         username: {
           [Op.substring]: q,
+          [Op.not]: req.user.username,
         },
       },
     });
@@ -83,6 +115,6 @@ const searchUsers = async (req, res, next) => {
 module.exports = {
   getAll,
   getUser,
-  getUsersBeers,
+  getProfile,
   searchUsers,
 };

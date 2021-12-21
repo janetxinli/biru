@@ -1,10 +1,5 @@
 import axios from "axios";
-
-export const getAll = async (queryParams = null) =>
-  axios.get("http://localhost:3001/api/beer", {
-    withCredentials: true,
-    params: queryParams,
-  });
+  
 export const getBeerById = async (id) =>
   axios.get(`http://localhost:3001/api/beer/${id}`, {
     withCredentials: true,
