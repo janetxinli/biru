@@ -13,3 +13,10 @@ export const getProfile = async (username, queryParams) =>
     withCredentials: true,
     params: queryParams,
   });
+
+export const signup = async (username, password, name, bio) => {
+  const newUser = { username, password, name, bio };
+  return axios.post("http://localhost:3001/api/user", newUser, {
+    withCredentials: true,
+  });
+};

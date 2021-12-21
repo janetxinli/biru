@@ -57,8 +57,9 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRouter);
 
+app.use("/api/user", userRouter);
+
 // require authenticated users for access
-app.use("/api/user", requireLogin, userRouter);
 app.use("/api/beer", requireLogin, beerRouter);
 app.use("/api/image", requireLogin, imageRouter);
 

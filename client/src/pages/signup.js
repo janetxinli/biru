@@ -4,14 +4,14 @@ import useForm from "../hooks/form";
 import withAuth from "../hocs/withAuth";
 import Input from "../components/Input";
 import PageError from "../components/PageError";
-import { signup } from "../services/auth";
+import { signup } from "../services/user";
 import styles from "../styles/pages/Signup.module.scss";
 
 const Signup = () => {
   const router = useRouter();
 
   // form field data state
-  const { form, handleFieldChange, setFormProperty } = useForm({
+  const { form, handleFieldChange } = useForm({
     username: "",
     password: "",
     passwordConfirm: "",

@@ -3,6 +3,30 @@ const { StatusCodes } = require("http-status-codes");
 const { Beer, User } = require("../models");
 const error = require("../utils/error");
 
+const createUser = async (req, res, next) => {
+  const { username, password, name, bio } = req.body;
+
+  try {
+    await User.create({
+      username,
+      password,
+      name,
+      bio: bio || null,
+    });
+
+    return res
+      .status(StatusCodes.CREATED)
+      .json({ message: "User created successfully" });
+  } catch (e) {
+    if (e.errors[0].message === "Username taken") {
+      const err = error(StatusCodes.CONFLICT, e.message);
+      return next(err);
+    }
+    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
+    return next(err);
+  }
+};
+
 const getAll = async (req, res, next) => {
   try {
     const allUsers = await User.findAll();
@@ -113,6 +137,7 @@ const searchUsers = async (req, res, next) => {
 };
 
 module.exports = {
+  createUser,
   getAll,
   getUser,
   getProfile,
