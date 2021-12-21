@@ -40,14 +40,14 @@ const createBeer = async (req, res, next) => {
       name,
       brewer,
       rating,
-      servingType,
-      beerType,
+      servingType: servingType || null,
+      beerType: beerType || null,
       abv: abv ? parseFloat(abv) : null,
       ibu: ibu ? parseInt(ibu) : null,
       date,
-      notes,
+      notes: notes || null,
       userId: req.user.id,
-      imageUrl,
+      imageUrl: imageUrl || null,
     });
     return res.status(StatusCodes.CREATED).json({ payload: newBeer });
   } catch (e) {
@@ -58,8 +58,18 @@ const createBeer = async (req, res, next) => {
 
 const updateBeer = async (req, res, next) => {
   const { id } = req.params;
-  const { name, brewer, rating, servingType, beerType, abv, ibu, date, notes } =
-    req.body;
+  const {
+    name,
+    brewer,
+    rating,
+    servingType,
+    beerType,
+    abv,
+    ibu,
+    date,
+    notes,
+    imageUrl,
+  } = req.body;
 
   try {
     const beer = await Beer.findByPk(id);
@@ -74,13 +84,14 @@ const updateBeer = async (req, res, next) => {
         name,
         brewer,
         rating,
-        servingType,
-        beerType,
+        servingType: servingType || null,
+        beerType: beerType || null,
         abv: abv ? parseFloat(abv) : null,
         ibu: ibu ? parseInt(ibu) : null,
         date,
-        notes,
+        notes: notes || null,
         userId: req.user.id,
+        imageUrl: imageUrl || null,
       },
       { where: { id }, returning: true }
     );
