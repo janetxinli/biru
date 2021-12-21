@@ -5,6 +5,7 @@ import { IoBeerOutline } from "react-icons/io5";
 import { getBeerById, deleteBeer } from "../../services/beer";
 import capitalize from "../../utils/capitalize";
 import withAuth from "../../hocs/withAuth";
+import Loading from "../../components/Loading";
 import PageError from "../../components/PageError";
 import styles from "../../styles/pages/Beer.module.scss";
 
@@ -49,7 +50,7 @@ const Beer = () => {
     router.push(`/beer/edit/${beer.id}`);
   };
 
-  if (!beer) return <p>Loading...</p>;
+  if (!beer) return <Loading />;
 
   const imgSrc = beer.imageUrl ? beer.imageUrl : "/beerIconSquare.svg";
 

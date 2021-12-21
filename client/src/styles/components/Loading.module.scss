@@ -1,0 +1,28 @@
+@import "../global/variables";
+
+.loading {
+  font-size: 1.25rem;
+  color: $rosewood;
+
+  &:after {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    content: "\2026";
+    width: 0;
+    animation: ellipsis steps(4, end) 1s infinite;
+    -webkit-animation: ellipsis steps(4, end) 1s infinite;
+  }
+}
+
+@keyframes ellipsis {
+  to {
+    width: 1em;
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 1em;
+  }
+}

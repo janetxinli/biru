@@ -7,6 +7,7 @@ import { useAuth } from "../../context/auth";
 import withAuth from "../../hocs/withAuth";
 import BeerOverview from "../../components/BeerOverview";
 import Dropdown from "../../components/Dropdown";
+import Loading from "../../components/Loading";
 import PageError from "../../components/PageError";
 import ProfileCard from "../../components/ProfileCard";
 import styles from "../../styles/pages/Profile.module.scss";
@@ -88,7 +89,7 @@ const Profile = () => {
     {}
   );
 
-  if (!profile) return <p>Loading...</p>;
+  if (!profile) return <Loading />;
 
   let beerListElement;
   if (profile && !profile.Beers.length) {

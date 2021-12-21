@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { getBeerById } from "../../../services/beer";
 import getFormattedDate from "../../../utils/getFormattedDate";
 import BeerForm from "../../../components/BeerForm";
+import Loading from "../../../components/Loading";
 import PageError from "../../../components/PageError";
 import withAuth from "../../../hocs/withAuth";
 
@@ -26,6 +27,7 @@ const EditBeer = () => {
             res.data.payload[k] = "";
           }
         }
+        
         setBeer({
           ...res.data.payload,
           date: getFormattedDate(res.data.payload.date), // make date conform to input format
@@ -42,13 +44,13 @@ const EditBeer = () => {
     loadBeer();
   }, []);
 
-  if (!beer) return <p>Loading...</p>;
+  if (!beer) return <Loading />;
 
   return (
     <>
       <h2>Edit Beer</h2>
       {error && <PageError message={error} closeError={() => setError(null)} />}
-      <BeerForm editMode formValues={beer} setError={setError} />
+      <BeerForm editValues={beer} setError={setError} />
     </>
   );
 };
