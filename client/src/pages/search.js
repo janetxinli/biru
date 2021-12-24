@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PageError from "../components/PageError";
 import Input from "../components/Input";
-import SearchResult from "../components/SearchResult";
+import UserOverview from "../components/UserOverview";
 import withAuth from "../hocs/withAuth";
 import { searchUsers } from "../services/user";
 import styles from "../styles/pages/Search.module.scss";
@@ -31,6 +31,23 @@ const Search = () => {
     }
   };
 
+  const handleClear = async (e) => {
+    e.preventDefault();
+    setQuery("");
+    setUserList(null);
+  };
+
+  let content;
+  if (query === "") {
+    content = null;
+  } else if (userList) {
+    if (!userList.length) {
+      content = <p>No users match your search</p>;
+    } else {
+      content = userList.map((u) => <UserOverview key={u.username} user={u} />);
+    }
+  }
+
   return (
     <>
       <h2 className="text-center">Search Users</h2>
@@ -55,10 +72,15 @@ const Search = () => {
         >
           Search
         </button>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={handleClear}
+        >
+          Clear
+        </button>
       </form>
-      <section className={styles.results}>
-        {userList ? userList.map((u) => <SearchResult key={u.username} user={u} />) : null}
-      </section>
+      <section className={styles.results}>{content}</section>
     </>
   );
 };
