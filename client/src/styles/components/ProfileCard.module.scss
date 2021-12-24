@@ -26,26 +26,30 @@
   .userInfo {
     margin-left: 1em;
 
+    & > :not(:last-child) {
+      margin-bottom: 0.25em;
+    }
+
     @media (min-width: $lgscreen) {
       margin-left: 0;
     }
 
     h2 {
       margin-top: 0;
-      margin-bottom: 0.25em;
     }
 
     .username {
       font-size: 1.125rem;
       font-weight: 500;
-      margin-bottom: 0.25em;
     }
 
-    .editProfile {
-      margin-top: 1.5em;
+    .following {
+      & > :not(:first-child) {
+        margin-left: 0.25em;
+      }
 
-      @media (min-width: $lgscreen) {
-        margin-top: 1em;
+      & > :not(:last-child) {
+        margin-right: 0.25em;
       }
     }
   }

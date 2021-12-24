@@ -48,5 +48,8 @@
   },
   "files": [
     "../globalConfig.json"
-  ]
+  ],
+  "engines": {
+    "node": ">=8.3.0"
+  }
 }

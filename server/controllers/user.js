@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
 const { StatusCodes } = require("http-status-codes");
-const { Beer, User } = require("../models");
+const { Beer, Follower, User, Sequelize } = require("../models");
 const error = require("../utils/error");
 
 const createUser = async (req, res, next) => {
@@ -64,6 +64,20 @@ const getProfile = async (req, res, next) => {
   const { username } = req.params;
   const { beerType, sort, descending } = req.query;
 
+  const profileUser = await User.findOne({
+    where: { username },
+  });
+
+  if (!profileUser) {
+    const err = error(StatusCodes.NOT_FOUND, "User does not exist");
+    return next(err);
+  }
+
+  const currentUser = req.user.username === profileUser.username;
+  const currentUserFollows = currentUser
+    ? undefined
+    : await Follower.checkFollowing(req.user.id, profileUser.id);
+
   // define query object
   const beerQuery = {};
 
@@ -89,19 +103,47 @@ const getProfile = async (req, res, next) => {
   if (descending) order.push("DESC");
 
   try {
-    const data = await User.findAll({
+    const data = await User.findOne({
       where: {
         username,
       },
-      include: {
-        model: Beer,
-        required: false,
-        where: beerQuery,
-      },
+      include: [
+        {
+          model: Beer,
+          required: false,
+          where: beerQuery,
+        },
+        {
+          model: Follower,
+          as: "FollowingUser",
+          attributes: [],
+        },
+        {
+          model: Follower,
+          as: "FollowedUser",
+          attributes: [],
+        },
+      ],
       order: [[{ model: Beer }, ...order]],
+      attributes: {
+        include: [
+          [
+            Sequelize.fn("COUNT", Sequelize.col("FollowingUser.id")),
+            "followingUsers",
+          ],
+          [
+            Sequelize.fn("COUNT", Sequelize.col("FollowedUser.id")),
+            "followedByUsers",
+          ],
+        ],
+      },
+      group: ["User.id", "Beers.id", "FollowingUser.id", "FollowedUser.id"],
     });
 
-    return res.json({ payload: data[0] });
+    data.setDataValue("currentUser", currentUser);
+    data.setDataValue("currentUserFollows", currentUserFollows);
+
+    return res.json({ payload: data });
   } catch (e) {
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
     return next(err);
@@ -136,10 +178,133 @@ const searchUsers = async (req, res, next) => {
   }
 };
 
+const followUser = async (req, res, next) => {
+  const { user } = req;
+  const followedUserId = req.params.id;
+
+  const alreadyFollowing = await Follower.checkFollowing(
+    user.id,
+    followedUserId
+  );
+
+  if (alreadyFollowing) {
+    const err = error(
+      StatusCodes.CONFLICT,
+      `User ${user.id} already follows ${followedUserId}`
+    );
+
+    return next(err);
+  }
+
+  try {
+    await Follower.create({
+      followingUserId: user.id,
+      followedUserId,
+    });
+
+    return res.status(StatusCodes.NO_CONTENT).end();
+  } catch (e) {
+    const err = error(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      "Unable to follow user"
+    );
+
+    return next(err);
+  }
+};
+
+const unfollowUser = async (req, res, next) => {
+  const { user } = req;
+  const followedUserId = req.params.id;
+
+  const following = Follower.checkFollowing(user.id, followedUserId);
+
+  if (!following) {
+    const err = error(
+      StatusCodes.CONFLICT,
+      `User ${user.id} does not follow ${followedUserId}`
+    );
+
+    return next(err);
+  }
+
+  try {
+    Follower.destroy({
+      where: {
+        followingUserId: user.id,
+        followedUserId,
+      },
+    });
+
+    return res.status(StatusCodes.NO_CONTENT).end();
+  } catch (e) {
+    const err = error(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      "Unable to unfollow user"
+    );
+
+    return next(err);
+  }
+};
+
+const getFollowing = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const following = await Follower.findAll({
+      where: {
+        followingUserId: id,
+      },
+      include: {
+        model: User,
+        as: "FollowedUser",
+      },
+    });
+
+    return res.status(StatusCodes.OK).json({ payload: following });
+  } catch (e) {
+    const err = error(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      "Unable to get followed users"
+    );
+
+    return next(err);
+  }
+};
+
+const getFollowers = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const followers = await Follower.findAll({
+      where: {
+        followedUserId: id,
+      },
+      include: {
+        model: User,
+        as: "FollowingUser",
+      },
+    });
+
+    return res.status(StatusCodes.OK).json({ payload: followers });
+  } catch (e) {
+    const err = error(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      "Unable to get followers"
+    );
+
+    return next(err);
+  }
+};
+
 module.exports = {
   createUser,
   getAll,
   getUser,
   getProfile,
   searchUsers,
+  followUser,
+  unfollowUser,
+  getFollowing,
+  getFollowers,
 };

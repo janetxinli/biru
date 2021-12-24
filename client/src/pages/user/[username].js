@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { beerTypes } from "../../utils/dataTypes";
-import { getProfile } from "../../services/user";
+import { getProfile, getFollowing, getFollowers } from "../../services/user";
 import { useAuth } from "../../context/auth";
 import withAuth from "../../hocs/withAuth";
 import BeerOverview from "../../components/BeerOverview";
@@ -10,6 +10,7 @@ import Dropdown from "../../components/Dropdown";
 import Loading from "../../components/Loading";
 import PageError from "../../components/PageError";
 import ProfileCard from "../../components/ProfileCard";
+import UserListPopup from "../../components/UserListPopup";
 import styles from "../../styles/pages/Profile.module.scss";
 
 const Profile = () => {
@@ -30,11 +31,13 @@ const Profile = () => {
   const [beerTypeVisible, setBeerTypeVisible] = useState(false);
 
   // page state
+  const [following, setFollowing] = useState(null);
+  const [followers, setFollowers] = useState(null);
   const [error, setError] = useState(null);
 
   // update beerList on queryParams change
   useEffect(() => {
-    if (!router) return;
+    if (!router.query.username) return;
 
     const updateBeers = async () => {
       setError(null);
@@ -48,6 +51,13 @@ const Profile = () => {
 
     updateBeers();
   }, [router, queryParams]);
+
+  // reset popup state between redirects
+  useEffect(() => {
+    setProfile(null);
+    setFollowing(null);
+    setFollowers(null);
+  }, [router.query]);
 
   const toggleSortVisible = (e) => {
     e.preventDefault();
@@ -89,6 +99,46 @@ const Profile = () => {
     {}
   );
 
+  const toggleShowFollowing = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    try {
+      let data;
+
+      if (following === null) {
+        const res = await getFollowing(profile.id);
+        data = res.data.payload;
+      } else {
+        data = null;
+      }
+
+      setFollowing(data);
+    } catch (err) {
+      setError("Cannot get followed users right now");
+    }
+  };
+
+  const toggleShowFollowers = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    try {
+      let data;
+
+      if (followers === null) {
+        const res = await getFollowers(profile.id);
+        data = res.data.payload;
+      } else {
+        data = null;
+      }
+
+      setFollowers(data);
+    } catch (err) {
+      setError("Cannot get followers right now");
+    }
+  };
+
   if (!profile) return <Loading />;
 
   let beerListElement;
@@ -108,7 +158,28 @@ const Profile = () => {
 
   return (
     <article className={styles.profile}>
-      <ProfileCard profile={profile} />
+      {following && (
+        <UserListPopup
+          title="Following"
+          userList={following}
+          accessor="FollowedUser"
+          toggleVisible={toggleShowFollowing}
+        />
+      )}
+      {followers && (
+        <UserListPopup
+          title="Followers"
+          userList={followers}
+          accessor="FollowingUser"
+          toggleVisible={toggleShowFollowers}
+        />
+      )}
+      <ProfileCard
+        profile={profile}
+        toggleShowFollowing={toggleShowFollowing}
+        toggleShowFollowers={toggleShowFollowers}
+        setError={setError}
+      />
       <section className={`df df-jc-c ${styles.navButtons}`}>
         <Dropdown
           label="sort"
@@ -135,7 +206,15 @@ const Profile = () => {
       {error === null ? (
         <section className={styles.beerList}>{beerListElement}</section>
       ) : (
-        <PageError message={error} />
+        <PageError
+          message={error}
+          closeError={
+            error === "Cannot get followed users right now" ||
+            error === "Cannot get followers right now"
+              ? () => setError(null)
+              : undefined
+          }
+        />
       )}
     </article>
   );

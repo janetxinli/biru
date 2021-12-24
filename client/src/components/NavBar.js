@@ -14,12 +14,8 @@ const NavBar = ({ handleLogout }) => {
       <Link href="/search">
         <a href="/search">Search</a>
       </Link>
-      <button
-        className="btn btn-secondary"
-        onClick={handleLogout}
-        type="button"
-      >
-        log out
+      <button className="btn btn-text" onClick={handleLogout} type="button">
+        Log Out
       </button>
     </nav>
   );

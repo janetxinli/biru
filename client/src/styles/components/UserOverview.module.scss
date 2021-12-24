@@ -1,9 +1,13 @@
 @import "../global/variables";
 
-.searchResult {
-  background-color: lighten($bone, 9%);
+.userOverview {
+  background-color: #fff;
   padding: 0.5em 1em;
   border-radius: 3px;
+
+  a {
+    color: $darkumber;
+  }
 
   &:not(:last-child) {
     margin-bottom: 1em;

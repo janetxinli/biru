@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import styles from "../styles/components/SearchResult.module.scss";
+import styles from "../styles/components/UserOverview.module.scss";
 
-const SearchResult = ({ user }) => (
-  <article className={styles.searchResult}>
+const UserOverview = ({ user }) => (
+  <article className={styles.userOverview}>
     <Link href={`/user/${user.username}`}>
       <a href={`/user/${user.username}`}>
         <h3>{user.name}</h3>
@@ -13,4 +13,4 @@ const SearchResult = ({ user }) => (
   </article>
 );
 
-export default SearchResult;
+export default UserOverview;

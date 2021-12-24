@@ -12,4 +12,12 @@ router.get("/:username", requireLogin, userController.getUser);
 
 router.get("/:username/profile", requireLogin, userController.getProfile);
 
+router.post("/:id/follow", requireLogin, userController.followUser);
+
+router.post("/:id/unfollow", requireLogin, userController.unfollowUser);
+
+router.get("/:id/following", requireLogin, userController.getFollowing);
+
+router.get("/:id/followers", requireLogin, userController.getFollowers);
+
 module.exports = router;
