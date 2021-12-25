@@ -51,8 +51,8 @@ app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/", (req, res) => {
-  res.json({ success: true });
+app.get("/api/ping", (req, res) => {
+  res.json({ message: "pong" });
 });
 
 app.use("/api/auth", authRouter);

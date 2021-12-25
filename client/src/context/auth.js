@@ -20,12 +20,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       const res = await checkAuthStatus();
+
       setAuthenticated(res.data.authenticated);
-
-      if (res.data.user) {
-        setUser(res.data.user);
-      }
-
+      setUser(res.data.user || null);
       setLoading(false);
     };
 
