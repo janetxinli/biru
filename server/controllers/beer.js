@@ -1,12 +1,16 @@
 const { StatusCodes } = require("http-status-codes");
-const { Beer } = require("../models");
+const { Beer, User } = require("../models");
 const error = require("../utils/error");
 
 const getBeer = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const beer = await Beer.findByPk(id);
+    const beer = await Beer.findByPk(id, {
+      include: {
+        model: User,
+      },
+    });
 
     // beer with specified id not found
     if (!beer) {

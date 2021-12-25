@@ -5,12 +5,14 @@ import { IoBeerOutline } from "react-icons/io5";
 import { getBeerById, deleteBeer } from "../../services/beer";
 import capitalize from "../../utils/capitalize";
 import withAuth from "../../hocs/withAuth";
+import { useAuth } from "../../context/auth";
 import Loading from "../../components/Loading";
 import PageError from "../../components/PageError";
 import styles from "../../styles/pages/Beer.module.scss";
 
 const Beer = () => {
   const router = useRouter();
+  const { user } = useAuth();
 
   const [beer, setBeer] = useState(null);
   const [error, setError] = useState(null);
@@ -62,7 +64,10 @@ const Beer = () => {
         <section className={`df df-fc df-ai-c ${styles.beerHeader}`}>
           <h2>{beer.name}</h2>
           <p className={styles.brewer}>{beer.brewer}</p>
-          <p>Added {new Date(Date.parse(beer.date)).toDateString()}</p>
+          <p>
+            Added by {user.id === beer.userId ? " you" : beer.User.name} on{" "}
+            {new Date(Date.parse(beer.date)).toDateString()}
+          </p>
         </section>
         {beer.notes && <p className={styles.notes}>{beer.notes}</p>}
         <section className={`df df-jc-c ${styles.beerStats}`}>
@@ -95,22 +100,24 @@ const Beer = () => {
             </p>
           </article>
         </section>
-        <section className={`df ${styles.btnGroup}`}>
-          <button
-            type="submit"
-            className="btn btn-secondary"
-            onClick={handleEdit}
-          >
-            Edit
-          </button>
-          <button
-            type="submit"
-            className="btn btn-primary"
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
-        </section>
+        {user.id === beer.userId && (
+          <section className={`df ${styles.btnGroup}`}>
+            <button
+              type="submit"
+              className="btn btn-secondary"
+              onClick={handleEdit}
+            >
+              Edit
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
+          </section>
+        )}
       </article>
     </div>
   );
