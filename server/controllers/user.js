@@ -1,6 +1,8 @@
+require("pg").defaults.parseInt8 = true;
+
 const { Op } = require("sequelize");
 const { StatusCodes } = require("http-status-codes");
-const { Beer, Follower, User, Sequelize } = require("../models");
+const { Beer, Follower, User, Sequelize, sequelize } = require("../models");
 const error = require("../utils/error");
 
 const createUser = async (req, res, next) => {
@@ -113,38 +115,30 @@ const getProfile = async (req, res, next) => {
           required: false,
           where: beerQuery,
         },
-        {
-          model: Follower,
-          as: "FollowingUser",
-          attributes: [],
-        },
-        {
-          model: Follower,
-          as: "FollowedUser",
-          attributes: [],
-        },
       ],
       order: [[{ model: Beer }, ...order]],
-      attributes: {
-        include: [
-          [
-            Sequelize.fn("COUNT", Sequelize.col("FollowingUser.id")),
-            "followingUsers",
-          ],
-          [
-            Sequelize.fn("COUNT", Sequelize.col("FollowedUser.id")),
-            "followedByUsers",
-          ],
-        ],
-      },
-      group: ["User.id", "Beers.id", "FollowingUser.id", "FollowedUser.id"],
     });
 
+    const followingUsers = await Follower.count({
+      where: {
+        followingUserId: profileUser.id,
+      },
+    });
+
+    const followedByUsers = await Follower.count({
+      where: {
+        followedUserId: profileUser.id,
+      },
+    });
+
+    data.setDataValue("followingUsers", followingUsers);
+    data.setDataValue("followedByUsers", followedByUsers);
     data.setDataValue("currentUser", currentUser);
     data.setDataValue("currentUserFollows", currentUserFollows);
 
     return res.json({ payload: data });
   } catch (e) {
+    console.error(e);
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
     return next(err);
   }
@@ -297,6 +291,66 @@ const getFollowers = async (req, res, next) => {
   }
 };
 
+const getFeed = async (req, res, next) => {
+  const { id } = req.params;
+  let page;
+  if (req.query.page) {
+    page = req.query.page;
+  } else {
+    page = 0;
+  }
+
+  const limit = 10;
+
+  try {
+    const feed = await Beer.findAll({
+      order: [["date"]],
+      limit,
+      offset: limit * page,
+      subQuery: false,
+      include: [
+        {
+          model: User,
+          required: true,
+          include: [
+            {
+              model: Follower,
+              as: "FollowedUser",
+              where: {
+                followingUserId: id,
+              },
+              attributes: [],
+            },
+          ],
+        },
+      ],
+    });
+    // const feed = await Follower.findAll({
+    //   where: {
+    //     followingUserId: id,
+    //   },
+    //   include: [
+    //     {
+    //       model: User,
+    //       as: "FollowedUser",
+    //       include: [
+    //         {
+    //           model: Beer,
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // });
+
+    return res.status(StatusCodes.OK).send({ payload: feed });
+  } catch (e) {
+    console.error(e);
+    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to get feed");
+
+    return next(err);
+  }
+};
+
 module.exports = {
   createUser,
   getAll,
@@ -307,4 +361,5 @@ module.exports = {
   unfollowUser,
   getFollowing,
   getFollowers,
+  getFeed,
 };

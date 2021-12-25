@@ -18,6 +18,7 @@
       flex-grow: 1;
       display: grid;
       grid-template-columns: 2fr 2fr 1fr;
+      align-items: center;
 
       >*:not(:first-child) {
         padding-left: 1em;
@@ -29,27 +30,32 @@
     }
 
     h3 {
-      font-size: 1em;
+      font-size: 1rem;
       margin-top: 0;
       margin-bottom: 0.25em;
 
 
       @media (min-width: $mdscreen) {
-        font-size: 1.125em;
+        font-size: 1.125rem;
         margin-bottom: 0;
       }
     }
 
     p {
-      font-size: 0.825em;
+      font-size: 0.825rem;
       margin-top: 0;
       margin-bottom: 0.5em;
       font-weight: 400;
 
       @media (min-width: $mdscreen) {
-        font-size: 1em;
+        font-size: 1rem;
         margin-bottom: 0;
       }
+    }
+
+    .addedBy {
+      font-size: 0.75rem;
+      color: darken($umber, 5%);
     }
 
     .dateAdded {

@@ -48,3 +48,11 @@ export const unfollowUser = async (id) =>
       withCredentials: true,
     }
   );
+
+export const getFeed = async (id, page) =>
+  axios.get(`http://localhost:3001/api/user/${id}/feed`, {
+    params: {
+      page,
+    },
+    withCredentials: true,
+  });

@@ -86,10 +86,10 @@ const ProfileCard = ({
           <button
             type="button"
             className="btn btn-text"
-            disabled={profile.followingUsers === "0"}
+            disabled={profile.followingUsers === 0}
             onClick={toggleShowFollowing}
           >
-            <strong>{profile.followingUsers || "0"}</strong> following
+            <strong>{profile.followingUsers || 0}</strong> following
           </button>
           <FavoriteBorderIcon fontSize="sm" />
           <button

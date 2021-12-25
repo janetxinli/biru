@@ -20,4 +20,6 @@ router.get("/:id/following", requireLogin, userController.getFollowing);
 
 router.get("/:id/followers", requireLogin, userController.getFollowers);
 
+router.get("/:id/feed", requireLogin, userController.getFeed);
+
 module.exports = router;
