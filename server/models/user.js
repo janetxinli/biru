@@ -30,6 +30,14 @@ module.exports = (sequelize, DataTypes) => {
     async validatePassword(givenPassword) {
       return bcrypt.compare(givenPassword, this.password);
     }
+
+    // update does not work with scopes
+    // manually delete password
+    toJSON() {
+      const values = { ...this.get() };
+      delete values.password;
+      return values;
+    }
   }
 
   User.init(
@@ -51,6 +59,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       bio: DataTypes.STRING,
+      imageUrl: DataTypes.STRING,
     },
     {
       sequelize,

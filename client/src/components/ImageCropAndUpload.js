@@ -14,6 +14,7 @@ const ImageCropAndUpload = ({
   errorMessage,
   setError,
   initialImage,
+  placeholder,
 }) => {
   const [image, setImage] = useState({ url: null, fileType: null });
   const [preview, setPreview] = useState(initialImage || null);
@@ -64,7 +65,7 @@ const ImageCropAndUpload = ({
       rotation
     );
     try {
-      const res = await uploadImage(img.url);
+      const res = await uploadImage(img);
       onComplete(res.data.payload.url);
       setPreview(img);
     } catch (e) {
@@ -87,9 +88,10 @@ const ImageCropAndUpload = ({
     <article className={className !== undefined && className}>
       <ImageInput
         handleChange={handleImageChange}
-        label="Upload an Image"
+        label="Upload"
         htmlFor="beerImage"
         preview={preview}
+        placeholder={placeholder}
         className={errorMessage ? styles.errorBorder : null}
       />
       {image.url !== null && (
@@ -142,7 +144,9 @@ const ImageCropAndUpload = ({
           </section>
         </div>
       )}
-      {errorMessage !== null && <p className={styles.errorText}>{errorMessage}</p>}
+      {errorMessage !== null && (
+        <p className={styles.errorText}>{errorMessage}</p>
+      )}
     </article>
   );
 };

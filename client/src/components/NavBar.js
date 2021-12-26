@@ -8,6 +8,9 @@ const NavBar = ({ handleLogout }) => {
 
   return (
     <nav className={`df df-ai-c ${styles.navBar}`}>
+      <Link href="/beer/new">
+        <a href="/beer/new">Add Beer</a>
+      </Link>
       <Link href={`/user/${user.username}`}>
         <a href={`/user/${user.username}`}>Profile</a>
       </Link>

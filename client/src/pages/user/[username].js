@@ -176,6 +176,7 @@ const Profile = () => {
       )}
       <ProfileCard
         profile={profile}
+        setProfile={setProfile}
         toggleShowFollowing={toggleShowFollowing}
         toggleShowFollowers={toggleShowFollowers}
         setError={setError}

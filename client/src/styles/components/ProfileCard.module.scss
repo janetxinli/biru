@@ -11,20 +11,20 @@
     align-self: start;
   }
 
-  img {
+  .profileImg {
     width: 25%;
     max-width: 8em;
     align-self: start;
 
     @media (min-width: $lgscreen) {
       width: 100%;
-      max-width: 12em;
       margin-bottom: 1em;
     }
   }
 
   .userInfo {
     margin-left: 1em;
+    width: 100%;
 
     & > :not(:last-child) {
       margin-bottom: 0.25em;
@@ -43,7 +43,7 @@
       font-weight: 500;
     }
 
-    .following {
+    .padItems {
       & > :not(:first-child) {
         margin-left: 0.25em;
       }

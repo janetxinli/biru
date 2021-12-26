@@ -62,6 +62,42 @@ const getUser = async (req, res, next) => {
   }
 };
 
+const editUser = async (req, res, next) => {
+  const { id } = req.params;
+  const { name, bio, imageUrl } = req.body;
+
+  if (req.user.id !== parseInt(id)) {
+    const err = error(StatusCodes.UNAUTHORIZED, "Unauthorized to edit user");
+    return next(err);
+  }
+
+  if (!name) {
+    const err = error(StatusCodes.BAD_REQUEST, "Name is required");
+    return next(err);
+  }
+
+  try {
+    const updated = await User.update(
+      {
+        name,
+        bio,
+        imageUrl,
+      },
+      {
+        where: {
+          id,
+        },
+        returning: true,
+      }
+    );
+
+    return res.status(StatusCodes.OK).json({ payload: updated[1][0] });
+  } catch (e) {
+    const err = error(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to edit user");
+    return next(err);
+  }
+};
+
 const getProfile = async (req, res, next) => {
   const { username } = req.params;
   const { beerType, sort, descending } = req.query;
@@ -138,7 +174,6 @@ const getProfile = async (req, res, next) => {
 
     return res.json({ payload: data });
   } catch (e) {
-    console.error(e);
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, e.message);
     return next(err);
   }
@@ -325,26 +360,9 @@ const getFeed = async (req, res, next) => {
         },
       ],
     });
-    // const feed = await Follower.findAll({
-    //   where: {
-    //     followingUserId: id,
-    //   },
-    //   include: [
-    //     {
-    //       model: User,
-    //       as: "FollowedUser",
-    //       include: [
-    //         {
-    //           model: Beer,
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // });
 
     return res.status(StatusCodes.OK).send({ payload: feed });
   } catch (e) {
-    console.error(e);
     const err = error(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to get feed");
 
     return next(err);
@@ -355,6 +373,7 @@ module.exports = {
   createUser,
   getAll,
   getUser,
+  editUser,
   getProfile,
   searchUsers,
   followUser,

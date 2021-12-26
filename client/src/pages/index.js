@@ -49,26 +49,21 @@ const Home = () => {
     requestFeed();
   }, [pageNum]);
 
+  if (error !== null) {
+    return <PageError error={error} />;
+  }
+
   return (
-    <>
-      <h2>Your Feed</h2>
-      {error !== null ? (
-        <PageError error={error} />
-      ) : (
-        <section>
-          {beers.length > 0 &&
-            beers.map((b, i) => {
-              if (i !== beers.length - 1) {
-                return <BeerOverview key={b.id} beer={b} />;
-              }
-              return (
-                <BeerOverview ref={lastBeerElementRef} key={b.id} beer={b} />
-              );
-            })}
-          {loading && <Loading className={styles.loading} />}
-        </section>
-      )}
-    </>
+    <section>
+      {beers.length > 0 &&
+        beers.map((b, i) => {
+          if (i !== beers.length - 1) {
+            return <BeerOverview key={b.id} beer={b} />;
+          }
+          return <BeerOverview ref={lastBeerElementRef} key={b.id} beer={b} />;
+        })}
+      {loading && <Loading className={styles.loading} />}
+    </section>
   );
 };
 

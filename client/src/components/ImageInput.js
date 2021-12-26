@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "../styles/components/ImageInput.module.scss";
 
-const ImageInput = ({ label, handleChange, className, htmlFor, preview }) => {
-  const imgSrc = preview || "/beerIconSquare.svg";
+const ImageInput = ({ label, handleChange, className, htmlFor, preview, placeholder }) => {
+  const imgSrc = preview || placeholder;
 
   const resetImage = (e) => {
     e.target.value = null;

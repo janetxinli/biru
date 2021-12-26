@@ -14,6 +14,19 @@ export const getProfile = async (username, queryParams) =>
     params: queryParams,
   });
 
+export const editUser = async (id, imageUrl, name, bio) =>
+  axios.post(
+    `http://localhost:3001/api/user/${id}/edit`,
+    {
+      imageUrl,
+      name,
+      bio,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+
 export const signup = async (username, password, name, bio) => {
   const newUser = { username, password, name, bio };
   return axios.post("http://localhost:3001/api/user", newUser, {
