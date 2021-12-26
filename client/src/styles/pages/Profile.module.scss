@@ -1,0 +1,40 @@
+@import "../global/variables";
+
+.profile {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 1em;
+
+  @media (min-width: $lgscreen) {
+    grid-template-columns: 1fr 3fr;
+  }
+
+  .navButtons {
+    @media (min-width: $smscreen) {
+      justify-content: flex-end;
+    }
+    
+    @media (min-width: $lgscreen) {
+      order: -1;
+      grid-column: 1 / end;
+    }
+  }
+
+  // need to vertically center text since link element is stretched
+  .newBeer {
+    display: flex;
+    align-items: center;
+  }
+
+  .beerList {
+    @media (min-width: $lgscreen) {
+      grid-column: 2 / end;
+    }
+  }
+
+  .noMatchingBeers {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: $redviolet;
+  }
+}

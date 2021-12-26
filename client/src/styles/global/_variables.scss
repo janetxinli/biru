@@ -1,11 +1,12 @@
 // colours
-$bone: #E9E6E2;
-$shadow: #8C7A6B;
+$bone: #e9e6e2;
+$shadow: #8c7a6b;
 $umber: #736559;
 $darkumber: #2e2824;
-$rosewood: #5E0B15;
-$redviolet: #90323D;
-$earthyellow: #D3A15F;
+$rosewood: #5e0b15;
+$redviolet: #90323d;
+$earthyellow: #d3a15f;
+$main-background: lighten($bone, 5%);
 
 // media breakpoints
 // TODO: convert these to ems?

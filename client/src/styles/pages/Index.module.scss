@@ -1,31 +1,5 @@
 @import "../global/variables";
 
-.pageHeader {
-  margin-bottom: 0.5em;
-
-  @media (min-width: $mdscreen) {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  h2 {
-    margin-bottom: 0.5em;
-
-    @media (min-width: $mdscreen) {
-      margin-bottom: 1em;
-    }
-  }
-}
-
-// need to vertically center text since link element is stretched
-.newBeer {
-  display: flex;
-  align-items: center;
-}
-
-.noMatchingBeers {
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: $redviolet;
+.loading {
+  margin-top: 1em;
 }

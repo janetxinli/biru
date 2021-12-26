@@ -59,6 +59,7 @@
   border-radius: 4px;
   font-size: 0.875rem;
   font-weight: 500;
+  color: $darkumber;
   cursor: pointer;
 
   &-primary {
@@ -105,11 +106,23 @@
     border: none;
     padding: 0;
 
-    
     &:hover,
     &:active,
     &:focus {
       color: lighten($darkumber, 10%);
+    }
+  }
+
+  &-text {
+    background-color: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    border: none;
+    padding-left: 0;
+    padding-right: 0;
+
+    &:disabled {
+      color: lighten($darkumber, 15%);
     }
   }
 }

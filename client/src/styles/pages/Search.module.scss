@@ -1,0 +1,22 @@
+@import "../global/variables";
+
+.searchForm {
+  width: 100%;
+  max-width: $smscreen;
+  margin: auto;
+  margin-bottom: 1em;
+
+  > :not(:last-child) {
+    margin-right: 0.5em;
+  }
+
+  label {
+    flex-grow: 1;
+  }
+}
+
+.results {
+  width: 100%;
+  max-width: $smscreen;
+  margin: auto;
+}

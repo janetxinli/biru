@@ -1,146 +1,70 @@
-import { useState, useEffect } from "react";
-import Head from "next/head";
-import Link from "next/link";
-import { beerTypes } from "../utils/dataTypes";
-import { getAll } from "../services/beer";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import withAuth from "../hocs/withAuth";
+import { useAuth } from "../context/auth";
+import { getFeed } from "../services/user";
 import BeerOverview from "../components/BeerOverview";
-import Dropdown from "../components/Dropdown";
 import PageError from "../components/PageError";
-import { extractToken } from "../utils/extractToken";
-import { notFound, redirectToLogin } from "../utils/serverSide";
+import Loading from "../components/Loading";
 import styles from "../styles/pages/Index.module.scss";
 
-const Home = ({ data, initialQuery }) => {
-  // data state
-  const [beerList, setBeerList] = useState(data.Beers);
-  const [filter, setFilter] = useState(initialQuery);
+const Home = () => {
+  const { user } = useAuth();
 
-  // menu button state
-  const [sortVisible, setSortVisible] = useState(false);
-  const [beerTypeVisible, setBeerTypeVisible] = useState(false);
-
-  // page state
+  const [beers, setBeers] = useState([]);
+  const [pageNum, setPageNum] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
   const [error, setError] = useState(null);
 
-  // update beerList on filter/sort change
+  const observer = useRef(null);
+  const lastBeerElementRef = useCallback(
+    (element) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPageNum(pageNum + 1);
+        }
+      });
+      if (element) observer.current.observe(element);
+    },
+    [loading, hasMore]
+  );
+
   useEffect(() => {
-    const updateBeers = async () => {
+    const requestFeed = async () => {
+      setLoading(true);
       setError(null);
       try {
-        const { data } = await getAll(filter);
-        setBeerList(data.payload.Beers);
-      } catch (error) {
-        setError("Cannot get your beer journal right now.");
+        const res = await getFeed(user.id, pageNum);
+        setBeers(beers.concat(res.data.payload));
+        setHasMore(res.data.payload.length > 0);
+      } catch (e) {
+        setError("Cannot get your feed right now");
+      } finally {
+        setLoading(false);
       }
     };
 
-    updateBeers();
-  }, [filter]);
+    requestFeed();
+  }, [pageNum]);
 
-  const toggleSortVisible = (e) => {
-    e.preventDefault();
-    setBeerTypeVisible(false);
-    setSortVisible(!sortVisible);
-  };
-
-  const toggleBeerTypeVisible = (e) => {
-    e.preventDefault();
-    setSortVisible(false);
-    setBeerTypeVisible(!beerTypeVisible);
-  };
-
-  const toggleSelectedBeerType = (beerType) => {
-    if (beerType === filter.beerType) {
-      setFilter({ ...filter, beerType: null });
-    } else {
-      setFilter({ ...filter, beerType });
-    }
-  };
-
-  const sortMap = {
-    date: () => setFilter({ ...filter, descending: true, sort: "date" }),
-    name: () => setFilter({ ...filter, descending: "", sort: "name" }),
-    rating: () => setFilter({ ...filter, descending: true, sort: "rating" }),
-  };
-
-  const beerTypeMap = beerTypes.reduce(
-    (o, t) => ({ ...o, [t]: () => toggleSelectedBeerType(t) }),
-    {}
-  );
-
-  let beerListElement;
-  if (beerList && !beerList.length) {
-    // no beers to show
-    beerListElement = (
-      <p className={styles.noMatchingBeers}>Nothing to show. Add a new beer!</p>
-    );
-  } else {
-    beerListElement = beerList.map((b) => <BeerOverview key={b.id} beer={b} />);
+  if (error !== null) {
+    return <PageError error={error} />;
   }
 
   return (
-    <>
-      <Head>
-        <title>biru</title>
-      </Head>
-      <section className={`df df-fc ${styles.pageHeader}`}>
-        <h2>{data.name}'s Beer Journal</h2>
-        <section className="df">
-          <Dropdown
-            label="sort"
-            optionMap={sortMap}
-            visibility={sortVisible}
-            toggleVisibility={toggleSortVisible}
-            selected={filter.sort}
-          />
-          <Dropdown
-            label="beer type"
-            optionMap={beerTypeMap}
-            visibility={beerTypeVisible}
-            toggleVisibility={toggleBeerTypeVisible}
-            selected={filter.beerType}
-          />
-          <Link href="/beer/new">
-            <a className={`btn btn-primary ${styles.newBeer}`}>new</a>
-          </Link>
-        </section>
-      </section>
-      {error === null ? (
-        <section>{beerListElement}</section>
-      ) : (
-        <PageError message={error} />
-      )}
-    </>
+    <section>
+      {beers.length > 0 &&
+        beers.map((b, i) => {
+          if (i !== beers.length - 1) {
+            return <BeerOverview key={b.id} beer={b} />;
+          }
+          return <BeerOverview ref={lastBeerElementRef} key={b.id} beer={b} />;
+        })}
+      {loading && <Loading className={styles.loading} />}
+    </section>
   );
 };
 
-export const getServerSideProps = async (ctx) => {
-  const token = extractToken(ctx);
-
-  // no logged in user
-  if (!token) {
-    return redirectToLogin;
-  }
-
-  try {
-    const initialQuery = {
-      sort: "date",
-      descending: true,
-      beerType: null,
-    };
-
-    const res = await getAll(initialQuery, token);
-
-    return {
-      props: {
-        data: res.data.payload,
-        loggedIn: true,
-        initialQuery,
-      },
-    };
-  } catch (err) {
-    return notFound;
-  }
-};
-
-export default Home;
+export default withAuth(Home);

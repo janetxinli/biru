@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import BeerForm from "../../components/BeerForm";
 import PageError from "../../components/PageError";
-import { extractToken } from "../../utils/extractToken";
-import { redirectToLogin } from "../../utils/serverSide";
+import withAuth from "../../hocs/withAuth";
 
 const New = () => {
   const [error, setError] = useState(null);
@@ -16,18 +15,4 @@ const New = () => {
   );
 };
 
-export const getServerSideProps = async (ctx) => {
-  const token = extractToken(ctx);
-
-  if (!token) {
-    return redirectToLogin;
-  }
-
-  return {
-    props: {
-      loggedIn: true,
-    },
-  };
-};
-
-export default New;
+export default withAuth(New);

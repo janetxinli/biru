@@ -3,15 +3,21 @@ import Link from "next/link";
 import { Rating } from "@mui/material";
 import styles from "../styles/components/BeerOverview.module.scss";
 
-const BeerOverview = ({ beer }) => {
+const BeerOverview = (props, ref) => {
+  const { beer } = props;
+
   const imgSrc = beer.imageUrl ? beer.imageUrl : "/beerIconSquare.svg";
 
   return (
-    <article className={styles.beerOverview}>
+    <article className={styles.beerOverview} ref={ref}>
       <Link href={`/beer/${beer.id}`}>
-        <a className="df df-jc-sb df-ai-c">
+        <a className="df df-jc-sb df-ai-c" href={`/beer/${beer.id}`}>
           <span className={`df df-fc ${styles.beerInfo}`}>
-            <h3>{beer.name}</h3>
+            <div>
+              <h3>{beer.name}</h3>
+              {beer.User && <p className={styles.addedBy}>Added by {beer.User.name}</p>}
+            </div>
+
             <p>{beer.brewer}</p>
             <p className={styles.dateAdded}>
               {new Date(Date.parse(beer.date)).toDateString()}
@@ -32,4 +38,4 @@ const BeerOverview = ({ beer }) => {
   );
 };
 
-export default BeerOverview;
+export default React.forwardRef(BeerOverview);

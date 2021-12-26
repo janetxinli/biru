@@ -1,0 +1,17 @@
+@import "../global/variables";
+
+.navBar {
+  margin-bottom: 1em;
+
+  @media (min-width: $smscreen) {
+    margin-bottom: 0em;
+  }
+
+  a {
+    color: $darkumber;
+  }
+
+  > *:not(:last-child) {
+    margin-right: 1em;
+  }
+}

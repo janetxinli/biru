@@ -1,0 +1,56 @@
+@import "../global/variables";
+
+.profileCard {
+  width: 100%;
+  background-color: $bone;
+  padding: 1em;
+  border-radius: 3px;
+
+  @media (min-width: $lgscreen) {
+    flex-direction: column;
+    align-self: start;
+  }
+
+  .profileImg {
+    width: 25%;
+    max-width: 8em;
+    align-self: start;
+
+    @media (min-width: $lgscreen) {
+      width: 100%;
+      margin-bottom: 1em;
+    }
+  }
+
+  .userInfo {
+    margin-left: 1em;
+    width: 100%;
+
+    & > :not(:last-child) {
+      margin-bottom: 0.25em;
+    }
+
+    @media (min-width: $lgscreen) {
+      margin-left: 0;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .username {
+      font-size: 1.125rem;
+      font-weight: 500;
+    }
+
+    .padItems {
+      & > :not(:first-child) {
+        margin-left: 0.25em;
+      }
+
+      & > :not(:last-child) {
+        margin-right: 0.25em;
+      }
+    }
+  }
+}
