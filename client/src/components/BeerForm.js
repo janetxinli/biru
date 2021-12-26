@@ -40,6 +40,7 @@ const BeerForm = ({ setError, editValues }) => {
     rating: null,
     abv: null,
     ibu: null,
+    date: null,
   });
 
   const setImage = (url) => {
@@ -85,21 +86,26 @@ const BeerForm = ({ setError, editValues }) => {
 
   const resetErrors = () => {
     setFormErrors({
-      name: false,
-      brewer: false,
-      rating: false,
-      abv: false,
-      ibu: false,
+      imageUrl: null,
+      name: null,
+      brewer: null,
+      rating: null,
+      abv: null,
+      ibu: null,
+      date: null,
     });
   };
 
   const validateFields = () => {
+    console.log(form);
     const errors = {
+      imageUrl: formErrors.imageUrl,
       name: form.name === "" ? "Required" : null,
       brewer: form.brewer === "" ? "Required" : null,
       rating: !form.rating ? "Required" : null,
       abv: form.abv !== "" && !parseFloat(form.abv) ? "Invalid value" : null,
       ibu: form.ibu !== "" && !parseInt(form.ibu) ? "Invalid value" : null,
+      date: form.date === "" ? "Required" : null,
     };
 
     setFormErrors(errors);
@@ -154,9 +160,10 @@ const BeerForm = ({ setError, editValues }) => {
       <ImageCropAndUpload
         onComplete={setImage}
         className={styles.imageCropAndUpload}
-        error={formErrors.imageUrl}
+        errorMessage={formErrors.imageUrl}
         setError={(e) => setFormErrors({ ...formErrors, imageUrl: e })}
         initialImage={editValues ? form.imageUrl : undefined}
+        placeholder="/beerIconSquare.svg"
       />
       <Input
         type="text"
@@ -187,6 +194,7 @@ const BeerForm = ({ setError, editValues }) => {
         htmlFor="date"
         value={form.date}
         onChange={handleFieldChange}
+        errorMessage={formErrors.date}
       />
       <Input
         label="Rating"

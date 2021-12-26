@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { GiHops } from "react-icons/gi";
 import { IoBeerOutline } from "react-icons/io5";
@@ -65,8 +66,15 @@ const Beer = () => {
           <h2>{beer.name}</h2>
           <p className={styles.brewer}>{beer.brewer}</p>
           <p>
-            Added by {user.id === beer.userId ? " you" : beer.User.name} on{" "}
-            {new Date(Date.parse(beer.date)).toDateString()}
+            Added by{" "}
+            {user.id === beer.userId ? (
+              " you"
+            ) : (
+              <Link href={`/user/${beer.User.username}`}>
+                <a href={`/user/${beer.User.username}`}>{beer.User.name}</a>
+              </Link>
+            )}{" "}
+            on {new Date(Date.parse(beer.date)).toDateString()}
           </p>
         </section>
         {beer.notes && <p className={styles.notes}>{beer.notes}</p>}

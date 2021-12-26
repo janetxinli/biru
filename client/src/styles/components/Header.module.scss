@@ -1,5 +1,21 @@
 @import "../global/variables";
 
-.logo {
-  color: $rosewood;
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (min-width: $smscreen) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .logo {
+    color: $rosewood;
+    margin-bottom: 0.125em;
+
+    @media (min-width: $smscreen) {
+      margin-bottom: 0.5em;
+    }
+  }
 }

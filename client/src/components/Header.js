@@ -28,7 +28,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="container df df-ai-c df-jc-sb">
+      <header className={`container ${styles.header}`}>
         <h1 className={styles.logo}>
           <Link href="/">biru</Link>
         </h1>
