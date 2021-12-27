@@ -4,6 +4,7 @@ const {
   POSTGRES_PASSWORD_DEV,
   POSTGRES_HOST_PROD,
   POSTGRES_USER_PROD,
+  POSTGRES_DATABASE_PROD,
   POSTGRES_PASSWORD_PROD,
 } = require("../utils/config");
 
@@ -25,10 +26,9 @@ module.exports = {
   production: {
     username: POSTGRES_USER_PROD,
     password: POSTGRES_PASSWORD_PROD,
-    database: "biru_db_production",
+    database: POSTGRES_DATABASE_PROD,
     host: POSTGRES_HOST_PROD,
     dialect: "postgres",
-    // use_env_variable: "DATABASE_URL",
     dialectOptions: {
       ssl: {
         rejectUnauthorized: false,
