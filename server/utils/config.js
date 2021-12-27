@@ -6,10 +6,10 @@ const PORT = process.env.PORT || 3001;
 const ENV = process.env.NODE_ENV || "development";
 const IN_PROD = ENV === "production";
 
-const POSTGRES_USER_DEV = process.env.POSTGRES_USER;
-const POSTGRES_HOST_DEV = process.env.POSTGRES_HOST;
-const POSTGRES_DATABASE_DEV = process.env.POSTGRES_DATABASE;
-const POSTGRES_PASSWORD_DEV = process.env.POSTGRES_PASSWORD;
+const POSTGRES_USER_DEV = process.env.POSTGRES_USER_DEV;
+const POSTGRES_HOST_DEV = process.env.POSTGRES_HOST_DEV;
+const POSTGRES_DATABASE_DEV = process.env.POSTGRES_DATABASE_DEV;
+const POSTGRES_PASSWORD_DEV = process.env.POSTGRES_PASSWORD_DEV;
 
 const POSTGRES_USER_PROD = process.env.POSTGRES_USER_PROD;
 const POSTGRES_HOST_PROD = process.env.POSTGRES_HOST_PROD;

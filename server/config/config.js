@@ -28,7 +28,7 @@ module.exports = {
     database: "biru_db_production",
     host: POSTGRES_HOST_PROD,
     dialect: "postgres",
-    use_env_variable: "DATABASE_URL",
+    // use_env_variable: "DATABASE_URL",
     dialectOptions: {
       ssl: {
         rejectUnauthorized: false,
