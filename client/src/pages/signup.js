@@ -108,6 +108,7 @@ const Signup = () => {
           value={form.username}
           onChange={handleFieldChange}
           maxLength={32}
+          autoComplete="username"
           errorMessage={formErrors.username}
         />
         <Input

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const searchUsers = async (q) =>
-  axios.get("http://localhost:3001/api/user/search", {
+  axios.get(`${process.env.BACKEND_URL}/api/user/search`, {
     params: {
       q,
     },
@@ -9,14 +9,14 @@ export const searchUsers = async (q) =>
   });
 
 export const getProfile = async (username, queryParams) =>
-  axios.get(`http://localhost:3001/api/user/${username}/profile`, {
+  axios.get(`${process.env.BACKEND_URL}/api/user/${username}/profile`, {
     withCredentials: true,
     params: queryParams,
   });
 
 export const editUser = async (id, imageUrl, name, bio) =>
   axios.post(
-    `http://localhost:3001/api/user/${id}/edit`,
+    `${process.env.BACKEND_URL}/api/user/${id}/edit`,
     {
       imageUrl,
       name,
@@ -29,24 +29,24 @@ export const editUser = async (id, imageUrl, name, bio) =>
 
 export const signup = async (username, password, name, bio) => {
   const newUser = { username, password, name, bio };
-  return axios.post("http://localhost:3001/api/user", newUser, {
+  return axios.post(`${process.env.BACKEND_URL}/api/user`, newUser, {
     withCredentials: true,
   });
 };
 
 export const getFollowing = async (id) =>
-  axios.get(`http://localhost:3001/api/user/${id}/following`, {
+  axios.get(`${process.env.BACKEND_URL}/api/user/${id}/following`, {
     withCredentials: true,
   });
 
 export const getFollowers = async (id) =>
-  axios.get(`http://localhost:3001/api/user/${id}/followers`, {
+  axios.get(`${process.env.BACKEND_URL}/api/user/${id}/followers`, {
     withCredentials: true,
   });
 
 export const followUser = async (id) =>
   axios.post(
-    `http://localhost:3001/api/user/${id}/follow`,
+    `${process.env.BACKEND_URL}/api/user/${id}/follow`,
     {},
     {
       withCredentials: true,
@@ -55,7 +55,7 @@ export const followUser = async (id) =>
 
 export const unfollowUser = async (id) =>
   axios.post(
-    `http://localhost:3001/api/user/${id}/unfollow`,
+    `${process.env.BACKEND_URL}/api/user/${id}/unfollow`,
     {},
     {
       withCredentials: true,
@@ -63,7 +63,7 @@ export const unfollowUser = async (id) =>
   );
 
 export const getFeed = async (id, page) =>
-  axios.get(`http://localhost:3001/api/user/${id}/feed`, {
+  axios.get(`${process.env.BACKEND_URL}/api/user/${id}/feed`, {
     params: {
       page,
     },

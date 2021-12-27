@@ -6,7 +6,7 @@ const uploadImage = async (encoded) => {
 
   form.append("image", encoded);
 
-  return axios.post("http://localhost:3001/api/image/upload", form, {
+  return axios.post(`${process.env.BACKEND_URL}api/image/upload`, form, {
     withCredentials: true,
   });
 };

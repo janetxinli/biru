@@ -54,6 +54,7 @@ const Login = () => {
         htmlFor="username"
         value={form.username}
         onChange={handleFieldChange}
+        autoComplete="username"
       />
       <Input
         type="password"
@@ -61,6 +62,7 @@ const Login = () => {
         htmlFor="password"
         value={form.password}
         onChange={handleFieldChange}
+        autoComplete="current-password"
       />
       <button
         className="btn btn-primary"
