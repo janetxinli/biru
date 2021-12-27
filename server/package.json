@@ -48,7 +48,7 @@
     "sequelize-cli": "^6.2.0"
   },
   "files": [
-    "../globalConfig.json"
+    "globalConfig.json"
   ],
   "engines": {
     "node": ">=8.3.0"

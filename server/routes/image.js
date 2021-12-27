@@ -1,6 +1,6 @@
 const multer = require("multer");
 const router = require("express").Router();
-const globalConfig = require("../../globalConfig.json");
+const globalConfig = require("../globalConfig.json");
 const imageController = require("../controllers/image");
 
 // images will be base64-encoded

@@ -1,5 +1,5 @@
 require("dotenv").config();
-const globalConfig = require("../../globalConfig.json");
+const globalConfig = require("../globalConfig.json");
 
 const PORT = process.env.PORT || 3001;
 
