@@ -1,1 +1,4 @@
-../globalConfig.json
+{
+  "MAX_IMAGE_SIZE": "10000000",
+  "SESSION_NAME": "biru"
+}
