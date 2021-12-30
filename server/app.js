@@ -28,7 +28,7 @@ app.use(
   })
 );
 
-if (IN_PROD) app.set("trust proxy", 1);
+if (IN_PROD) app.enable("trust proxy");
 
 app.use(
   session({
