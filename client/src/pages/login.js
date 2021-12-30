@@ -36,48 +36,55 @@ const Login = () => {
   };
 
   return (
-    <form
-      className={`df df-fc df-ai-s df-jc-c ${styles.login}`}
-      onSubmit={handleLogin}
-    >
-      <h2>Login</h2>
-      {error !== null && (
-        <PageError
-          message={error}
-          closeError={() => setError(null)}
-          className={styles.error}
-        />
-      )}
-      <Input
-        type="text"
-        label="Username"
-        htmlFor="username"
-        value={form.username}
-        onChange={handleFieldChange}
-        autoComplete="username"
-      />
-      <Input
-        type="password"
-        label="Password"
-        htmlFor="password"
-        value={form.password}
-        onChange={handleFieldChange}
-        autoComplete="current-password"
-      />
-      <button
-        className="btn btn-primary"
-        type="submit"
-        disabled={loading || form.username === "" || form.password === ""}
+    <>
+      <form
+        className={`df df-fc df-ai-s df-jc-c ${styles.login}`}
+        onSubmit={handleLogin}
       >
-        Log In
-      </button>
-      <p className="text-center">
-        New to biru?{" "}
-        <Link href="/signup">
-          <a href="/signup">Sign up here.</a>
-        </Link>
-      </p>
-    </form>
+        <h2>Login</h2>
+        {error !== null && (
+          <PageError
+            message={error}
+            closeError={() => setError(null)}
+            className={styles.error}
+          />
+        )}
+        <Input
+          type="text"
+          label="Username"
+          htmlFor="username"
+          value={form.username}
+          onChange={handleFieldChange}
+          autoComplete="username"
+        />
+        <Input
+          type="password"
+          label="Password"
+          htmlFor="password"
+          value={form.password}
+          onChange={handleFieldChange}
+          autoComplete="current-password"
+        />
+        <button
+          className="btn btn-primary"
+          type="submit"
+          disabled={loading || form.username === "" || form.password === ""}
+        >
+          Log In
+        </button>
+        <p className="text-center">
+          New to biru?{" "}
+          <Link href="/signup">
+            <a href="/signup">Sign up here.</a>
+          </Link>
+        </p>
+      </form>
+      <div className={styles.demo}>
+        <h2>demo credentials</h2>
+        <p><strong>username:</strong> demouser</p>
+        <p><strong>password:</strong> birudemo1234</p>
+      </div>
+    </>
   );
 };
 

@@ -97,7 +97,6 @@ const BeerForm = ({ setError, editValues }) => {
   };
 
   const validateFields = () => {
-    console.log(form);
     const errors = {
       imageUrl: formErrors.imageUrl,
       name: form.name === "" ? "Required" : null,

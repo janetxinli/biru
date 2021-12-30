@@ -43,6 +43,14 @@
       font-weight: 500;
     }
 
+    .details {
+      @media (min-width: $lgscreen) {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: space-between
+      }
+    }
+
     .padItems {
       & > :not(:first-child) {
         margin-left: 0.25em;

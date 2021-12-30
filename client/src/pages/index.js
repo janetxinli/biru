@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import withAuth from "../hocs/withAuth";
 import { useAuth } from "../context/auth";
 import { getFeed } from "../services/user";
@@ -55,6 +56,15 @@ const Home = () => {
 
   return (
     <section>
+      {beers.length === 0 && pageNum === 0 && (
+        <p className={styles.nothing}>
+          Nothing to show in your feed.{" "}
+          <Link href="/search">
+            <a href="/search">Search</a>
+          </Link>{" "}
+          for users to follow!
+        </p>
+      )}
       {beers.length > 0 &&
         beers.map((b, i) => {
           if (i !== beers.length - 1) {

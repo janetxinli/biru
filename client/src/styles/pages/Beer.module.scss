@@ -8,7 +8,7 @@
   border-radius: 3px;
 
   & > *:not(:last-child) {
-    margin-bottom: 1.5em;
+    margin-bottom: 1em;
   }
 
   @media (min-width: $mdscreen) {

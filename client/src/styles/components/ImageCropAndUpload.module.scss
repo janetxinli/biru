@@ -15,6 +15,7 @@
   }
 
   .cropControls {
+    display: flex;
     position: relative;
     height: 10%;
     margin: 0 3em;
@@ -24,7 +25,11 @@
     }
 
     .rotateBtn {
-      margin-right: 1.5em;
+      margin-right: 2em;
+    }
+
+    .slider {
+      flex-shrink: 100;
     }
   }
 }

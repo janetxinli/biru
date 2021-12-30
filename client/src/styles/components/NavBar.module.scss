@@ -7,8 +7,10 @@
     margin-bottom: 0em;
   }
 
-  a {
+  a,
+  button {
     color: $darkumber;
+    font-weight: 500;
   }
 
   > *:not(:last-child) {

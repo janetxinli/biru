@@ -1,12 +1,25 @@
 @import "../global/variables";
 
-.login {
+.login,
+.demo {
   width: 100%;
   margin: auto;
 
   @media (min-width: $smscreen) {
     width: 20em;
     padding: 1em;
+  }
+
+  h2 {
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.login {
+  margin-bottom: 2em;
+
+  @media (min-width: $smscreen) {
     border-radius: 3px;
     border: 2px solid $bone;
   }
@@ -15,12 +28,16 @@
     margin-top: 1em;
   }
 
-  h2 {
-    text-align: center;
-    margin: 0;
-  }
-
   .error {
     margin-bottom: 0;
+  }
+}
+
+.demo {
+  background-color: $bone;
+  border-radius: 3px;
+
+  p {
+    margin: 0.5em 0;
   }
 }

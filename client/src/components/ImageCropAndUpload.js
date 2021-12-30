@@ -69,6 +69,7 @@ const ImageCropAndUpload = ({
       onComplete(res.data.payload.url);
       setPreview(img);
     } catch (e) {
+      console.error(e);
       setError("Failed to upload image");
     } finally {
       setImage({ url: null, fileType: null });
@@ -118,6 +119,7 @@ const ImageCropAndUpload = ({
             </button>
             <Slider
               key="slider"
+              className={styles.slider}
               aria-label="Zoom"
               defaultValue={1}
               value={zoom}
