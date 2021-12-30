@@ -28,6 +28,8 @@ app.use(
   })
 );
 
+if (IN_PROD) app.set("trust proxy", 1);
+
 app.use(
   session({
     store,
