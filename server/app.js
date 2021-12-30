@@ -42,7 +42,7 @@ app.use(
     cookie: {
       secure: IN_PROD,
       maxAge: SESSION_COOKIE_MAX_AGE,
-      sameSite: "lax",
+      sameSite: IN_PROD ? "none" : "lax",
     },
   })
 );
