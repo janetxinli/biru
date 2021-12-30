@@ -38,6 +38,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     rolling: true,
+    proxy: true,
     cookie: {
       secure: IN_PROD,
       maxAge: SESSION_COOKIE_MAX_AGE,
