@@ -24,7 +24,7 @@ const store = new SequelizeStore({ db: sequelize });
 app.use(
   cors({
     credentials: true,
-    origin: IN_PROD ? "https://biru.vercel.app/" : "http://localhost:3000",
+    origin: IN_PROD ? "https://biru.vercel.app" : "http://localhost:3000",
   })
 );
 
