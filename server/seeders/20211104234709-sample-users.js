@@ -4,15 +4,10 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const seedUsers = [
       {
-        username: "testuser",
-        password: "somethingrandomfornow",
-        name: "Test User",
+        username: "demouser",
+        password: "birudemo1234",
+        name: "Demo User",
         bio: "Beer lover",
-      },
-      {
-        username: "user123",
-        password: "blah",
-        name: "Jane Smith",
       },
     ];
     const users = seedUsers.map(async (u) => User.create(u));
