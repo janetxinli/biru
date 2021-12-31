@@ -5,7 +5,7 @@ import Slider from "@mui/material/Slider";
 import ImageInput from "./ImageInput";
 import cropImage from "../utils/cropImage";
 import uploadImage from "../services/image";
-import globalConfig from "../../../globalConfig.json";
+import globalConfig from "../../globalConfig.json";
 import styles from "../styles/components/ImageCropAndUpload.module.scss";
 
 const ImageCropAndUpload = ({

@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p $PORT"
+    "start": "next start -p $PORT",
+    "heroku:deploy": "cp ../globalConfig.json . && cd ../ && git subtree push --prefix client heroku-client main"
   },
   "dependencies": {
     "@emotion/react": "^11.4.1",

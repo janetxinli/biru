@@ -12,7 +12,8 @@
     "db:migrate:undo": "sequelize-cli db:migrate:undo",
     "db:g:seed": "sequelize-cli seed:generate --name",
     "db:seeds": "sequelize-cli db:seed:all",
-    "db:reset": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
+    "db:reset": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+    "heroku:deploy": "cp ../globalConfig.json . && cd ../ && git subtree push --prefix server heroku-server main"
   },
   "keywords": [],
   "author": "",
