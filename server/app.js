@@ -39,6 +39,7 @@ app.use(
     saveUninitialized: false,
     rolling: true,
     proxy: true,
+    domain: IN_PROD ? "https://biru.vercel.app" : "https://localhost:3000",
     cookie: {
       secure: IN_PROD,
       maxAge: SESSION_COOKIE_MAX_AGE,
@@ -54,6 +55,11 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use("/", (req, res, next) => {
+  console.log(req.session);
+  return next();
+});
 
 app.get("/api/ping", (req, res) => {
   res.json({ message: "pong" });
