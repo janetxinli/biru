@@ -9,17 +9,21 @@
     color: $darkumber;
   }
 
-  &:not(:last-child) {
-    margin-bottom: 1em;
+  img {
+    width: 5em;
   }
 
-  h3 {
-    margin-top: 0;
-    margin-bottom: 0.5em;
-    font-size: 1rem;
-  }
+  .userInfo {
+    margin-left: 1em;
 
-  p {
-    font-size: 0.75rem;
+    h3 {
+      margin-top: 0;
+      margin-bottom: 0.5em;
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.75rem;
+    }
   }
 }

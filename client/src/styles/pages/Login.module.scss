@@ -7,7 +7,6 @@
 
   @media (min-width: $smscreen) {
     width: 20em;
-    padding: 1em;
   }
 
   h2 {
@@ -20,6 +19,7 @@
   margin-bottom: 2em;
 
   @media (min-width: $smscreen) {
+    padding: 1em;
     border-radius: 3px;
     border: 2px solid $bone;
   }
@@ -34,6 +34,7 @@
 }
 
 .demo {
+  padding: 1em;
   background-color: $bone;
   border-radius: 3px;
 

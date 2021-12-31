@@ -208,7 +208,7 @@ const ProfileCard = ({
             </button>
           </div>
         ) : (
-          <div className={`df df-ai-c df-jc-sb ${styles.details}`}>
+          <div className={`df df-fc df-ai-s df-jc-c ${styles.details}`}>
             <div className={`df df-ai-c ${styles.padItems}`}>
               <button
                 type="button"
