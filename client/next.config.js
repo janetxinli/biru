@@ -12,7 +12,7 @@ module.exports = {
       destination:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3001/api/:path*"
-          : "http://biru-api.herokuapp.com/api/:path*",
+          : "https://biru-api.herokuapp.com/api/:path*",
     },
   ],
 };
