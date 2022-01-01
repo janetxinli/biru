@@ -21,13 +21,12 @@ const passport = require("./passport");
 const app = express();
 const store = new SequelizeStore({ db: sequelize });
 
-if (!IN_PROD)
-  app.use(
-    cors({
-      credentials: true,
-      origin: "http://localhost:3000",
-    })
-  );
+app.use(
+  cors({
+    credentials: true,
+    origin: IN_PROD ? "https://journal.biru.cool" : "http://localhost:3000",
+  })
+);
 
 if (IN_PROD) app.enable("trust proxy");
 
@@ -40,6 +39,7 @@ app.use(
     saveUninitialized: false,
     rolling: true,
     proxy: true,
+    domain: "biru.cool",
     cookie: {
       secure: IN_PROD,
       maxAge: SESSION_COOKIE_MAX_AGE,
