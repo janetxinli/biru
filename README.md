@@ -47,6 +47,8 @@ Data is stored in a [PostgreSQL](https://www.postgresql.org/) database. [Cloudin
 - `@mui/material`: component library
 - `@mui/icons-material`: icon library
 - `react-icons`: icon library
+- `@emotion/react`: required for MUI css styles 
+- `@emotion/styled`: required for MUI styled components
 
 ## Running locally
 
