@@ -2,7 +2,6 @@ const cors = require("cors");
 const express = require("express");
 const session = require("express-session");
 const morgan = require("morgan");
-const cookieParser = require("cookie-parser");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const {
   IN_PROD,
@@ -52,7 +51,6 @@ store.sync();
 
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 

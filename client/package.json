@@ -6,11 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p $PORT",
-    "heroku:deploy": "cp ../globalConfig.json . && cd ../ && git subtree push --prefix client heroku-client main"
+    "heroku:deploy": "cp ../globalConfig.json . && cd ../ && git subtree push --prefix client heroku-client main",
+    "heroku:logs": "heroku logs --tail --remote heroku-client"
   },
   "dependencies": {
-    "@emotion/react": "^11.4.1",
-    "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.0.3",
     "@mui/material": "^5.0.1",
     "axios": "^0.22.0",
