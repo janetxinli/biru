@@ -54,13 +54,22 @@ Data is stored in a [PostgreSQL](https://www.postgresql.org/) database. [Cloudin
 
 ### Server
 
-Enter the `server` subdirectory:
+Enter the `server` subdirectory and install the dependencies:
 
 ```bash
 cd server
+npm install
 ```
 
-Several environment variables must be configured in order to run the back end application. You must have a [PostgreSQL](https://www.postgresql.org/) user and host configured on your local machine, a [Cloudinary](https://cloudinary.com/) account and a session secret for `express-session`. Create a file called `.env` with the following contents:
+The backend stores data in a [PostgreSQL](https://www.postgresql.org/) database, so you must have it installed on your machine. Use the following commands to create and initialize the database:
+
+```bash
+npm run db:create
+npm run db:migrate
+npm run db:seeds
+```
+
+Several environment variables must be configured in order to run the back end application. You must have a Postgres user and host configured on your local machine, a [Cloudinary](https://cloudinary.com/) account and a session secret for `express-session`. Create a file called `.env` in the `server` subdirectory with the following contents:
 
 ```bash
 PORT=3001
@@ -86,10 +95,11 @@ The app will be listening on http://localhost:3001.
 
 ### Client
 
-Enter the client subdirectory and run the app in development mode:
+Enter the client subdirectory, install the dependencies and run the app in development mode:
 
 ```bash
 cd client
+npm install
 npm run dev
 ```
 
